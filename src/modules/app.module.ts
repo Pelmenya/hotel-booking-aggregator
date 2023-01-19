@@ -7,7 +7,7 @@ import { ReservationsModule } from './reservations/reservations.module';
 import { SupportChatModule } from './support-chat/support-chat.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { getMongoConfig } from './configs/get-mongo-config';
+import { getMongoConfig } from '../configs/get-mongo-config';
 
 @Module({
     imports: [
