@@ -1,10 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { IUser } from './types/i-user';
-import { TRole } from './types/t-role';
+import { IUser } from '../types/i-user';
+import { TRole } from '../types/t-role';
 
 @Schema()
-export class User implements Partial<IUser> {
-    @Prop({ required: true })
+export class User implements Omit<IUser, '_id'> {
+    @Prop({ required: true, unique: true })
     public email: string;
 
     @Prop({ required: true })

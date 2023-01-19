@@ -6,7 +6,7 @@ import { ISearchUserParams } from './types/i-search-user-params';
 import { IUser } from './types/i-user';
 import { IUserService } from './types/i-user-service';
 import { TUserDocument } from './types/t-user-document';
-import { User } from './users.schema';
+import { User } from './schemas/users.schema';
 
 const user: IUser = {
     _id: 'ddd',

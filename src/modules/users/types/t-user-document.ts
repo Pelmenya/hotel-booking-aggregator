@@ -1,4 +1,4 @@
 import { Document } from 'mongoose';
-import { User } from '../users.schema';
+import { User } from '../schemas/users.schema';
 
 export type TUserDocument = User & Document;
