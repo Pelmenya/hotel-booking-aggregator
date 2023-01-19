@@ -23,7 +23,7 @@ export class UsersService implements IUserService {
         @InjectConnection() private connection: Connection,
     ) {}
 
-    async create(dto: Partial<IUser>): Promise<IUser> {
+    async create(dto: Omit<IUser, '_id'>): Promise<IUser> {
         const user = new this.UserModel(dto);
         return await user.save();
     }

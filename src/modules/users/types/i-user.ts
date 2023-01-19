@@ -6,5 +6,5 @@ export interface IUser {
     passwordHash: string;
     name: string;
     phone?: string;
-    role: TRole;
+    role?: TRole;
 }

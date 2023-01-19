@@ -8,6 +8,8 @@ import { SupportChatModule } from './support-chat/support-chat.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { getMongoConfig } from '../configs/get-mongo-config';
+import { AuthModule } from './auth/auth.module';
+import { ClientModule } from './client/client.module';
 
 @Module({
     imports: [
@@ -18,6 +20,8 @@ import { getMongoConfig } from '../configs/get-mongo-config';
             useFactory: getMongoConfig,
         }),
         UsersModule,
+        ClientModule,
+        AuthModule,
         HotelsModule,
         ReservationsModule,
         SupportChatModule,
