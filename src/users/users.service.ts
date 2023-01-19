@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { resolve } from 'path';
+import { InjectModel, InjectConnection } from '@nestjs/mongoose';
+import { Connection, Model } from 'mongoose';
 import { ID } from 'src/types/id';
 import { ISearchUserParams } from './types/i-search-user-params';
 import { IUser } from './types/i-user';
 import { IUserService } from './types/i-user-service';
+import { TUserDocument } from './types/t-user-document';
+import { User } from './users.schema';
 
 const user: IUser = {
     _id: 'ddd',
@@ -15,9 +18,16 @@ const user: IUser = {
 
 @Injectable()
 export class UsersService implements IUserService {
-    async create(data: Partial<IUser>): Promise<IUser> {
-        return Promise.resolve(user);
+    constructor(
+        @InjectModel(User.name) private UserModel: Model<TUserDocument>,
+        @InjectConnection() private connection: Connection,
+    ) {}
+
+    async create(dto: Partial<IUser>): Promise<IUser> {
+        const user = new this.UserModel(dto);
+        return await user.save();
     }
+
     async findById(id: ID): Promise<IUser> {
         return Promise.resolve(user);
     }
@@ -26,7 +36,7 @@ export class UsersService implements IUserService {
         return Promise.resolve(user);
     }
 
-    async findAll(params: ISearchUserParams): Promise<IUser[]> {
-        return Promise.resolve([user]);
+    async findAll(): Promise<IUser[]> {
+        return await this.UserModel.find();
     }
 }
