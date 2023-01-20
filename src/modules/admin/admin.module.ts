@@ -1,4 +1,14 @@
 import { Module } from '@nestjs/common';
+import { HotelRoomsModule } from '../hotel-rooms/hotel-rooms.module';
+import { HotelsModule } from '../hotels/hotels.module';
+import { UsersModule } from '../users/users.module';
+import { AdminController } from './admin.controller';
+import { AdminService } from './admin.service';
 
-@Module({})
+@Module({
+    imports: [UsersModule, HotelsModule, HotelRoomsModule],
+    controllers: [AdminController],
+    providers: [AdminService],
+    exports: [AdminService],
+})
 export class AdminModule {}

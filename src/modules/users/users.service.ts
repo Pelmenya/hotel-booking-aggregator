@@ -7,6 +7,7 @@ import { IUser } from './types/i-user';
 import { IUserService } from './types/i-user-service';
 import { TUserDocument } from './types/t-user-document';
 import { User } from './schemas/users.schema';
+import { TUserDto } from './types/t-user-dto';
 
 @Injectable()
 export class UsersService implements IUserService {
@@ -15,7 +16,7 @@ export class UsersService implements IUserService {
         @InjectConnection() private connection: Connection,
     ) {}
 
-    async create(dto: Omit<IUser, '_id'>): Promise<IUser> {
+    async create(dto: TUserDto): Promise<IUser> {
         return await this.UserModel.create(dto);
     }
 

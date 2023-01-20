@@ -4,8 +4,8 @@ import { ISearchHotelParams } from './i-search-hotel-params';
 import { IUpdateHotelParams } from './i-update-hotel-params';
 
 export interface IHotelService {
-    create(data: Partial<Hotel>): Promise<Hotel>;
+    create(dto: Partial<Hotel>): Promise<Hotel>;
     findById(id: ID): Promise<Hotel>;
     search(params: ISearchHotelParams): Promise<Hotel[]>;
-    update(id: ID, data: IUpdateHotelParams): Promise<Hotel>;
+    update(id: ID, dto: IUpdateHotelParams): Promise<Hotel>;
 }
