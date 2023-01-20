@@ -4,7 +4,7 @@ import { TRole } from '../types/t-role';
 
 @Schema()
 export class User implements Omit<IUser, '_id'> {
-    @Prop({ required: true, unique: true })
+    @Prop({ type: String, required: true, unique: true })
     public email: string;
 
     @Prop({ required: true })

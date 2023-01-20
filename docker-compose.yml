@@ -7,9 +7,9 @@ services:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
 
-  library:
+  hotel-aggregator:
     build: ./
-    container_name: library-nest
+    container_name: hotel-aggregator
     ports:
       - 80:${PORT}
     environment:      

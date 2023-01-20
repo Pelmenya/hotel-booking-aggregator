@@ -8,14 +8,6 @@ import { IUserService } from './types/i-user-service';
 import { TUserDocument } from './types/t-user-document';
 import { User } from './schemas/users.schema';
 
-const user: IUser = {
-    _id: 'ddd',
-    name: 'ddd',
-    email: 'ddd',
-    passwordHash: 'dddd',
-    role: 'admin',
-};
-
 @Injectable()
 export class UsersService implements IUserService {
     constructor(
@@ -24,16 +16,15 @@ export class UsersService implements IUserService {
     ) {}
 
     async create(dto: Omit<IUser, '_id'>): Promise<IUser> {
-        const user = new this.UserModel(dto);
-        return await user.save();
+        return await this.UserModel.create(dto);
     }
 
     async findById(id: ID): Promise<IUser> {
-        return Promise.resolve(user);
+        return await this.UserModel.findById(id);
     }
 
     async findByEmail(email: string): Promise<IUser> {
-        return Promise.resolve(user);
+        return await this.UserModel.findOne({ email });
     }
 
     async findAll(): Promise<IUser[]> {

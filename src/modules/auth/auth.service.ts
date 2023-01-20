@@ -21,7 +21,6 @@ export class AuthService implements IAuthService {
 
     async register(dto: IRegisterDto): Promise<Omit<IRegisterDto, 'password'>> {
         const { email, password, name, contactPhone } = dto;
-
         const saveDto: Omit<IUser, '_id'> = {
             email,
             name,

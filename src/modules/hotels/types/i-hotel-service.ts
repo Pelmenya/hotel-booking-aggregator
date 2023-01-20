@@ -1,5 +1,5 @@
 import { ID } from 'src/types/id';
-import { Hotel } from './hotel.schema';
+import { Hotel } from '../schemas/hotel.schema';
 import { ISearchHotelParams } from './i-search-hotel-params';
 import { IUpdateHotelParams } from './i-update-hotel-params';
 
