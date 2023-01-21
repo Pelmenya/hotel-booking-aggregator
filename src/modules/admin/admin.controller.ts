@@ -1,7 +1,7 @@
 import { Post, Body, Controller } from '@nestjs/common';
-import { IHotel } from '../hotels/types/i-hotel';
 import { TUserDto } from '../users/types/t-user-dto';
 import { AdminService } from './admin.service';
+import { THotelDto } from './types/t-create-hotel-dto';
 
 @Controller('admin')
 export class AdminController {
@@ -13,7 +13,7 @@ export class AdminController {
     }
 
     @Post('hotels')
-    public creatHotel(@Body() dto: Partial<IHotel>) {
+    public creatHotel(@Body() dto: THotelDto) {
         return this.adminService.createHotel(dto);
     }
 }

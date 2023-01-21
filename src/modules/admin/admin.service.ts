@@ -2,12 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { HotelRoomsService } from '../hotel-rooms/hotel-rooms.service';
 import { IHotelRoom } from '../hotel-rooms/types/i-hotel-room';
 import { HotelsService } from '../hotels/hotels.service';
-import { IHotel } from '../hotels/types/i-hotel';
 import { TUserDto } from '../users/types/t-user-dto';
 import { UsersService } from '../users/users.service';
+import { IAdminService } from './types/i-admin-service';
+import { THotelDto } from './types/t-create-hotel-dto';
 
 @Injectable()
-export class AdminService {
+export class AdminService implements IAdminService {
     constructor(
         private readonly usersService: UsersService,
         private readonly hotelsService: HotelsService,
@@ -18,7 +19,7 @@ export class AdminService {
         return this.usersService.create(dto);
     }
 
-    createHotel(dto: Partial<IHotel>) {
+    createHotel(dto: THotelDto) {
         return this.hotelsService.create(dto);
     }
 

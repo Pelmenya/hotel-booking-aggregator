@@ -3,6 +3,7 @@ import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Connection, Model } from 'mongoose';
 import { ID } from 'src/types/id';
 import { Hotel } from './schemas/hotel.schema';
+import { IHotel } from './types/i-hotel';
 import { IHotelService } from './types/i-hotel-service';
 import { ISearchHotelParams } from './types/i-search-hotel-params';
 import { IUpdateHotelParams } from './types/i-update-hotel-params';
@@ -23,15 +24,15 @@ export class HotelsService implements IHotelService {
         @InjectConnection() private connection: Connection,
     ) {}
 
-    async create(dto: Partial<Hotel>): Promise<Hotel> {
+    async create(dto: Partial<Hotel>): Promise<IHotel> {
         return await this.HotelModel.create(dto);
     }
 
-    async findById(id: ID): Promise<Hotel> {
+    async findById(id: ID): Promise<IHotel> {
         return await this.HotelModel.findById(id);
     }
 
-    search(params: ISearchHotelParams): Promise<Hotel[]> {
+    search(params: ISearchHotelParams): Promise<IHotel[]> {
         return Promise.resolve([hotel]);
     }
 
