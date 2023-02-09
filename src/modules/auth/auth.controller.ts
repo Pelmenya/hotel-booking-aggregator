@@ -1,5 +1,14 @@
-import { Body, Controller, Post, UseGuards, HttpCode } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Post,
+    UseGuards,
+    HttpCode,
+    Req,
+} from '@nestjs/common';
+import { Request } from 'express';
 import { AuthService } from './auth.service';
+import { AuthenticatedGuard } from './authenticated.guard';
 import { LoginGuard } from './login.guard';
 import { LoginDto } from './types/login.dto';
 
@@ -16,8 +25,10 @@ export class AuthController {
         return { email, name, contactPhone };
     }
 
+    @HttpCode(200)
+    @UseGuards(AuthenticatedGuard)
     @Post('logout')
-    logout() {
-        return this.authService.logout();
+    logout(@Req() req: Request) {
+        return this.authService.logout(req);
     }
 }

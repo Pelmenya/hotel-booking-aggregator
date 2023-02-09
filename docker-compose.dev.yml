@@ -27,5 +27,7 @@ services:
       - 80:3000
     depends_on:
       - mongo
+    environment:
+      - SECRETE={SECRETE}
     working_dir: /app
     command: sh -c "cd /app; npm i -g @nestjs/cli; npm install; npm run start:dev"

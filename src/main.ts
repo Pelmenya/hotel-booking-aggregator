@@ -2,11 +2,12 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './modules/app.module';
 import { ValidationPipe } from './pipes/validation/validation.pipe';
 import * as cookieParser from 'cookie-parser';
-import * as passport from 'passport';
 import * as session from 'express-session';
+import * as passport from 'passport';
+
 declare const module: any;
 
-const secret = 'some-cookie-secret';
+const secret = process.env.SECRETE || 'some-cookie-secret';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);

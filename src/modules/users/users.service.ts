@@ -1,4 +1,8 @@
-import { UnauthorizedException, BadRequestException, Injectable } from '@nestjs/common';
+import {
+    UnauthorizedException,
+    BadRequestException,
+    Injectable,
+} from '@nestjs/common';
 import { InjectModel, InjectConnection } from '@nestjs/mongoose';
 import { Connection, Model } from 'mongoose';
 import { ID } from 'src/types/id';
@@ -19,8 +23,10 @@ export class UsersService implements IUserService {
     async create(dto: Omit<CreateUserDto, 'password'>): Promise<IUser> {
         try {
             return await this.UserModel.create(dto);
-        } catch(e) {
-            if (e.message.indexOf('E11000 duplicate key error collection') === 0)
+        } catch (e) {
+            if (
+                e.message.indexOf('E11000 duplicate key error collection') === 0
+            )
                 throw new BadRequestException(ERRORS_USER.ALREADY_EXISTS);
             throw new BadRequestException(e.message);
         }

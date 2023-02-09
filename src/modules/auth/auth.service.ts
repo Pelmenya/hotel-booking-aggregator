@@ -6,10 +6,11 @@ import { LoginDto } from './types/login.dto';
 import { RegisterDto } from './types/register.dto';
 import { genSalt, hash, compare } from 'bcrypt';
 import { ERRORS_USER } from '../users/users.constants';
+import { Request } from 'express';
 
 @Injectable()
 export class AuthService implements IAuthService {
-    constructor(private readonly usersService: UsersService) { }
+    constructor(private readonly usersService: UsersService) {}
 
     async login(dto: LoginDto): Promise<Omit<RegisterDto, 'password'>> {
         const { email, password } = dto;
@@ -19,10 +20,6 @@ export class AuthService implements IAuthService {
             return user;
         }
         throw new UnauthorizedException(ERRORS_USER.BAD_REQUEST);
-    }
-
-    async validateUser(email: string, password: string) {
-        return await this.login({ email, password });
     }
 
     async register(dto: RegisterDto): Promise<Omit<RegisterDto, 'password'>> {
@@ -43,7 +40,7 @@ export class AuthService implements IAuthService {
         };
     }
 
-    logout(): void {
-        console.log('ddd');
+    async logout(req: Request) {
+        req.logout((err) => console.log(err));
     }
 }
