@@ -1,5 +1,5 @@
 import { Post, Body, Controller } from '@nestjs/common';
-import { TUserDto } from '../users/types/t-user-dto';
+import { CreateUserDto } from '../users/types/create-user.dto';
 import { AdminService } from './admin.service';
 import { THotelDto } from './types/t-create-hotel-dto';
 
@@ -8,7 +8,7 @@ export class AdminController {
     constructor(private readonly adminService: AdminService) {}
 
     @Post('users')
-    public creatUser(@Body() dto: TUserDto) {
+    public creatUser(@Body() dto: CreateUserDto) {
         return this.adminService.createUser(dto);
     }
 

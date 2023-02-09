@@ -1,41 +1,46 @@
-import { Injectable } from '@nestjs/common';
-import { IUser } from '../users/types/i-user';
-import { TUserDto } from '../users/types/t-user-dto';
+import { UnauthorizedException, Injectable } from '@nestjs/common';
+import { CreateUserDto } from '../users/types/create-user.dto';
 import { UsersService } from '../users/users.service';
 import { IAuthService } from './types/i-auth-service';
-import { ILoginDto } from './types/i-login-dto';
-import { IRegisterDto } from './types/i-register-dto';
-
-const user = {
-    name: 'ddd',
-    email: 'ddd',
-    phone: 'sss',
-};
+import { LoginDto } from './types/login.dto';
+import { RegisterDto } from './types/register.dto';
+import { genSalt, hash, compare } from 'bcrypt';
+import { ERRORS_USER } from '../users/users.constants';
 
 @Injectable()
 export class AuthService implements IAuthService {
-    constructor(private readonly usersService: UsersService) {}
+    constructor(private readonly usersService: UsersService) { }
 
-    login(dto: ILoginDto): Promise<Omit<IRegisterDto, 'password'>> {
-        return Promise.resolve(user);
+    async login(dto: LoginDto): Promise<Omit<RegisterDto, 'password'>> {
+        const { email, password } = dto;
+        const user = await this.usersService.findByEmail(email);
+        const isValidUser = await compare(password, user.passwordHash);
+        if (isValidUser) {
+            return user;
+        }
+        throw new UnauthorizedException(ERRORS_USER.BAD_REQUEST);
     }
 
-    async register(dto: IRegisterDto): Promise<Omit<IRegisterDto, 'password'>> {
+    async validateUser(email: string, password: string) {
+        return await this.login({ email, password });
+    }
+
+    async register(dto: RegisterDto): Promise<Omit<RegisterDto, 'password'>> {
         const { email, password, name, contactPhone } = dto;
-        const saveDto: TUserDto = {
+        const salt = await genSalt(10);
+        const passwordHash = await hash(password, salt);
+        const saveDto: Omit<CreateUserDto, 'password'> = {
             email,
             name,
-            passwordHash: password,
+            passwordHash,
             contactPhone,
         };
-
         const user = await this.usersService.create(saveDto);
-
-        return Promise.resolve({
+        return {
             email: user.email,
             name: user.name,
             contactPhone: user?.contactPhone,
-        });
+        };
     }
 
     logout(): void {

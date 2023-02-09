@@ -1,8 +1,8 @@
-import { ILoginDto } from './i-login-dto';
-import { IRegisterDto } from './i-register-dto';
+import { LoginDto } from './login.dto';
+import { RegisterDto } from './register.dto';
 
 export interface IAuthService {
-    login(dto: ILoginDto): Promise<Omit<IRegisterDto, 'password'>>;
-    register(dto: IRegisterDto): Promise<Omit<IRegisterDto, 'password'>>;
+    login(dto: LoginDto): Promise<Omit<RegisterDto, 'password'>>;
+    register(dto: RegisterDto): Promise<Omit<RegisterDto, 'password'>>;
     logout(): void;
 }
