@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { genSalt, hash } from 'bcrypt';
 import { HotelRoomsService } from '../hotel-rooms/hotel-rooms.service';
 import { IHotelRoom } from '../hotel-rooms/types/i-hotel-room';
 import { HotelsService } from '../hotels/hotels.service';
@@ -15,8 +16,26 @@ export class AdminService implements IAdminService {
         private readonly hotelRoomsService: HotelRoomsService,
     ) {}
 
-    createUser(dto: CreateUserDto) {
-        return this.usersService.create(dto);
+    async createUser(
+        dto: CreateUserDto,
+    ): Promise<Omit<CreateUserDto, 'password'>> {
+        const { email, password, name, contactPhone, role } = dto;
+        const salt = await genSalt(10);
+        const passwordHash = await hash(password, salt);
+        const saveDto: Omit<CreateUserDto, 'password'> = {
+            email,
+            name,
+            passwordHash,
+            contactPhone,
+            role,
+        };
+        const user = await this.usersService.create(saveDto);
+        return {
+            email: user.email,
+            name: user.name,
+            contactPhone: user?.contactPhone,
+            role: user.role,
+        };
     }
 
     createHotel(dto: THotelDto) {

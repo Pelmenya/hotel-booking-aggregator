@@ -1,5 +1,7 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import { UnauthorizedException } from '@nestjs/common/exceptions';
 import { Reflector } from '@nestjs/core';
+import { ERRORS_USER } from 'src/modules/users/users.constants';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -14,6 +16,11 @@ export class RolesGuard implements CanActivate {
             return true;
         }
         const request = context.switchToHttp().getRequest();
+
+        if (!request.isAuthenticated()) {
+            throw new UnauthorizedException(ERRORS_USER.UNAUTHORIZED);
+        }
+
         const { user } = request;
         return roles.includes(user?.role);
     }

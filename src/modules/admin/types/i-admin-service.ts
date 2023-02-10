@@ -5,7 +5,7 @@ import { IUser } from 'src/modules/users/types/i-user';
 import { THotelDto } from './t-create-hotel-dto';
 
 export interface IAdminService {
-    createUser(dto: CreateUserDto): Promise<Omit<IUser, '_id'>>;
+    createUser(dto: CreateUserDto): Promise<Omit<CreateUserDto, 'password'>>;
     createHotel(dto: THotelDto): Promise<IHotel>;
     createHotelRoom(dto: Partial<IHotelRoom>): Promise<IHotelRoom>;
 }
