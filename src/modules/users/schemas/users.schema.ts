@@ -14,7 +14,7 @@ export class User implements Omit<IUser, '_id'> {
     public name: string;
 
     @Prop()
-    public phone: string;
+    public contactPhone: string;
 
     @Prop({
         type: String,

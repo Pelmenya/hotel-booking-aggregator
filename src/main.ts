@@ -4,10 +4,11 @@ import { ValidationPipe } from './pipes/validation/validation.pipe';
 import * as cookieParser from 'cookie-parser';
 import * as session from 'express-session';
 import * as passport from 'passport';
+import { RolesGuard } from './guards/roles.guard';
 
 declare const module: any;
 
-const secret = process.env.SECRETE || 'some-cookie-secret';
+const secret = process.env.SECRET || 'cookie-secret';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
@@ -15,6 +16,7 @@ async function bootstrap() {
     app.setGlobalPrefix('api');
     app.enableCors();
     app.use(cookieParser());
+    app.useGlobalPipes(new ValidationPipe());
     app.use(
         session({
             secret,
@@ -24,7 +26,6 @@ async function bootstrap() {
     );
     app.use(passport.initialize());
     app.use(passport.session());
-    app.useGlobalPipes(new ValidationPipe());
 
     await app.listen(3000);
 
