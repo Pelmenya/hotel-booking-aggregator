@@ -12,6 +12,8 @@ import { TUserDocument } from './types/t-user-document';
 import { User } from './schemas/users.schema';
 import { CreateUserDto } from './types/create-user.dto';
 import { ERRORS_USER } from './users.constants';
+import { SearchUserParams } from './types/search-user-params';
+import { TQueryUserMongoParams } from './types/t-query-user-mongo-params';
 
 @Injectable()
 export class UsersService implements IUserService {
@@ -48,7 +50,28 @@ export class UsersService implements IUserService {
         throw new UnauthorizedException(ERRORS_USER.NOT_FOUND);
     }
 
-    async findAll(): Promise<IUser[]> {
-        return await this.UserModel.find();
+    async findAll(query: SearchUserParams): Promise<IUser[]> {
+        const { limit = 20, offset = 0, name, email, contactPhone } = query;
+        const queryParams: TQueryUserMongoParams = {};
+
+        if (name) {
+            queryParams.name = { $regex: name };
+        }
+
+        if (email) {
+            queryParams.email = { $regex: email };
+        }
+
+        if (contactPhone) {
+            queryParams.contactPhone = { $regex: contactPhone };
+        }
+
+        const users = await this.UserModel.find(queryParams)
+            .skip(offset)
+            .limit(limit)
+            .select({ _id: 0, id: '$_id', name: 1, email: 1, contactPhone: 1 })
+            .exec();
+
+        return users;
     }
 }
