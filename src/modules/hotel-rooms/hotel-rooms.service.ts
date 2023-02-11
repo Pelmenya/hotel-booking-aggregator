@@ -5,7 +5,7 @@ import { ID } from 'src/types/id';
 import { HotelRoom } from './schemas/hotel-room.schema';
 import { IHotelRoom } from './types/i-hotel-room';
 import { IHotelRoomsService } from './types/i-hotel-rooms-service';
-import { ISearchRoomsParams } from './types/i-search-rooms-params';
+import { ISearchRoomsParams } from './types/search-rooms-params';
 import { THotelRoomDocument } from './types/t-hotel-rooms-document';
 
 const room: IHotelRoom = {

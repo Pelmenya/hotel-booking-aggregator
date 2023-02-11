@@ -3,11 +3,13 @@ import { genSalt, hash } from 'bcrypt';
 import { HotelRoomsService } from '../hotel-rooms/hotel-rooms.service';
 import { IHotelRoom } from '../hotel-rooms/types/i-hotel-room';
 import { HotelsService } from '../hotels/hotels.service';
+import { CreateHotelDto } from '../hotels/types/create-hotel.dto';
+import { HotelData } from '../hotels/types/hotel-data';
+import { SearchHotelsParams } from '../hotels/types/search-hotels-params';
 import { CreateUserDto } from '../users/types/create-user.dto';
 import { SearchUserParams } from '../users/types/search-user-params';
 import { UsersService } from '../users/users.service';
 import { IAdminService } from './types/i-admin-service';
-import { THotelDto } from './types/t-create-hotel-dto';
 
 @Injectable()
 export class AdminService implements IAdminService {
@@ -45,11 +47,20 @@ export class AdminService implements IAdminService {
         return users;
     }
 
-    createHotel(dto: THotelDto) {
-        return this.hotelsService.create(dto);
+    async createHotel(dto: CreateHotelDto) {
+        const hotel = await this.hotelsService.create(dto);
+        return {
+            id: hotel._id,
+            title: hotel.title,
+            description: hotel.description,
+        };
     }
 
-    createHotelRoom(dto: IHotelRoom) {
-        return this.hotelRoomsService.create(dto);
+    async createHotelRoom(dto: IHotelRoom) {
+        return await this.hotelRoomsService.create(dto);
+    }
+
+    async getHotels(query: SearchHotelsParams): Promise<HotelData[]> {
+        return await this.hotelsService.search(query);
     }
 }

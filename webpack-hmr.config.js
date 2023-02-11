@@ -8,8 +8,8 @@ module.exports = function (options, webpack) {
         entry: ['webpack/hot/poll?100', options.entry],
         watchOptions: {
             // без этого не успевает в Docker Hot Module Reload!!!
-            aggregateTimeout: 300,
-            poll: 1000,
+            aggregateTimeout: 100,
+            poll: 100,
         },
         externals: [
             nodeExternals({
@@ -20,11 +20,11 @@ module.exports = function (options, webpack) {
             ...options.plugins,
             new webpack.HotModuleReplacementPlugin(),
             new webpack.WatchIgnorePlugin({
-                paths: [/\.js$/, /\.d\.ts$/],
+                paths: [/\.js$/, /\.d\.ts$/, /node_modules/],
             }),
             new RunScriptWebpackPlugin({
                 name: options.output.filename,
-                autoRestart: false,
+                autoRestart: true,
             }),
         ],
     };

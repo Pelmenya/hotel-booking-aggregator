@@ -1,10 +1,19 @@
-import { Get, Query, Post, Body, Controller, UseGuards } from '@nestjs/common';
+import {
+    Get,
+    Query,
+    Post,
+    Body,
+    Controller,
+    UseGuards,
+    HttpCode,
+} from '@nestjs/common';
 import { Roles } from 'src/decorators/roles.decorator';
 import { RolesGuard } from 'src/guards/roles.guard';
+import { CreateHotelDto } from '../hotels/types/create-hotel.dto';
+import { SearchHotelsParams } from '../hotels/types/search-hotels-params';
 import { CreateUserDto } from '../users/types/create-user.dto';
 import { SearchUserParams } from '../users/types/search-user-params';
 import { AdminService } from './admin.service';
-import { THotelDto } from './types/t-create-hotel-dto';
 
 @UseGuards(RolesGuard)
 @Controller('admin')
@@ -13,20 +22,25 @@ export class AdminController {
 
     @Post('users')
     @Roles('admin')
-    public creatUser(@Body() dto: CreateUserDto) {
-        return this.adminService.createUser(dto);
+    async creatUser(@Body() dto: CreateUserDto) {
+        return await this.adminService.createUser(dto);
     }
 
     @Get('users')
     @Roles('admin')
-    public getUsers(@Query() query: SearchUserParams) {
-        console.log(query);
-        return this.adminService.getUsers(query);
+    async getUsers(@Query() query: SearchUserParams) {
+        return await this.adminService.getUsers(query);
     }
 
     @Post('hotels')
     @Roles('admin')
-    public creatHotel(@Body() dto: THotelDto) {
-        return this.adminService.createHotel(dto);
+    async creatHotel(@Body() dto: CreateHotelDto) {
+        return await this.adminService.createHotel(dto);
+    }
+
+    @Get('hotels')
+    @Roles('admin')
+    async getHotels(@Query() query: SearchHotelsParams) {
+        return await this.adminService.getHotels(query);
     }
 }

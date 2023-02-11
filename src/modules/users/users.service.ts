@@ -3,8 +3,8 @@ import {
     BadRequestException,
     Injectable,
 } from '@nestjs/common';
-import { InjectModel, InjectConnection } from '@nestjs/mongoose';
-import { Connection, Model } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { ID } from 'src/types/id';
 import { IUser } from './types/i-user';
 import { IUserService } from './types/i-user-service';
@@ -19,7 +19,6 @@ import { TQueryUserMongoParams } from './types/t-query-user-mongo-params';
 export class UsersService implements IUserService {
     constructor(
         @InjectModel(User.name) private UserModel: Model<TUserDocument>,
-        @InjectConnection() private connection: Connection,
     ) {}
 
     async create(dto: Omit<CreateUserDto, 'password'>): Promise<IUser> {
