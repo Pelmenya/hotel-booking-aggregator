@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { genSalt, hash } from 'bcrypt';
+import { ID } from 'src/types/id';
 import { HotelRoomsService } from '../hotel-rooms/hotel-rooms.service';
 import { IHotelRoom } from '../hotel-rooms/types/i-hotel-room';
 import { HotelsService } from '../hotels/hotels.service';
 import { CreateHotelDto } from '../hotels/types/create-hotel.dto';
 import { HotelData } from '../hotels/types/hotel-data';
 import { SearchHotelsParams } from '../hotels/types/search-hotels-params';
+import { UpdateHotelDto } from '../hotels/types/update-hotel.dto';
 import { CreateUserDto } from '../users/types/create-user.dto';
 import { SearchUserParams } from '../users/types/search-user-params';
 import { UsersService } from '../users/users.service';
@@ -47,6 +49,10 @@ export class AdminService implements IAdminService {
         return users;
     }
 
+    async getHotels(query: SearchHotelsParams): Promise<HotelData[]> {
+        return await this.hotelsService.search(query);
+    }
+
     async createHotel(dto: CreateHotelDto) {
         const hotel = await this.hotelsService.create(dto);
         return {
@@ -56,11 +62,16 @@ export class AdminService implements IAdminService {
         };
     }
 
-    async createHotelRoom(dto: IHotelRoom) {
-        return await this.hotelRoomsService.create(dto);
+    async updateHotel(id: ID, dto: UpdateHotelDto) {
+        const hotel = await this.hotelsService.update(id, dto);
+        return {
+            id: hotel._id,
+            title: hotel.title,
+            description: hotel.description,
+        };
     }
 
-    async getHotels(query: SearchHotelsParams): Promise<HotelData[]> {
-        return await this.hotelsService.search(query);
+    async createHotelRoom(dto: IHotelRoom) {
+        return await this.hotelRoomsService.create(dto);
     }
 }

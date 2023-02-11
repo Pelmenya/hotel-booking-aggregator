@@ -6,11 +6,16 @@ import {
     Controller,
     UseGuards,
     HttpCode,
+    Put,
+    Param,
 } from '@nestjs/common';
 import { Roles } from 'src/decorators/roles.decorator';
 import { RolesGuard } from 'src/guards/roles.guard';
+import { IdValidationPipe } from 'src/pipes/id-validation/id-validation.pipe';
+import { ID } from 'src/types/id';
 import { CreateHotelDto } from '../hotels/types/create-hotel.dto';
 import { SearchHotelsParams } from '../hotels/types/search-hotels-params';
+import { UpdateHotelDto } from '../hotels/types/update-hotel.dto';
 import { CreateUserDto } from '../users/types/create-user.dto';
 import { SearchUserParams } from '../users/types/search-user-params';
 import { AdminService } from './admin.service';
@@ -42,5 +47,12 @@ export class AdminController {
     @Roles('admin')
     async getHotels(@Query() query: SearchHotelsParams) {
         return await this.adminService.getHotels(query);
+    }
+
+    @Put('hotels/:id')
+    @Roles('admin')
+    // eslint-disable-next-line prettier/prettier
+    async updateHotel(@Param('id', IdValidationPipe) id: ID, @Body() dto: UpdateHotelDto) {
+        return await this.adminService.updateHotel(id, dto);
     }
 }

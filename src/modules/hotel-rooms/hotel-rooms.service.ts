@@ -5,7 +5,7 @@ import { ID } from 'src/types/id';
 import { HotelRoom } from './schemas/hotel-room.schema';
 import { IHotelRoom } from './types/i-hotel-room';
 import { IHotelRoomsService } from './types/i-hotel-rooms-service';
-import { ISearchRoomsParams } from './types/search-rooms-params';
+import { SearchRoomsParams } from './types/search-rooms-params';
 import { THotelRoomDocument } from './types/t-hotel-rooms-document';
 
 const room: IHotelRoom = {
@@ -33,7 +33,7 @@ export class HotelRoomsService implements IHotelRoomsService {
         return Promise.resolve(room);
     }
 
-    search(params: ISearchRoomsParams): Promise<IHotelRoom[]> {
+    search(params: SearchRoomsParams): Promise<IHotelRoom[]> {
         return Promise.resolve([room]);
     }
 

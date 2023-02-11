@@ -3,11 +3,13 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ID } from 'src/types/id';
 import { Hotel } from './schemas/hotel.schema';
+import { CreateHotelDto } from './types/create-hotel.dto';
 import { HotelData } from './types/hotel-data';
 import { IHotelService } from './types/i-hotel-service';
 import { IUpdateHotelParams } from './types/i-update-hotel-params';
 import { SearchHotelsParams } from './types/search-hotels-params';
 import { THotelDocument } from './types/t-hotel-document';
+import { UpdateHotelDto } from './types/update-hotel.dto';
 
 const hotel = {
     _id: 'sdf',
@@ -39,7 +41,7 @@ export class HotelsService implements IHotelService {
             .select({ _id: 0, id: '$_id', title: 1, description: 1 });
     }
 
-    update(id: ID, data: IUpdateHotelParams): Promise<HotelData> {
-        return Promise.resolve(hotel);
+    async update(id: ID, dto: UpdateHotelDto): Promise<HotelData> {
+        return await this.HotelModel.findOneAndUpdate({ _id: id }, dto);
     }
 }
