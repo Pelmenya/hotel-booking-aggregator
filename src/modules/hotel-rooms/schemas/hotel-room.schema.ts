@@ -1,11 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose from 'mongoose';
+import { Schema as MongooseSchema } from 'mongoose';
 import { Hotel } from 'src/modules/hotels/schemas/hotel.schema';
 import { IHotelRoom } from '../types/i-hotel-room';
 
 @Schema()
 export class HotelRoom implements Omit<IHotelRoom, '_id'> {
-    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Hotel' })
+    @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Hotel' })
     public hotel: Hotel;
 
     @Prop()

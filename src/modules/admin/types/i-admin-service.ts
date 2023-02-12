@@ -16,8 +16,5 @@ export interface IAdminService {
     getHotels(query: SearchHotelsParams): Promise<HotelData[]>;
     createHotel(dto: CreateHotelDto): Promise<THotelDataRes>;
     updateHotel(id: ID, dto: Partial<CreateHotelDto>): Promise<THotelDataRes>;
-    createHotelRoom(
-        files: Express.Multer.File[],
-        dto: CreateHotelRoomDto,
-    ): Promise<IHotelRoom>;
+    createHotelRoom(files: Express.Multer.File[], dto: CreateHotelRoomDto);
 }
