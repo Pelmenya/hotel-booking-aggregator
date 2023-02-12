@@ -8,5 +8,5 @@ export interface IHotelRoomsService {
     create(dto: CreateHotelRoomDto): Promise<HotelRoomDataRes>;
     findById(id: ID): Promise<HotelRoomDataRes>;
     search(params: SearchRoomsParams): Promise<HotelRoomDataRes[]>;
-    update(id: ID, dto: Partial<IHotelRoom>): Promise<HotelRoomDataRes>;
+    update(id: ID, dto: Partial<CreateHotelRoomDto>): Promise<HotelRoomDataRes>;
 }

@@ -77,10 +77,42 @@ export class AdminService implements IAdminService {
         files: Express.Multer.File[],
         dto: CreateHotelRoomDto,
     ) {
-        const images = await this.filesService.saveFiles(files);
-        return await this.hotelRoomsService.create({
+        const hotelRoom = await this.hotelRoomsService.create(dto);
+        const { _id } = hotelRoom;
+        const images = await this.filesService.saveFiles(_id, files);
+        const res = await this.hotelRoomsService.update(_id, {
             ...dto,
             images,
         });
+
+        return res;
+    }
+
+    async updateHotelRoom(
+        id: ID,
+        files: Express.Multer.File[],
+        dto: CreateHotelRoomDto,
+    ) {
+        const hotelRoom = await this.hotelRoomsService.findOne(id);
+        const { images: imagesDB } = hotelRoom;
+        const { images: imagesBody = [] } = dto;
+        console.log(imagesBody);
+        const imagesUpload = await this.filesService.saveFiles(id, files);
+        let imagesSave: string[] = [];
+        if (Array.isArray(imagesBody)) {
+            imagesSave = [...imagesUpload, ...imagesBody];
+        } else {
+            imagesSave = [...imagesUpload];
+            imagesSave.push(imagesBody);
+        }
+        const imagesRemove = imagesDB.filter(
+            (image) => !imagesSave.includes(image),
+        );
+        await this.filesService.removeFiles(imagesRemove);
+        const res = await this.hotelRoomsService.update(id, {
+            ...dto,
+            images: imagesSave,
+        });
+        return res;
     }
 }

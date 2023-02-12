@@ -5,7 +5,6 @@ import {
     Body,
     Controller,
     UseGuards,
-    HttpCode,
     Put,
     Param,
     UseInterceptors,
@@ -70,5 +69,16 @@ export class AdminController {
         @Body() dto: CreateHotelRoomDto,
     ) {
         return await this.adminService.createHotelRoom(files, dto);
+    }
+
+    @Put('hotel-rooms/:id')
+    @Roles('admin')
+    @UseInterceptors(FilesInterceptor('images'))
+    async updateHotelRoom(
+        @UploadedFiles() files: Express.Multer.File[],
+        @Param('id') id: ID,
+        @Body() dto: CreateHotelRoomDto,
+    ) {
+        return await this.adminService.updateHotelRoom(id, files, dto);
     }
 }

@@ -2,8 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ID } from 'src/types/id';
-import { Hotel } from '../hotels/schemas/hotel.schema';
-import { THotelDocument } from '../hotels/types/t-hotel-document';
 import { HotelRoom } from './schemas/hotel-room.schema';
 import { CreateHotelRoomDto } from './types/create-hotel-room.dto';
 import { HotelRoomDataRes } from './types/hotel-room-data-res';
@@ -30,13 +28,16 @@ export class HotelRoomsService implements IHotelRoomsService {
     constructor(
         @InjectModel(HotelRoom.name)
         private HotelRoomsModel: Model<THotelRoomDocument>,
-        @InjectModel(Hotel.name)
-        private HotelModel: Model<THotelDocument>,
     ) {}
 
-    async create(dto: CreateHotelRoomDto): Promise<HotelRoomDataRes> {
+    async create(dto: CreateHotelRoomDto): Promise<IHotelRoom> {
         const hotelRoom = await this.HotelRoomsModel.create(dto);
-        return await this.findById(hotelRoom._id);
+        return hotelRoom;
+    }
+
+    async findOne(id: ID): Promise<IHotelRoom> {
+        const hotelRoom = this.HotelRoomsModel.findOne({ _id: id });
+        return hotelRoom;
     }
 
     async findById(id: ID): Promise<HotelRoomDataRes> {
@@ -61,11 +62,18 @@ export class HotelRoomsService implements IHotelRoomsService {
         return res;
     }
 
-    search(params: SearchRoomsParams): Promise<IHotelRoom[]> {
-        return Promise.resolve([room]);
+    async update(
+        id: ID,
+        dto: Partial<CreateHotelRoomDto>,
+    ): Promise<HotelRoomDataRes> {
+        const hotelRoom = await this.HotelRoomsModel.findByIdAndUpdate(
+            id,
+            dto,
+        ).exec();
+        return await this.findById(hotelRoom._id);
     }
 
-    update(id: ID, dto: Partial<IHotelRoom>): Promise<IHotelRoom> {
-        return Promise.resolve(room);
+    search(params: SearchRoomsParams): Promise<IHotelRoom[]> {
+        return Promise.resolve([room]);
     }
 }
