@@ -96,14 +96,18 @@ export class AdminService implements IAdminService {
         const hotelRoom = await this.hotelRoomsService.findOne(id);
         const { images: imagesDB } = hotelRoom;
         const { images: imagesBody = [] } = dto;
-        console.log(imagesBody);
         const imagesUpload = await this.filesService.saveFiles(id, files);
         let imagesSave: string[] = [];
         if (Array.isArray(imagesBody)) {
-            imagesSave = [...imagesUpload, ...imagesBody];
+            imagesSave = [
+                ...imagesUpload,
+                ...imagesBody.filter((image) => imagesDB.includes(image)),
+            ];
         } else {
             imagesSave = [...imagesUpload];
-            imagesSave.push(imagesBody);
+            if (imagesDB.includes(imagesBody)) {
+                imagesSave.push(imagesBody);
+            }
         }
         const imagesRemove = imagesDB.filter(
             (image) => !imagesSave.includes(image),
