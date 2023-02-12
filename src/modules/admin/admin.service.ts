@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { genSalt, hash } from 'bcrypt';
 import { ID } from 'src/types/id';
+import { FilesService } from '../files/files.service';
 import { HotelRoomsService } from '../hotel-rooms/hotel-rooms.service';
-import { IHotelRoom } from '../hotel-rooms/types/i-hotel-room';
+import { CreateHotelRoomDto } from '../hotel-rooms/types/create-hotel-room.dto';
 import { HotelsService } from '../hotels/hotels.service';
 import { CreateHotelDto } from '../hotels/types/create-hotel.dto';
 import { HotelData } from '../hotels/types/hotel-data';
@@ -19,6 +20,7 @@ export class AdminService implements IAdminService {
         private readonly usersService: UsersService,
         private readonly hotelsService: HotelsService,
         private readonly hotelRoomsService: HotelRoomsService,
+        private readonly filesService: FilesService,
     ) {}
 
     async createUser(dto: CreateUserDto) {
@@ -71,7 +73,14 @@ export class AdminService implements IAdminService {
         };
     }
 
-    async createHotelRoom(dto: IHotelRoom) {
-        return await this.hotelRoomsService.create(dto);
+    async createHotelRoom(
+        files: Express.Multer.File[],
+        dto: CreateHotelRoomDto,
+    ) {
+        const images = await this.filesService.saveFiles(files);
+        return await this.hotelRoomsService.create({
+            ...dto,
+            images,
+        });
     }
 }

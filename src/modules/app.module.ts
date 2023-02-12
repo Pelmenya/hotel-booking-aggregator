@@ -14,6 +14,7 @@ import { AdminModule } from './admin/admin.module';
 import { ManagerModule } from './manager/manager.module';
 import { HotelRoomsModule } from './hotel-rooms/hotel-rooms.module';
 import { SupportRequestsModule } from './support-requests/support-requests.module';
+import { FilesModule } from './files/files.module';
 
 @Module({
     imports: [
@@ -33,6 +34,7 @@ import { SupportRequestsModule } from './support-requests/support-requests.modul
         AdminModule,
         ManagerModule,
         SupportRequestsModule,
+        FilesModule,
     ],
     controllers: [AppController],
     providers: [AppService],

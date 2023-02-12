@@ -1,8 +1,9 @@
+import { Hotel } from 'src/modules/hotels/schemas/hotel.schema';
 import { ID } from 'src/types/id';
 
 export interface IHotelRoom {
     _id: ID;
-    hotel: ID;
+    hotel: Hotel;
     description?: string;
     images?: string[];
     createAt: Date;

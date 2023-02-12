@@ -8,11 +8,15 @@ import {
     HttpCode,
     Put,
     Param,
+    UseInterceptors,
+    UploadedFiles,
 } from '@nestjs/common';
+import { FilesInterceptor } from '@nestjs/platform-express';
 import { Roles } from 'src/decorators/roles.decorator';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { IdValidationPipe } from 'src/pipes/id-validation/id-validation.pipe';
 import { ID } from 'src/types/id';
+import { CreateHotelRoomDto } from '../hotel-rooms/types/create-hotel-room.dto';
 import { CreateHotelDto } from '../hotels/types/create-hotel.dto';
 import { SearchHotelsParams } from '../hotels/types/search-hotels-params';
 import { UpdateHotelDto } from '../hotels/types/update-hotel.dto';
@@ -51,8 +55,20 @@ export class AdminController {
 
     @Put('hotels/:id')
     @Roles('admin')
-    // eslint-disable-next-line prettier/prettier
-    async updateHotel(@Param('id', IdValidationPipe) id: ID, @Body() dto: UpdateHotelDto) {
+    async updateHotel(
+        @Param('id', IdValidationPipe) id: ID,
+        @Body() dto: UpdateHotelDto,
+    ) {
         return await this.adminService.updateHotel(id, dto);
+    }
+
+    @Post('hotel-rooms')
+    @Roles('admin')
+    @UseInterceptors(FilesInterceptor('images'))
+    async creatHotelRoom(
+        @UploadedFiles() files: Express.Multer.File[],
+        @Body() dto: CreateHotelRoomDto,
+    ) {
+        return await this.adminService.createHotelRoom(files, dto);
     }
 }

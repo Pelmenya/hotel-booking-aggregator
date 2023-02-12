@@ -26,7 +26,7 @@ module.exports = {
         'code': 120,
         'comments': 120
     }],
-    '@typescript-eslint/indent': ['error', 4],
+    //'@typescript-eslint/indent': ['error', 4],
     'quotes': ['error', 'single'],
     'no-plusplus': ['error', { 'allowForLoopAfterthoughts': true }],
 

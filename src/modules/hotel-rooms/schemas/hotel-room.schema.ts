@@ -1,11 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { ID } from 'src/types/id';
+import mongoose from 'mongoose';
+import { Hotel } from 'src/modules/hotels/schemas/hotel.schema';
 import { IHotelRoom } from '../types/i-hotel-room';
 
 @Schema()
 export class HotelRoom implements Omit<IHotelRoom, '_id'> {
-    @Prop({ type: String, required: true })
-    public hotel: ID;
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Hotel' })
+    public hotel: Hotel;
 
     @Prop()
     public description: string;
@@ -13,10 +14,10 @@ export class HotelRoom implements Omit<IHotelRoom, '_id'> {
     @Prop({ type: [String] })
     public images: string[];
 
-    @Prop({ required: true })
+    @Prop({ required: true, default: new Date() })
     public createAt: Date;
 
-    @Prop({ required: true })
+    @Prop({ required: true, default: new Date() })
     public updateAt: Date;
 
     @Prop({ type: Boolean, required: true, default: true })
