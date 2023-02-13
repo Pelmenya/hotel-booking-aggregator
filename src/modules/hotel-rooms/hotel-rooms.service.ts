@@ -2,6 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ID } from 'src/types/id';
+import {
+    selectHotelParam,
+    selectHotelRoomParam,
+} from './hotel-rooms.constants';
 import { HotelRoom } from './schemas/hotel-room.schema';
 import { CreateHotelRoomDto } from './types/create-hotel-room.dto';
 import { HotelRoomDataRes } from './types/hotel-room-data-res';
@@ -9,19 +13,6 @@ import { IHotelRoom } from './types/i-hotel-room';
 import { IHotelRoomsService } from './types/i-hotel-rooms-service';
 import { SearchRoomsParams } from './types/search-rooms-params';
 import { THotelRoomDocument } from './types/t-hotel-rooms-document';
-
-const room: IHotelRoom = {
-    _id: 'ddd',
-    hotel: {
-        title: 'sds',
-        description: 'dasdas',
-        createAt: new Date(),
-        updateAt: new Date(),
-    },
-    createAt: new Date(),
-    updateAt: new Date(),
-    isEnabled: true,
-};
 
 @Injectable()
 export class HotelRoomsService implements IHotelRoomsService {
@@ -42,22 +33,8 @@ export class HotelRoomsService implements IHotelRoomsService {
 
     async findById(id: ID): Promise<HotelRoomDataRes> {
         const res = await this.HotelRoomsModel.findById(id)
-            .populate({
-                path: 'hotel',
-                select: {
-                    _id: 0,
-                    id: '$_id',
-                    title: 1,
-                    description: 1,
-                },
-            })
-            .select({
-                _id: 0,
-                id: '$_id',
-                description: 1,
-                images: 1,
-                isEnabled: 1,
-            })
+            .populate(selectHotelParam)
+            .select(selectHotelRoomParam)
             .exec();
         return res;
     }
@@ -73,7 +50,23 @@ export class HotelRoomsService implements IHotelRoomsService {
         return await this.findById(hotelRoom._id);
     }
 
-    search(params: SearchRoomsParams): Promise<IHotelRoom[]> {
-        return Promise.resolve([room]);
+    async search(query: SearchRoomsParams): Promise<IHotelRoom[]> {
+        const { limit = 20, offset = 0, hotel, isEnabled } = query;
+        const queryParams: SearchRoomsParams = {};
+        if (hotel) {
+            queryParams.hotel = hotel;
+        }
+
+        if (isEnabled) {
+            queryParams.isEnabled = isEnabled;
+        }
+
+        const res = await this.HotelRoomsModel.find(queryParams)
+            .limit(limit)
+            .skip(offset)
+            .populate(selectHotelParam)
+            .select(selectHotelRoomParam)
+            .exec();
+        return res;
     }
 }

@@ -8,6 +8,7 @@ import { THotelDataRes } from 'src/modules/hotels/types/t-hotel-data-res';
 import { ID } from 'src/types/id';
 import { CreateHotelRoomDto } from 'src/modules/hotel-rooms/types/create-hotel-room.dto';
 import { HotelRoomDataRes } from 'src/modules/hotel-rooms/types/hotel-room-data-res';
+import { SearchRoomsParams } from 'src/modules/hotel-rooms/types/search-rooms-params';
 
 export interface IAdminService {
     createUser(dto: CreateUserDto): Promise<Omit<CreateUserDto, 'password'>>;

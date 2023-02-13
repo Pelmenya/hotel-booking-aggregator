@@ -1,4 +1,4 @@
 export class SearchHotelsParams {
-    limit: number;
-    offset: number;
+    limit?: number;
+    offset?: number;
 }
