@@ -60,7 +60,7 @@ export class HotelRoomsService implements IHotelRoomsService {
         if (isEnabled) {
             queryParams.isEnabled = isEnabled;
         }
-
+        console.log(queryParams);
         const res = await this.HotelRoomsModel.find(queryParams)
             .limit(limit)
             .skip(offset)
