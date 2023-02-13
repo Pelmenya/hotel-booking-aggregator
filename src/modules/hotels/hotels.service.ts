@@ -3,21 +3,11 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ID } from 'src/types/id';
 import { Hotel } from './schemas/hotel.schema';
-import { CreateHotelDto } from './types/create-hotel.dto';
 import { HotelData } from './types/hotel-data';
 import { IHotelService } from './types/i-hotel-service';
-import { IUpdateHotelParams } from './types/i-update-hotel-params';
 import { SearchHotelsParams } from './types/search-hotels-params';
 import { THotelDocument } from './types/t-hotel-document';
 import { UpdateHotelDto } from './types/update-hotel.dto';
-
-const hotel = {
-    _id: 'sdf',
-    title: 'string',
-    description: 'string',
-    createAt: new Date(),
-    updateAt: new Date(),
-};
 
 @Injectable()
 export class HotelsService implements IHotelService {
