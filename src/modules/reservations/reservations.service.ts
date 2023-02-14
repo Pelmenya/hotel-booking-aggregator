@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+    BadRequestException,
+    ForbiddenException,
+    Injectable,
+    NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { differenceInDays } from 'date-fns';
 import { Model } from 'mongoose';
@@ -18,6 +23,7 @@ import { IReservationsService } from './types/i-reservations-service';
 import { SearchReservationsParams } from './types/search-reservations-params';
 import { IValidationFields } from './types/i-validation-fields';
 import { TReservationDocument } from './types/t-reservation-document';
+import { User } from '../users/schemas/users.schema';
 
 @Injectable()
 export class ReservationsService implements IReservationsService {
@@ -60,18 +66,21 @@ export class ReservationsService implements IReservationsService {
         searchParams.startDate = { $gte: startDate };
         searchParams.endDate = { $lte: startDate };
 
-        const startIsValid = await this.ReservationModel.find(searchParams);
-        if (!startIsValid.length) {
+        const startIsInIntervalDate = await this.ReservationModel.findOne(
+            searchParams,
+        );
+        if (!startIsInIntervalDate) {
             searchParams.startDate = { $gte: endDate };
             searchParams.endDate = { $lte: endDate };
-            const endIsValid = await this.ReservationModel.find(searchParams);
-            if (!endIsValid.length) {
+            const endIsInIntervalDate = await this.ReservationModel.findOne(
+                searchParams,
+            );
+            if (!endIsInIntervalDate) {
                 searchParams.startDate = { $gte: startDate };
                 searchParams.endDate = { $lte: endDate };
-                const fullIsValid = await this.ReservationModel.find(
-                    searchParams,
-                );
-                if (!fullIsValid.length) {
+                const startDateAndEndDateContainsInterval =
+                    await this.ReservationModel.findOne(searchParams);
+                if (!startDateAndEndDateContainsInterval) {
                     return true;
                 }
             }
@@ -79,8 +88,20 @@ export class ReservationsService implements IReservationsService {
         return false;
     }
 
-    async removeReservation(id: ID): Promise<Reservation> {
-        return await this.ReservationModel.findByIdAndRemove(id);
+    async removeReservation(room: ID, user: ID): Promise<Reservation> {
+        const reservation = await this.ReservationModel.findById(room);
+        if (reservation) {
+            if (String(reservation.user) === user) {
+                return await this.ReservationModel.findByIdAndRemove(room)
+                    .select(selectReservation)
+                    .populate(populateHotelParam)
+                    .populate(populateHotelRoomParam);
+            }
+            throw new ForbiddenException(ERRORS_RESERVATION.USER_NOT_VALID);
+        }
+        throw new BadRequestException(
+            ERRORS_RESERVATION.RESERVATION_IS_NOT_EXIST,
+        );
     }
 
     async getReservations(

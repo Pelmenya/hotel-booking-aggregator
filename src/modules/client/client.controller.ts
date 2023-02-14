@@ -7,10 +7,13 @@ import {
     BadRequestException,
     Get,
     Query,
+    Delete,
+    Param,
 } from '@nestjs/common';
 import { Roles } from 'src/decorators/roles.decorator';
 import { NotAuthenticatedGuard } from 'src/guards/not-authenticated.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
+import { ID } from 'src/types/id';
 import { AuthService } from '../auth/auth.service';
 import { RegisterDto } from '../auth/types/register.dto';
 import { ERRORS_HOTEL_ROOMS } from '../hotel-rooms/hotel-rooms.constants';
@@ -62,5 +65,17 @@ export class ClientController {
     ) {
         const searchParams = { ...query, user: req.user?._id };
         return await this.reservationsService.getReservations(searchParams);
+    }
+
+    @Delete('reservations/:id')
+    @Roles('client')
+    async deleteReservation(
+        @Param('id') room: ID,
+        @Req() req: Express.Request & { user: IUser },
+    ) {
+        return await this.reservationsService.removeReservation(
+            room,
+            req?.user?._id,
+        );
     }
 }
