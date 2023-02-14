@@ -24,6 +24,7 @@ import { SearchReservationsParams } from './types/search-reservations-params';
 import { IValidationFields } from './types/i-validation-fields';
 import { TReservationDocument } from './types/t-reservation-document';
 import { User } from '../users/schemas/users.schema';
+import { ISearchReservationsParam } from './types/i-search-reservations-param';
 
 @Injectable()
 export class ReservationsService implements IReservationsService {
@@ -88,10 +89,17 @@ export class ReservationsService implements IReservationsService {
         return false;
     }
 
-    async removeReservation(room: ID, user: ID): Promise<Reservation> {
+    async removeReservation(room: ID, user?: ID): Promise<Reservation> {
         const reservation = await this.ReservationModel.findById(room);
         if (reservation) {
-            if (String(reservation.user) === user) {
+            if (user) {
+                if (String(reservation.user) === user) {
+                    return await this.ReservationModel.findByIdAndRemove(room)
+                        .select(selectReservation)
+                        .populate(populateHotelParam)
+                        .populate(populateHotelRoomParam);
+                }
+            } else {
                 return await this.ReservationModel.findByIdAndRemove(room)
                     .select(selectReservation)
                     .populate(populateHotelParam)
@@ -108,14 +116,14 @@ export class ReservationsService implements IReservationsService {
         query: SearchReservationsParams,
     ): Promise<Reservation[]> {
         const { limit = 20, offset = 0, user, startDate, endDate } = query;
-        const searchParams: SearchReservationsParams = { user };
+        const searchParams: ISearchReservationsParam = { user };
 
         if (startDate) {
-            searchParams.startDate = startDate;
+            searchParams.startDate = { $gte: startDate };
         }
 
         if (endDate) {
-            searchParams.endDate = endDate;
+            searchParams.endDate = { $lte: endDate };
         }
 
         const res = await this.ReservationModel.find(searchParams)
