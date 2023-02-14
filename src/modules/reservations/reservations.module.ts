@@ -3,7 +3,6 @@ import { ReservationsService } from './reservations.service';
 import { ReservationsController } from './reservations.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Reservation, ReservationSchema } from './schemas/reservation.schema';
-import { HotelRoomsModule } from '../hotel-rooms/hotel-rooms.module';
 
 @Module({
     imports: [

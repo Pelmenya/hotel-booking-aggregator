@@ -20,10 +20,10 @@ export class Reservation implements Omit<IReservation, '_id'> {
     })
     public room: HotelRoom;
 
-    @Prop({ required: true })
+    @Prop({ type: Date, required: true })
     public startDate: Date;
 
-    @Prop({ required: true })
+    @Prop({ type: Date, required: true })
     public endDate: Date;
 }
 

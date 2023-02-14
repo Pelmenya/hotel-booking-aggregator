@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ID } from 'src/types/id';
 import {
-    selectHotelParam,
+    populateHotelParam,
     selectHotelRoomParam,
 } from './hotel-rooms.constants';
 import { HotelRoom } from './schemas/hotel-room.schema';
@@ -33,7 +33,7 @@ export class HotelRoomsService implements IHotelRoomsService {
 
     async findById(id: ID): Promise<HotelRoomDataRes> {
         const res = await this.HotelRoomsModel.findById(id)
-            .populate(selectHotelParam)
+            .populate(populateHotelParam)
             .select(selectHotelRoomParam)
             .exec();
         return res;
@@ -60,11 +60,11 @@ export class HotelRoomsService implements IHotelRoomsService {
         if (isEnabled) {
             queryParams.isEnabled = isEnabled;
         }
-        console.log(queryParams);
+
         const res = await this.HotelRoomsModel.find(queryParams)
             .limit(limit)
             .skip(offset)
-            .populate(selectHotelParam)
+            .populate(populateHotelParam)
             .select(selectHotelRoomParam)
             .exec();
         return res;

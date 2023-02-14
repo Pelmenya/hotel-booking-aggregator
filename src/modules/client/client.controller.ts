@@ -1,9 +1,17 @@
-import { Post, Body, Controller, UseGuards, Req } from '@nestjs/common';
+import {
+    Post,
+    Body,
+    Controller,
+    UseGuards,
+    Req,
+    BadRequestException,
+} from '@nestjs/common';
 import { Roles } from 'src/decorators/roles.decorator';
 import { NotAuthenticatedGuard } from 'src/guards/not-authenticated.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { AuthService } from '../auth/auth.service';
 import { RegisterDto } from '../auth/types/register.dto';
+import { ERRORS_HOTEL_ROOMS } from '../hotel-rooms/hotel-rooms.constants';
 import { HotelRoomsService } from '../hotel-rooms/hotel-rooms.service';
 import { ReservationsService } from '../reservations/reservations.service';
 import { CreateReservationDto } from '../reservations/types/create-reservation.dto';
@@ -30,11 +38,16 @@ export class ClientController {
         @Req() req: Express.Request & { user: IUser },
         @Body() dto: CreateReservationDto,
     ) {
-        const { hotel } = await this.hotelRoomsService.findOne(dto.room);
+        const room = await this.hotelRoomsService.findOne(dto.room);
+
+        if (!room || !room.isEnabled) {
+            throw new BadRequestException(ERRORS_HOTEL_ROOMS.NOT_EXIST);
+        }
+
         return await this.reservationsService.addReservation({
             ...dto,
             user: String(req?.user._id),
-            hotel: String(hotel),
+            hotel: String(room.hotel),
         });
     }
 }

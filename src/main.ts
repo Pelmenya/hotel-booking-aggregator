@@ -4,7 +4,6 @@ import { ValidationPipe } from './pipes/validation/validation.pipe';
 import * as cookieParser from 'cookie-parser';
 import * as session from 'express-session';
 import * as passport from 'passport';
-import { RolesGuard } from './guards/roles.guard';
 
 declare const module: any;
 

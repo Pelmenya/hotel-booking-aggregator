@@ -1,4 +1,4 @@
-export const selectHotelParam = {
+export const populateHotelParam = {
     path: 'hotel',
     select: {
         _id: 0,
@@ -14,4 +14,16 @@ export const selectHotelRoomParam = {
     description: 1,
     images: 1,
     isEnabled: 1,
+};
+
+export const populateHotelRoomParam = {
+    path: 'room',
+    select: {
+        description: 1,
+        images: 1,
+    },
+};
+
+export const ERRORS_HOTEL_ROOMS = {
+    NOT_EXIST: 'Номера с таким Id не существует',
 };

@@ -1,11 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { differenceInDays } from 'date-fns';
 import { Model } from 'mongoose';
 import { ID } from 'src/types/id';
+import { ERRORS_RESERVATION } from './reservation.constants';
 import { Reservation } from './schemas/reservation.schema';
 import { CreateReservationDto } from './types/create-reservation.dto';
 import { IReservationsService } from './types/i-reservations-service';
 import { ISearchReservationsParams } from './types/i-search-reservations-params';
+import { IValidationFields } from './types/i-validation-fields';
 import { TReservationDocument } from './types/t-reservation-document';
 
 @Injectable()
@@ -16,12 +19,44 @@ export class ReservationsService implements IReservationsService {
     ) {}
 
     async addReservation(dto: CreateReservationDto) {
-        return await this.ReservationModel.create(dto);
+        const datesIsValid = await this.validateReservationDates(dto);
+        if (datesIsValid) {
+            const reservation = await this.ReservationModel.create(dto);
+            return reservation;
+        } else {
+            throw new NotFoundException(ERRORS_RESERVATION.ROOM_IS_OCCUPIED);
+        }
+    }
+
+    async validateReservationDates(dto: CreateReservationDto) {
+        const { startDate, endDate } = dto;
+        if (differenceInDays(new Date(endDate), new Date(startDate)) < 1) {
+            throw new NotFoundException(ERRORS_RESERVATION.ONE_DAY_BOOKING);
+        }
+        const searchParams: IValidationFields = {};
+        searchParams.startDate = { $gte: startDate };
+        searchParams.endDate = { $lte: startDate };
+        const startIsValid = await this.ReservationModel.find(searchParams);
+        if (!startIsValid.length) {
+            searchParams.startDate = { $gte: endDate };
+            searchParams.endDate = { $lte: endDate };
+            const endIsValid = await this.ReservationModel.find(searchParams);
+            if (!endIsValid.length) {
+                searchParams.startDate = { $gte: startDate };
+                searchParams.endDate = { $lte: endDate };
+                const fullIsValid = await this.ReservationModel.find(
+                    searchParams,
+                );
+                if (!fullIsValid.length) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     async removeReservation(id: ID): Promise<Reservation> {
-        const dto: any = {};
-        return await this.ReservationModel.create(dto);
+        return await this.ReservationModel.findByIdAndRemove(id);
     }
 
     async getReservations(
