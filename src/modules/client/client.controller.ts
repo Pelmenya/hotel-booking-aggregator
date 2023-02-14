@@ -5,6 +5,8 @@ import {
     UseGuards,
     Req,
     BadRequestException,
+    Get,
+    Query,
 } from '@nestjs/common';
 import { Roles } from 'src/decorators/roles.decorator';
 import { NotAuthenticatedGuard } from 'src/guards/not-authenticated.guard';
@@ -15,6 +17,7 @@ import { ERRORS_HOTEL_ROOMS } from '../hotel-rooms/hotel-rooms.constants';
 import { HotelRoomsService } from '../hotel-rooms/hotel-rooms.service';
 import { ReservationsService } from '../reservations/reservations.service';
 import { CreateReservationDto } from '../reservations/types/create-reservation.dto';
+import { SearchReservationsParams } from '../reservations/types/search-reservations-params';
 import { IUser } from '../users/types/i-user';
 
 @UseGuards(RolesGuard)
@@ -49,5 +52,15 @@ export class ClientController {
             user: String(req?.user._id),
             hotel: String(room.hotel),
         });
+    }
+
+    @Get('reservations')
+    @Roles('client')
+    async getReservations(
+        @Req() req: Express.Request & { user: IUser },
+        @Query() query: SearchReservationsParams,
+    ) {
+        const searchParams = { ...query, user: req.user?._id };
+        return await this.reservationsService.getReservations(searchParams);
     }
 }

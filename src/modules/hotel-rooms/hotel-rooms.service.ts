@@ -57,8 +57,8 @@ export class HotelRoomsService implements IHotelRoomsService {
             queryParams.hotel = hotel;
         }
 
-        if (isEnabled) {
-            queryParams.isEnabled = isEnabled;
+        if (String(isEnabled) === 'false') {
+            queryParams.isEnabled = false;
         }
 
         const res = await this.HotelRoomsModel.find(queryParams)

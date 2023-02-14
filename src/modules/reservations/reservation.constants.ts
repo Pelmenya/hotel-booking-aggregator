@@ -1,9 +1,9 @@
+export const MIN_DAYS_RESERVATION = 1;
+
 export const ERRORS_RESERVATION = {
     ROOM_IS_OCCUPIED: 'Номер занят в этот период',
-    ONE_DAY_BOOKING: 'Бронирование от одного дня',
+    MIN_DAYS_RESERVATION: `Бронирование от ${MIN_DAYS_RESERVATION} дня`,
 };
-
-export const MIN_DAYS_RESERVATION = 1;
 
 export const selectReservation = {
     _id: 0,

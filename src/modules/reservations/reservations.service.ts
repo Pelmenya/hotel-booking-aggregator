@@ -15,7 +15,7 @@ import {
 import { Reservation } from './schemas/reservation.schema';
 import { CreateReservationDto } from './types/create-reservation.dto';
 import { IReservationsService } from './types/i-reservations-service';
-import { ISearchReservationsParams } from './types/i-search-reservations-params';
+import { SearchReservationsParams } from './types/search-reservations-params';
 import { IValidationFields } from './types/i-validation-fields';
 import { TReservationDocument } from './types/t-reservation-document';
 
@@ -27,13 +27,10 @@ export class ReservationsService implements IReservationsService {
     ) {}
 
     async findById(id: ID) {
-        const res = await (
-            await (
-                await this.ReservationModel.findById(id).select(
-                    selectReservation,
-                )
-            ).populate(populateHotelParam)
-        ).populate(populateHotelRoomParam);
+        const res = await this.ReservationModel.findById(id)
+            .select(selectReservation)
+            .populate(populateHotelParam)
+            .populate(populateHotelRoomParam);
 
         return res;
     }
@@ -54,7 +51,9 @@ export class ReservationsService implements IReservationsService {
             differenceInDays(new Date(endDate), new Date(startDate)) <
             MIN_DAYS_RESERVATION
         ) {
-            throw new NotFoundException(ERRORS_RESERVATION.ONE_DAY_BOOKING);
+            throw new NotFoundException(
+                ERRORS_RESERVATION.MIN_DAYS_RESERVATION,
+            );
         }
 
         const searchParams: IValidationFields = { room };
@@ -85,10 +84,26 @@ export class ReservationsService implements IReservationsService {
     }
 
     async getReservations(
-        query: ISearchReservationsParams,
+        query: SearchReservationsParams,
     ): Promise<Reservation[]> {
-        console.log(query);
-        const dto: any = {};
-        return [await this.ReservationModel.create(dto)];
+        const { limit = 20, offset = 0, user, startDate, endDate } = query;
+        const searchParams: SearchReservationsParams = { user };
+
+        if (startDate) {
+            searchParams.startDate = startDate;
+        }
+
+        if (endDate) {
+            searchParams.endDate = endDate;
+        }
+
+        const res = await this.ReservationModel.find(searchParams)
+            .limit(limit)
+            .skip(offset)
+            .select(selectReservation)
+            .populate(populateHotelParam)
+            .populate(populateHotelRoomParam);
+
+        return res;
     }
 }
