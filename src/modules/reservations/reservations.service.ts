@@ -23,7 +23,6 @@ import { IReservationsService } from './types/i-reservations-service';
 import { SearchReservationsParams } from './types/search-reservations-params';
 import { IValidationFields } from './types/i-validation-fields';
 import { TReservationDocument } from './types/t-reservation-document';
-import { User } from '../users/schemas/users.schema';
 import { ISearchReservationsParam } from './types/i-search-reservations-param';
 
 @Injectable()

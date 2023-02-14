@@ -69,7 +69,7 @@ export class ClientController {
 
     @Delete('reservations/:id')
     @Roles('client')
-    async deleteReservation(
+    async removeReservation(
         @Param('id') room: ID,
         @Req() req: Express.Request & { user: IUser },
     ) {

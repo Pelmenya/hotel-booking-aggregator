@@ -1,4 +1,4 @@
-import { Controller, Param } from '@nestjs/common';
+import { Controller, Delete, Param } from '@nestjs/common';
 import { Get, Query, UseGuards } from '@nestjs/common';
 import { Roles } from 'src/decorators/roles.decorator';
 import { RolesGuard } from 'src/guards/roles.guard';
@@ -30,5 +30,11 @@ export class ManagerController {
     ) {
         const searchParams = { ...query, user };
         return await this.reservationsService.getReservations(searchParams);
+    }
+
+    @Delete('reservations/:id')
+    @Roles('manager')
+    async removeReservation(@Param('id') room: ID) {
+        return await this.reservationsService.removeReservation(room);
     }
 }
