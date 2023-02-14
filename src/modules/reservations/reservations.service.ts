@@ -29,11 +29,12 @@ export class ReservationsService implements IReservationsService {
     }
 
     async validateReservationDates(dto: CreateReservationDto) {
-        const { startDate, endDate } = dto;
+        const { startDate, endDate, room } = dto;
         if (differenceInDays(new Date(endDate), new Date(startDate)) < 1) {
             throw new NotFoundException(ERRORS_RESERVATION.ONE_DAY_BOOKING);
         }
         const searchParams: IValidationFields = {};
+        searchParams.room = room;
         searchParams.startDate = { $gte: startDate };
         searchParams.endDate = { $lte: startDate };
         const startIsValid = await this.ReservationModel.find(searchParams);
