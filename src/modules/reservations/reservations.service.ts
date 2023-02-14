@@ -3,7 +3,15 @@ import { InjectModel } from '@nestjs/mongoose';
 import { differenceInDays } from 'date-fns';
 import { Model } from 'mongoose';
 import { ID } from 'src/types/id';
-import { ERRORS_RESERVATION } from './reservation.constants';
+import {
+    populateHotelParam,
+    populateHotelRoomParam,
+} from '../hotel-rooms/hotel-rooms.constants';
+import {
+    ERRORS_RESERVATION,
+    MIN_DAYS_RESERVATION,
+    selectReservation,
+} from './reservation.constants';
 import { Reservation } from './schemas/reservation.schema';
 import { CreateReservationDto } from './types/create-reservation.dto';
 import { IReservationsService } from './types/i-reservations-service';
@@ -18,11 +26,23 @@ export class ReservationsService implements IReservationsService {
         private readonly ReservationModel: Model<TReservationDocument>,
     ) {}
 
+    async findById(id: ID) {
+        const res = await (
+            await (
+                await this.ReservationModel.findById(id).select(
+                    selectReservation,
+                )
+            ).populate(populateHotelParam)
+        ).populate(populateHotelRoomParam);
+
+        return res;
+    }
+
     async addReservation(dto: CreateReservationDto) {
         const datesIsValid = await this.validateReservationDates(dto);
         if (datesIsValid) {
             const reservation = await this.ReservationModel.create(dto);
-            return reservation;
+            return await this.findById(reservation._id);
         } else {
             throw new NotFoundException(ERRORS_RESERVATION.ROOM_IS_OCCUPIED);
         }
@@ -30,13 +50,17 @@ export class ReservationsService implements IReservationsService {
 
     async validateReservationDates(dto: CreateReservationDto) {
         const { startDate, endDate, room } = dto;
-        if (differenceInDays(new Date(endDate), new Date(startDate)) < 1) {
+        if (
+            differenceInDays(new Date(endDate), new Date(startDate)) <
+            MIN_DAYS_RESERVATION
+        ) {
             throw new NotFoundException(ERRORS_RESERVATION.ONE_DAY_BOOKING);
         }
-        const searchParams: IValidationFields = {};
-        searchParams.room = room;
+
+        const searchParams: IValidationFields = { room };
         searchParams.startDate = { $gte: startDate };
         searchParams.endDate = { $lte: startDate };
+
         const startIsValid = await this.ReservationModel.find(searchParams);
         if (!startIsValid.length) {
             searchParams.startDate = { $gte: endDate };

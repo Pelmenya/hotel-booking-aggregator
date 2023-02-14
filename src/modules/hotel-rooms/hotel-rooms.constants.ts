@@ -19,6 +19,8 @@ export const selectHotelRoomParam = {
 export const populateHotelRoomParam = {
     path: 'room',
     select: {
+        _id: 0,
+        id: '$_id',
         description: 1,
         images: 1,
     },
