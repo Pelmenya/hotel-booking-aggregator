@@ -15,7 +15,7 @@ export class SupportRequest implements Omit<ISupportRequest, '_id'> {
     @Prop({ type: MongooseSchema.Types.Array })
     public messages: [Message];
 
-    @Prop()
+    @Prop({ type: Boolean, default: true })
     public isActive: boolean;
 }
 

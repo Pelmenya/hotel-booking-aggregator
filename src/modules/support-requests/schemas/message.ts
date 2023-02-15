@@ -11,7 +11,7 @@ export class Message implements Omit<IMessage, '_id'> {
     @Prop({ required: true, type: Date, default: new Date().toISOString() })
     public sentAt: Date;
 
-    @Prop({ required: true })
+    @Prop({ type: String, required: true })
     public text: string;
 
     @Prop()

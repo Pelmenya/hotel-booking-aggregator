@@ -6,8 +6,8 @@ import {
     SupportRequestSchema,
 } from './schemas/support-request';
 import { SupportRequestsService } from './support-requests.service';
-import { SupportRequestClientService } from './support-request-client.service';
-import { SupportRequestEmployeeService } from './support-request-employee.service';
+import { SupportRequestsClientService } from './support-requests-client.service';
+import { SupportRequestsEmployeeService } from './support-requests-employee.service';
 
 @Module({
     imports: [
@@ -24,13 +24,13 @@ import { SupportRequestEmployeeService } from './support-request-employee.servic
     ],
     providers: [
         SupportRequestsService,
-        SupportRequestClientService,
-        SupportRequestEmployeeService,
+        SupportRequestsClientService,
+        SupportRequestsEmployeeService,
     ],
     exports: [
         SupportRequestsService,
-        SupportRequestClientService,
-        SupportRequestEmployeeService,
+        SupportRequestsClientService,
+        SupportRequestsEmployeeService,
     ],
 })
 export class SupportRequestsModule {}

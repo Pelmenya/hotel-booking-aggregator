@@ -21,6 +21,7 @@ import { HotelRoomsService } from '../hotel-rooms/hotel-rooms.service';
 import { ReservationsService } from '../reservations/reservations.service';
 import { CreateReservationDto } from '../reservations/types/create-reservation.dto';
 import { SearchReservationsParams } from '../reservations/types/search-reservations-params';
+import { SupportRequestsClientService } from '../support-requests/support-requests-client.service';
 import { IUser } from '../users/types/i-user';
 
 @UseGuards(RolesGuard)
@@ -30,6 +31,7 @@ export class ClientController {
         private readonly authService: AuthService,
         private readonly reservationsService: ReservationsService,
         private readonly hotelRoomsService: HotelRoomsService,
+        private readonly supportRequestsClientService: SupportRequestsClientService,
     ) {}
 
     @UseGuards(NotAuthenticatedGuard)
@@ -77,5 +79,17 @@ export class ClientController {
             room,
             req?.user?._id,
         );
+    }
+
+    @Post('support-requests')
+    @Roles('client')
+    async createSupportRequest(
+        @Req() req: Express.Request & { user: IUser },
+        @Body('text') text: string,
+    ) {
+        return await this.supportRequestsClientService.createSupportRequest({
+            user: req?.user?._id,
+            text,
+        });
     }
 }
