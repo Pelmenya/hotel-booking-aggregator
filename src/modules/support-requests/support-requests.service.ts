@@ -2,6 +2,7 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ID } from 'src/types/id';
+import { IUser } from '../users/types/i-user';
 import { Message } from './schemas/message';
 import { SupportRequest } from './schemas/support-request';
 import { ERRORS_SUPPORT_REQUESTS } from './support-requests.constants';
@@ -60,9 +61,33 @@ export class SupportRequestsService implements ISupportRequestsService {
         return requests;
     }
 
-    sendMessage(dto: SendMessageDto): Promise<Message> {
-        let m: any;
-        return Promise.resolve(m);
+    async sendMessage({
+        supportRequest,
+        ...dto
+    }: SendMessageDto): Promise<Message> {
+        const { messages } = await this.SupportRequestModel.findById(
+            supportRequest,
+        ).exec();
+        const message = await this.MessageModel.create(dto);
+        await this.SupportRequestModel.findByIdAndUpdate(supportRequest, {
+            messages: [...messages, message],
+        });
+        return await this.MessageModel.findById(message._id)
+            .select({
+                _id: 0,
+                id: '$_id',
+                sentAt: 1,
+                text: 1,
+                readAt: 1,
+            })
+            .populate({
+                path: 'author',
+                select: {
+                    _id: 0,
+                    id: '$_id',
+                    name: 1,
+                },
+            });
     }
 
     async getMessages(supportRequest: ID): Promise<any> {
@@ -99,9 +124,21 @@ export class SupportRequestsService implements ISupportRequestsService {
         Promise.resolve(m);
     }
 
-    getUnreadCount(supportRequest: ID): Promise<Message[]> {
+    async getUnreadCount(supportRequest: ID): Promise<Message[]> {
         let m: any;
         return Promise.resolve(m);
+    }
+
+    async hasSupportRequest(user: IUser, supportRequest: ID) {
+        if (user.role === 'client') {
+            const hasSupportRequests = await this.findSupportRequests({
+                user: user._id,
+                _id: supportRequest,
+            });
+            if (!hasSupportRequests.length) {
+                throw new ForbiddenException(ERRORS_SUPPORT_REQUESTS.FORBIDEN);
+            }
+        }
     }
 
     subscribe(

@@ -1,8 +1,10 @@
 import {
+    Body,
     Controller,
     ForbiddenException,
     Get,
     Param,
+    Post,
     Query,
     Req,
     UseGuards,
@@ -50,16 +52,23 @@ export class CommonController {
         @Param('id', IdValidationPipe) id: ID,
     ) {
         const { user } = req;
-        if (user.role === 'client') {
-            const hasSupportRequests =
-                await this.supportRequestsService.findSupportRequests({
-                    user: user._id,
-                    _id: id,
-                });
-            if (!hasSupportRequests.length) {
-                throw new ForbiddenException(ERRORS_SUPPORT_REQUESTS.FORBIDEN);
-            }
-        }
+        await this.supportRequestsService.hasSupportRequest(user, id);
         return this.supportRequestsService.getMessages(id);
+    }
+
+    @Roles('client', 'manager')
+    @Post('support-requests/:id/messages')
+    async sendMessages(
+        @Req() req: Express.Request & { user: IUser },
+        @Param('id', IdValidationPipe) id: ID,
+        @Body('text') text: string,
+    ) {
+        const { user } = req;
+        await this.supportRequestsService.hasSupportRequest(user, id);
+        return this.supportRequestsService.sendMessage({
+            author: user._id,
+            supportRequest: id,
+            text,
+        });
     }
 }
