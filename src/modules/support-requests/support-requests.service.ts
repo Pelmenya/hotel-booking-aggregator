@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ID } from 'src/types/id';
 import { Message } from './schemas/message';
 import { SupportRequest } from './schemas/support-request';
+import { ERRORS_SUPPORT_REQUESTS } from './support-requests.constants';
 import { ISupportRequest } from './types/i-request-support';
 import { ISupportRequestsService } from './types/i-support-requests-service';
 import { MarkMessagesAsReadDto } from './types/mark-messages-as-read.dto';
@@ -65,15 +66,32 @@ export class SupportRequestsService implements ISupportRequestsService {
     }
 
     async getMessages(supportRequest: ID): Promise<any> {
-        return await this.SupportRequestModel.findById(supportRequest)
-            .select({ _id: 0, isActive: 0, user: 0, createAt: 0, __v: 0 })
+        const requests = await this.SupportRequestModel.findById(supportRequest)
             .populate({
                 path: 'messages',
+                select: {
+                    _id: 0,
+                    id: '$_id',
+                    sentAt: 1,
+                    text: 1,
+                    readAt: 1,
+                },
                 populate: {
                     path: 'author',
+                    select: {
+                        _id: 0,
+                        id: '$_id',
+                        name: 1,
+                    },
                 },
             })
             .exec();
+
+        if (!requests) {
+            throw new ForbiddenException(ERRORS_SUPPORT_REQUESTS.FORBIDEN);
+        }
+
+        return [...requests.messages];
     }
 
     markMessagesAsRead(dto: MarkMessagesAsReadDto): void {

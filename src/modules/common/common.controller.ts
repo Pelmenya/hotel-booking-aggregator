@@ -12,6 +12,7 @@ import { RolesGuard } from 'src/guards/roles.guard';
 import { IdValidationPipe } from 'src/pipes/id-validation/id-validation.pipe';
 import { ID } from 'src/types/id';
 import { SearchRoomsParams } from '../hotel-rooms/types/search-rooms-params';
+import { ERRORS_SUPPORT_REQUESTS } from '../support-requests/support-requests.constants';
 import { SupportRequestsService } from '../support-requests/support-requests.service';
 import { IUser } from '../users/types/i-user';
 import { CommonService } from './common.service';
@@ -46,7 +47,7 @@ export class CommonController {
     @Get('support-requests/:id/messages')
     async getMessages(
         @Req() req: Express.Request & { user: IUser },
-        @Param('id') id: ID,
+        @Param('id', IdValidationPipe) id: ID,
     ) {
         const { user } = req;
         if (user.role === 'client') {
@@ -56,7 +57,7 @@ export class CommonController {
                     _id: id,
                 });
             if (!hasSupportRequests.length) {
-                throw new ForbiddenException('Forbidden');
+                throw new ForbiddenException(ERRORS_SUPPORT_REQUESTS.FORBIDEN);
             }
         }
         return this.supportRequestsService.getMessages(id);

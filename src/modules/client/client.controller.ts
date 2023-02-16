@@ -18,6 +18,7 @@ import { RolesGuard } from 'src/guards/roles.guard';
 import {
     SupportRequestsResponseInterceptor,
 } from 'src/modules/support-requests/interceptors/support-requests-response-interceptor';
+import { IdValidationPipe } from 'src/pipes/id-validation/id-validation.pipe';
 import { ID } from 'src/types/id';
 import { AuthService } from '../auth/auth.service';
 import { RegisterDto } from '../auth/types/register.dto';
@@ -80,7 +81,7 @@ export class ClientController {
     @Delete('reservations/:id')
     @Roles('client')
     async removeReservation(
-        @Param('id') room: ID,
+        @Param('id', IdValidationPipe) room: ID,
         @Req() req: Express.Request & { user: IUser },
     ) {
         return await this.reservationsService.removeReservation(

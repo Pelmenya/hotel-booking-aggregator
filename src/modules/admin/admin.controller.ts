@@ -76,7 +76,7 @@ export class AdminController {
     @UseInterceptors(FilesInterceptor('images'))
     async updateHotelRoom(
         @UploadedFiles() files: Express.Multer.File[],
-        @Param('id') id: ID,
+        @Param('id', IdValidationPipe) id: ID,
         @Body() dto: CreateHotelRoomDto,
     ) {
         return await this.adminService.updateHotelRoom(id, files, dto);
