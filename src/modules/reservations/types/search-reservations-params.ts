@@ -1,9 +1,9 @@
 import { Type } from 'class-transformer';
 import { IsDate, IsOptional } from 'class-validator';
-import { SearchHotelsParams } from 'src/modules/hotels/types/search-hotels-params';
+import { SearchBaseParams } from 'src/types/search-base-params';
 import { ID } from 'src/types/id';
 
-export class SearchReservationsParams extends SearchHotelsParams {
+export class SearchReservationsParams extends SearchBaseParams {
     user: ID;
     @IsOptional() @IsDate() @Type(() => Date) startDate?: Date;
     @IsOptional() @IsDate() @Type(() => Date) endDate?: Date;

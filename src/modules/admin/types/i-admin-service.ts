@@ -1,4 +1,4 @@
-import { SearchHotelsParams } from 'src/modules/hotels/types/search-hotels-params';
+import { SearchBaseParams } from 'src/types/search-base-params';
 import { CreateHotelDto } from 'src/modules/hotels/types/create-hotel.dto';
 import { HotelData } from 'src/modules/hotels/types/hotel-data';
 import { CreateUserDto } from 'src/modules/users/types/create-user.dto';
@@ -13,7 +13,7 @@ export interface IAdminService {
     getUsers(
         query: SearchUserParams,
     ): Promise<Omit<CreateUserDto, 'password'>[]>;
-    getHotels(query: SearchHotelsParams): Promise<HotelData[]>;
+    getHotels(query: SearchBaseParams): Promise<HotelData[]>;
     createHotel(dto: CreateHotelDto): Promise<THotelDataRes>;
     updateHotel(id: ID, dto: Partial<CreateHotelDto>): Promise<THotelDataRes>;
     createHotelRoom(

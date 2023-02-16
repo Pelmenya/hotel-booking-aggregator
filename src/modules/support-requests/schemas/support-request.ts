@@ -9,7 +9,7 @@ export class SupportRequest implements Omit<ISupportRequest, '_id'> {
     @Prop({ required: true, type: MongooseSchema.Types.ObjectId, ref: 'User' })
     public user: User;
 
-    @Prop({ required: true, type: Date, default: new Date().toISOString() })
+    @Prop({ required: true, type: Date, default: new Date() })
     public createAt: Date;
 
     @Prop({ type: MongooseSchema.Types.Array })

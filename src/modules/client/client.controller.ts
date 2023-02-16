@@ -9,10 +9,15 @@ import {
     Query,
     Delete,
     Param,
+    UseInterceptors,
 } from '@nestjs/common';
 import { Roles } from 'src/decorators/roles.decorator';
 import { NotAuthenticatedGuard } from 'src/guards/not-authenticated.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
+// eslint-disable-next-line prettier/prettier
+import {
+    SupportRequestsResponseInterceptor,
+} from 'src/modules/support-requests/interceptors/support-requests-response-interceptor';
 import { ID } from 'src/types/id';
 import { AuthService } from '../auth/auth.service';
 import { RegisterDto } from '../auth/types/register.dto';
@@ -22,6 +27,8 @@ import { ReservationsService } from '../reservations/reservations.service';
 import { CreateReservationDto } from '../reservations/types/create-reservation.dto';
 import { SearchReservationsParams } from '../reservations/types/search-reservations-params';
 import { SupportRequestsClientService } from '../support-requests/support-requests-client.service';
+import { SupportRequestsService } from '../support-requests/support-requests.service';
+import { SearchChatListParams } from '../support-requests/types/search-chat-list-params';
 import { IUser } from '../users/types/i-user';
 
 @UseGuards(RolesGuard)
@@ -31,6 +38,7 @@ export class ClientController {
         private readonly authService: AuthService,
         private readonly reservationsService: ReservationsService,
         private readonly hotelRoomsService: HotelRoomsService,
+        private readonly supportRequestsService: SupportRequestsService,
         private readonly supportRequestsClientService: SupportRequestsClientService,
     ) {}
 
@@ -83,13 +91,26 @@ export class ClientController {
 
     @Post('support-requests')
     @Roles('client')
-    async createSupportRequest(
+    async getSupportRequest(
         @Req() req: Express.Request & { user: IUser },
         @Body('text') text: string,
     ) {
         return await this.supportRequestsClientService.createSupportRequest({
             user: req?.user?._id,
             text,
+        });
+    }
+
+    @Get('support-requests')
+    @Roles('client')
+    @UseInterceptors(SupportRequestsResponseInterceptor)
+    async createSupportRequest(
+        @Req() req: Express.Request & { user: IUser },
+        @Query() query: SearchChatListParams,
+    ) {
+        return await this.supportRequestsService.findSupportRequests({
+            ...query,
+            user: req?.user?._id,
         });
     }
 }

@@ -1,7 +1,7 @@
 import { ID } from 'src/types/id';
-import { SearchHotelsParams } from '../../hotels/types/search-hotels-params';
+import { SearchBaseParams } from '../../../types/search-base-params';
 
-export class SearchRoomsParams extends SearchHotelsParams {
+export class SearchRoomsParams extends SearchBaseParams {
     hotel?: ID;
     isEnabled?: boolean;
 }

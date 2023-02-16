@@ -1,4 +1,4 @@
-import { Controller, Delete, Param } from '@nestjs/common';
+import { Controller, Delete, Param, UseInterceptors } from '@nestjs/common';
 import { Get, Query, UseGuards } from '@nestjs/common';
 import { Roles } from 'src/decorators/roles.decorator';
 import { RolesGuard } from 'src/guards/roles.guard';
@@ -6,6 +6,12 @@ import { ID } from 'src/types/id';
 import { AdminService } from '../admin/admin.service';
 import { ReservationsService } from '../reservations/reservations.service';
 import { SearchReservationsParams } from '../reservations/types/search-reservations-params';
+// eslint-disable-next-line prettier/prettier
+import {
+    SupportRequestsResponseInterceptor,
+} from '../support-requests/interceptors/support-requests-response-interceptor';
+import { SupportRequestsService } from '../support-requests/support-requests.service';
+import { SearchChatListParams } from '../support-requests/types/search-chat-list-params';
 import { SearchUserParams } from '../users/types/search-user-params';
 
 @UseGuards(RolesGuard)
@@ -14,6 +20,7 @@ export class ManagerController {
     constructor(
         private readonly adminService: AdminService,
         private readonly reservationsService: ReservationsService,
+        private readonly supportRequestsService: SupportRequestsService,
     ) {}
 
     @Get('users')
@@ -36,5 +43,12 @@ export class ManagerController {
     @Roles('manager')
     async removeReservation(@Param('id') room: ID) {
         return await this.reservationsService.removeReservation(room);
+    }
+
+    @Get('support-requests')
+    @Roles('manager')
+    @UseInterceptors(SupportRequestsResponseInterceptor)
+    async getSupportRequests(@Query() query: SearchChatListParams) {
+        return this.supportRequestsService.findSupportRequests(query);
     }
 }

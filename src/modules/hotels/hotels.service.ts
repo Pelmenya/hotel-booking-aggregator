@@ -5,7 +5,7 @@ import { ID } from 'src/types/id';
 import { Hotel } from './schemas/hotel.schema';
 import { HotelData } from './types/hotel-data';
 import { IHotelService } from './types/i-hotel-service';
-import { SearchHotelsParams } from './types/search-hotels-params';
+import { SearchBaseParams } from '../../types/search-base-params';
 import { THotelDocument } from './types/t-hotel-document';
 import { UpdateHotelDto } from './types/update-hotel.dto';
 
@@ -23,7 +23,7 @@ export class HotelsService implements IHotelService {
         return await this.HotelModel.findById(id);
     }
 
-    async search(params: SearchHotelsParams): Promise<HotelData[]> {
+    async search(params: SearchBaseParams): Promise<HotelData[]> {
         const { limit = 20, offset = 0 } = params;
         return await this.HotelModel.find()
             .limit(limit)
