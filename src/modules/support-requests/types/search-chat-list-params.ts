@@ -5,6 +5,7 @@ import { IsBoolean, IsOptional } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class SearchChatListParams extends SearchBaseParams {
+    _id?: ID;
     user?: Nullable<ID>;
-    @IsOptional() @IsBoolean() @Type(() => Boolean) isActive: boolean;
+    @IsOptional() @IsBoolean() @Type(() => Boolean) isActive?: boolean;
 }

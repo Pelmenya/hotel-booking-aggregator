@@ -8,7 +8,7 @@ export class Message implements Omit<IMessage, '_id'> {
     @Prop({ required: true, type: MongooseSchema.Types.ObjectId, ref: 'User' })
     public author: User;
 
-    @Prop({ required: true, type: Date, default: new Date().toISOString() })
+    @Prop({ required: true, type: Date, default: new Date() })
     public sentAt: Date;
 
     @Prop({ type: String, required: true })

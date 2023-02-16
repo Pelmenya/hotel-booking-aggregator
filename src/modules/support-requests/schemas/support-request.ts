@@ -12,7 +12,7 @@ export class SupportRequest implements Omit<ISupportRequest, '_id'> {
     @Prop({ required: true, type: Date, default: new Date() })
     public createAt: Date;
 
-    @Prop({ type: MongooseSchema.Types.Array })
+    @Prop({ type: [MongooseSchema.Types.ObjectId], ref: 'Message' })
     public messages: [Message];
 
     @Prop({ type: Boolean, default: true })

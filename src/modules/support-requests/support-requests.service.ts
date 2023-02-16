@@ -24,7 +24,7 @@ export class SupportRequestsService implements ISupportRequestsService {
     async findSupportRequests(
         params: SearchChatListParams,
     ): Promise<ISupportRequest[]> {
-        const { user, limit = 20, offset = 0, isActive } = params;
+        const { user, limit = 20, offset = 0, isActive, _id } = params;
         const searchParams: Partial<SearchChatListParams> = {};
 
         if (user) {
@@ -33,6 +33,10 @@ export class SupportRequestsService implements ISupportRequestsService {
 
         if (String(isActive) === 'false') {
             searchParams.isActive = false;
+        }
+
+        if (_id) {
+            searchParams._id = _id;
         }
 
         const requests = await this.SupportRequestModel.find(searchParams)
@@ -60,9 +64,16 @@ export class SupportRequestsService implements ISupportRequestsService {
         return Promise.resolve(m);
     }
 
-    getMessages(supportRequest: ID): Promise<Message[]> {
-        let m: any;
-        return Promise.resolve(m);
+    async getMessages(supportRequest: ID): Promise<any> {
+        return await this.SupportRequestModel.findById(supportRequest)
+            .select({ _id: 0, isActive: 0, user: 0, createAt: 0, __v: 0 })
+            .populate({
+                path: 'messages',
+                populate: {
+                    path: 'author',
+                },
+            })
+            .exec();
     }
 
     markMessagesAsRead(dto: MarkMessagesAsReadDto): void {
