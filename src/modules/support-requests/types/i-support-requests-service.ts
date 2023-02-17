@@ -12,8 +12,10 @@ export interface ISupportRequestsService {
     ): Promise<ISupportRequest[]>;
     sendMessage(dto: SendMessageDto): Promise<Message>;
     getMessages(supportRequest: ID): Promise<Message[]>;
-    markMessagesAsRead(dto: MarkMessagesAsReadDto): void;
-    getUnreadCount(supportRequest: ID): Promise<Message[]>;
+    markMessagesAsRead(
+        dto: MarkMessagesAsReadDto,
+    ): Promise<{ succes: boolean }>;
+    getUnreadCount(supportRequest: ID): Promise<number>;
     subscribe(
         handler: (supportRequest: SupportRequest, message: Message) => void,
     ): () => void;

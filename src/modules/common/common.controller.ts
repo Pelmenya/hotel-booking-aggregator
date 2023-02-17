@@ -1,8 +1,8 @@
 import {
     Body,
     Controller,
-    ForbiddenException,
     Get,
+    HttpCode,
     Param,
     Post,
     Query,
@@ -14,8 +14,8 @@ import { RolesGuard } from 'src/guards/roles.guard';
 import { IdValidationPipe } from 'src/pipes/id-validation/id-validation.pipe';
 import { ID } from 'src/types/id';
 import { SearchRoomsParams } from '../hotel-rooms/types/search-rooms-params';
-import { ERRORS_SUPPORT_REQUESTS } from '../support-requests/support-requests.constants';
 import { SupportRequestsService } from '../support-requests/support-requests.service';
+import { MarkMessagesAsReadDto } from '../support-requests/types/mark-messages-as-read.dto';
 import { IUser } from '../users/types/i-user';
 import { CommonService } from './common.service';
 
@@ -69,6 +69,23 @@ export class CommonController {
             author: user._id,
             supportRequest: id,
             text,
+        });
+    }
+
+    @Roles('client', 'manager')
+    @Post('support-requests/:id/messages/read')
+    @HttpCode(200)
+    async markMessagesAsRead(
+        @Req() req: Express.Request & { user: IUser },
+        @Param('id', IdValidationPipe) id: ID,
+        @Body() dto: MarkMessagesAsReadDto,
+    ) {
+        const { user } = req;
+        await this.supportRequestsService.hasSupportRequest(user, id);
+        return this.supportRequestsService.markMessagesAsRead({
+            user: user._id,
+            supportRequest: id,
+            createdBefore: dto.createdBefore,
         });
     }
 }

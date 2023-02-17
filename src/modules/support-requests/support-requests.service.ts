@@ -1,11 +1,17 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+    ForbiddenException,
+    Injectable,
+    NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { isBefore } from 'date-fns';
 import { Model } from 'mongoose';
 import { ID } from 'src/types/id';
 import { IUser } from '../users/types/i-user';
 import { Message } from './schemas/message';
 import { SupportRequest } from './schemas/support-request';
 import { ERRORS_SUPPORT_REQUESTS } from './support-requests.constants';
+import { IMessage } from './types/i-message';
 import { ISupportRequest } from './types/i-request-support';
 import { ISupportRequestsService } from './types/i-support-requests-service';
 import { MarkMessagesAsReadDto } from './types/mark-messages-as-read.dto';
@@ -65,33 +71,38 @@ export class SupportRequestsService implements ISupportRequestsService {
         supportRequest,
         ...dto
     }: SendMessageDto): Promise<Message> {
-        const { messages } = await this.SupportRequestModel.findById(
+        const request = await this.SupportRequestModel.findById(
             supportRequest,
         ).exec();
-        const message = await this.MessageModel.create(dto);
-        await this.SupportRequestModel.findByIdAndUpdate(supportRequest, {
-            messages: [...messages, message],
-        });
-        return await this.MessageModel.findById(message._id)
-            .select({
-                _id: 0,
-                id: '$_id',
-                sentAt: 1,
-                text: 1,
-                readAt: 1,
-            })
-            .populate({
-                path: 'author',
-                select: {
+
+        if (request) {
+            const message = await this.MessageModel.create(dto);
+            await this.SupportRequestModel.findByIdAndUpdate(supportRequest, {
+                messages: [...request.messages, message],
+            });
+            return await this.MessageModel.findById(message._id)
+                .select({
                     _id: 0,
                     id: '$_id',
-                    name: 1,
-                },
-            });
+                    sentAt: 1,
+                    text: 1,
+                    readAt: 1,
+                })
+                .populate({
+                    path: 'author',
+                    select: {
+                        _id: 0,
+                        id: '$_id',
+                        name: 1,
+                    },
+                });
+        }
+
+        throw new NotFoundException(ERRORS_SUPPORT_REQUESTS.NOT_FOUND);
     }
 
     async getMessages(supportRequest: ID): Promise<any> {
-        const requests = await this.SupportRequestModel.findById(supportRequest)
+        const request = await this.SupportRequestModel.findById(supportRequest)
             .populate({
                 path: 'messages',
                 select: {
@@ -112,21 +123,64 @@ export class SupportRequestsService implements ISupportRequestsService {
             })
             .exec();
 
-        if (!requests) {
-            throw new ForbiddenException(ERRORS_SUPPORT_REQUESTS.FORBIDEN);
+        if (!request) {
+            throw new NotFoundException(ERRORS_SUPPORT_REQUESTS.NOT_FOUND);
         }
 
-        return [...requests.messages];
+        return [...request.messages];
     }
 
-    markMessagesAsRead(dto: MarkMessagesAsReadDto): void {
-        let m: any;
-        Promise.resolve(m);
+    async markMessagesAsRead(
+        dto: MarkMessagesAsReadDto,
+    ): Promise<{ succes: boolean }> {
+        const request = await this.SupportRequestModel.findById(
+            dto.supportRequest,
+        ).populate({
+            path: 'messages',
+            select: {
+                _id: 1,
+                author: 1,
+                sentAt: 1,
+            },
+        });
+
+        if (request) {
+            const { messages } = request;
+            const notUserMessages = messages.filter(
+                (message: Message) =>
+                    String(dto.user) !== String(message.author),
+            );
+            notUserMessages.forEach(async (message: Message & { _id: ID }) => {
+                if (
+                    isBefore(
+                        new Date(message.sentAt),
+                        new Date(dto.createdBefore),
+                    )
+                ) {
+                    await this.MessageModel.findByIdAndUpdate(message._id, {
+                        readAt: new Date(),
+                    });
+                }
+            });
+            return { succes: true };
+        }
+
+        throw new NotFoundException(ERRORS_SUPPORT_REQUESTS.NOT_FOUND);
     }
 
-    async getUnreadCount(supportRequest: ID): Promise<Message[]> {
-        let m: any;
-        return Promise.resolve(m);
+    async getUnreadCount(supportRequest: ID): Promise<number> {
+        const req = await this.SupportRequestModel.findById(supportRequest)
+            .populate({ path: 'messages' })
+            .exec();
+
+        if (req) {
+            const unreadMessages = req.messages.reduce((acc, message) => {
+                return !!message.readAt === false ? acc + 1 : acc;
+            }, 0);
+            return unreadMessages;
+        }
+
+        throw new ForbiddenException(ERRORS_SUPPORT_REQUESTS.FORBIDEN);
     }
 
     async hasSupportRequest(user: IUser, supportRequest: ID) {

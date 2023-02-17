@@ -32,7 +32,6 @@ export class SupportRequestsClientService
 
         const {
             _id: id,
-            messages,
             createAt,
             isActive,
         } = await this.SupportRequestModel.create({
@@ -40,9 +39,7 @@ export class SupportRequestsClientService
             messages: [message],
         });
 
-        const hasNewMessages = messages.some(
-            (message: Message) => !!message?.readAt === false,
-        );
+        const hasNewMessages = false;
 
         return {
             id,
