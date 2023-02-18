@@ -24,12 +24,14 @@ export class SupportRequestsGateway {
 
     @SubscribeMessage('subscribeToChat')
     handleMessage(
-        @MessageBody('chatId') chatId: ID,
+        @MessageBody('chatId') chatId,
         @ConnectedSocket() client: Socket,
     ) {
         this.supportRequestsService.subscribe(
             (supportRequest: SupportRequest, message: Message) => {
-                client.emit(`${supportRequest}`, message);
+                if (String(supportRequest) === chatId) {
+                    client.emit(chatId, message);
+                }
             },
         );
     }
