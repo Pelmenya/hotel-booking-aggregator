@@ -5,13 +5,13 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { isBefore } from 'date-fns';
+import { EventEmitter } from 'node:events';
 import { Model } from 'mongoose';
 import { ID } from 'src/types/id';
 import { IUser } from '../users/types/i-user';
 import { Message } from './schemas/message';
 import { SupportRequest } from './schemas/support-request';
 import { ERRORS_SUPPORT_REQUESTS } from './support-requests.constants';
-import { IMessage } from './types/i-message';
 import { ISupportRequest } from './types/i-request-support';
 import { ISupportRequestsService } from './types/i-support-requests-service';
 import { MarkMessagesAsReadDto } from './types/mark-messages-as-read.dto';
@@ -22,12 +22,15 @@ import { TSupportRequestDocument } from './types/t-support-request-document';
 
 @Injectable()
 export class SupportRequestsService implements ISupportRequestsService {
+    public chatEmitter: EventEmitter;
     constructor(
         @InjectModel(Message.name)
         private readonly MessageModel: Model<TMessageDocument>,
         @InjectModel(SupportRequest.name)
         private readonly SupportRequestModel: Model<TSupportRequestDocument>,
-    ) {}
+    ) {
+        this.chatEmitter = new EventEmitter();
+    }
 
     async findSupportRequests(
         params: SearchChatListParams,
@@ -80,7 +83,7 @@ export class SupportRequestsService implements ISupportRequestsService {
             await this.SupportRequestModel.findByIdAndUpdate(supportRequest, {
                 messages: [...request.messages, message],
             });
-            return await this.MessageModel.findById(message._id)
+            const newMessage = await this.MessageModel.findById(message._id)
                 .select({
                     _id: 0,
                     id: '$_id',
@@ -96,6 +99,12 @@ export class SupportRequestsService implements ISupportRequestsService {
                         name: 1,
                     },
                 });
+            this.chatEmitter.emit('newMessage', {
+                supportRequest,
+                message: newMessage,
+            });
+
+            return newMessage;
         }
 
         throw new NotFoundException(ERRORS_SUPPORT_REQUESTS.NOT_FOUND);
@@ -198,7 +207,10 @@ export class SupportRequestsService implements ISupportRequestsService {
     subscribe(
         handler: (supportRequest: SupportRequest, message: Message) => void,
     ): () => void {
-        const m = 6;
-        return () => m;
+        this.chatEmitter.on('newMessage', ({ supportRequest, message }) => {
+            console.log(message);
+            handler(supportRequest, message);
+        });
+        return;
     }
 }

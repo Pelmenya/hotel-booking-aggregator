@@ -8,6 +8,7 @@ import {
 import { SupportRequestsService } from './support-requests.service';
 import { SupportRequestsClientService } from './support-requests-client.service';
 import { SupportRequestsEmployeeService } from './support-requests-employee.service';
+import { SupportRequestsGateway } from './support-requests.gateway';
 
 @Module({
     imports: [
@@ -26,6 +27,7 @@ import { SupportRequestsEmployeeService } from './support-requests-employee.serv
         SupportRequestsService,
         SupportRequestsClientService,
         SupportRequestsEmployeeService,
+        SupportRequestsGateway,
     ],
     exports: [
         SupportRequestsService,
