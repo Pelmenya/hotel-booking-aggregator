@@ -7,9 +7,7 @@ import {
     MessageBody,
 } from '@nestjs/websockets';
 import { Socket, Server } from 'socket.io';
-import { Roles } from 'src/decorators/roles.decorator';
-import { RolesGuard } from 'src/guards/roles.guard';
-import { ID } from 'src/types/id';
+import { WsAuthenticatedGuard } from 'src/guards/ws-authenticated.guard';
 import { Message } from './schemas/message';
 import { SupportRequest } from './schemas/support-request';
 import { SupportRequestsService } from './support-requests.service';
@@ -22,9 +20,10 @@ export class SupportRequestsGateway {
 
     @WebSocketServer() server: Server;
 
+    @UseGuards(WsAuthenticatedGuard)
     @SubscribeMessage('subscribeToChat')
     handleMessage(
-        @MessageBody('chatId') chatId,
+        @MessageBody('chatId') chatId: string,
         @ConnectedSocket() client: Socket,
     ) {
         this.supportRequestsService.subscribe(

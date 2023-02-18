@@ -205,11 +205,10 @@ export class SupportRequestsService implements ISupportRequestsService {
     }
 
     subscribe(
-        handler: (supportRequest: SupportRequest, message: Message) => void,
+        cb: (supportRequest: SupportRequest, message: Message) => void,
     ): () => void {
         this.chatEmitter.on('newMessage', ({ supportRequest, message }) => {
-            console.log(message);
-            handler(supportRequest, message);
+            cb(supportRequest, message);
         });
         return;
     }

@@ -17,6 +17,6 @@ export interface ISupportRequestsService {
     ): Promise<{ succes: boolean }>;
     getUnreadCount(supportRequest: ID): Promise<number>;
     subscribe(
-        handler: (supportRequest: SupportRequest, message: Message) => void,
+        cb: (supportRequest: SupportRequest, message: Message) => void,
     ): () => void;
 }

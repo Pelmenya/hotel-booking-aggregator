@@ -4,10 +4,17 @@ import { ValidationPipe } from './pipes/validation/validation.pipe';
 import * as cookieParser from 'cookie-parser';
 import * as session from 'express-session';
 import * as passport from 'passport';
+import { SessionAdapter } from './modules/auth/session-adapter';
 
 declare const module: any;
 
 const secret = process.env.SECRET || 'cookie-secret';
+
+const sessionMiddleware = session({
+    secret,
+    resave: true,
+    saveUninitialized: true,
+});
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
@@ -16,15 +23,10 @@ async function bootstrap() {
     app.enableCors();
     app.use(cookieParser());
     app.useGlobalPipes(new ValidationPipe());
-    app.use(
-        session({
-            secret,
-            resave: true,
-            saveUninitialized: true,
-        }),
-    );
+    app.use(sessionMiddleware);
     app.use(passport.initialize());
     app.use(passport.session());
+    app.useWebSocketAdapter(new SessionAdapter(sessionMiddleware, app));
 
     await app.listen(3000);
 
