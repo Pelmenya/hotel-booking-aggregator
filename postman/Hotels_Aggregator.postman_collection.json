@@ -1,0 +1,900 @@
+{
+	"info": {
+		"_postman_id": "09e95516-5d1c-48d5-b60d-4b4b110d53fc",
+		"name": "Hotels_Aggregator",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9455686"
+	},
+	"item": [
+		{
+			"name": "Login User Admin",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"password\": \"dddd\",\r\n\t\"email\": \"z7zz777d@rr.yye\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/api/auth/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login User Client",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"password\": \"dddd\",\r\n\t\"email\": \"zz11zd@rr.ee\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/api/auth/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login User Manager",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"password\": \"dddd\",\r\n\t\"email\": \"zddzdz@ds.ru\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/api/auth/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout  User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/api/auth/logout",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"auth",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create User Admin",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"name\" : \"ddddd\",\r\n\t\"password\": \"dddd\",\r\n\t\"email\": \"z111z@ds1s.ru\",\r\n\t\"contactPhone\": \"dasda\",\r\n\t\"role\": \"manager\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/api/admin/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"admin",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create User Client",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"name\" : \"ddddd\",\r\n\t\"password\": \"dddd\",\r\n\t\"email\": \"z@ds.ru\",\r\n\t\"contactPhone\": \"dasda\",\r\n\t\"role\": \"manager\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/api/client/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"client",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Hotel Admin",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"title\" : \"Leonardo Yalta Beach hotels\",\r\n\t\"description\": \"Хороший отель на берегу моря\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/api/admin/hotels",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"admin",
+						"hotels"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Hotel  Room Admin",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "description",
+							"value": "sadasdas asd asd asd asd",
+							"type": "text"
+						},
+						{
+							"key": "hotel",
+							"value": "63e742ee2709479b12995771",
+							"type": "text"
+						},
+						{
+							"key": "images",
+							"type": "file",
+							"src": [
+								"/C:/Users/Diamond/Downloads/attach_1041204341_5399876864899662037.jpeg",
+								"/C:/Users/Diamond/Downloads/library.svg"
+							]
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/api/admin/hotel-rooms",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"admin",
+						"hotel-rooms"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Hotel  Room Admin",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "description",
+							"value": "sadasdas asd asd asd asd",
+							"type": "text"
+						},
+						{
+							"key": "hotel",
+							"value": "63e742ee2709479b12995771",
+							"type": "text"
+						},
+						{
+							"key": "images",
+							"type": "file",
+							"src": [
+								"/C:/Users/Diamond/Downloads/library.svg",
+								"/C:/Users/Diamond/Downloads/пи.png",
+								"/C:/Users/Diamond/Downloads/IMG_0826.jpg"
+							]
+						},
+						{
+							"key": "images",
+							"value": "/api/uploads/2023-02-12/library.svg",
+							"type": "text"
+						},
+						{
+							"key": "images",
+							"value": "/api/uploads/2023-02-12/пи.png",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/api/admin/hotel-rooms",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"admin",
+						"hotel-rooms"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Hotel Admin",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"title\" : \"Leonardo Yalta Beach hotels\",\r\n\t\"description\": \"Хороший отель на берегу моря\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/api/admin/hotels/63e742f32709479b12995777",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"admin",
+						"hotels",
+						"63e742f32709479b12995777"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Hotels Admin Query",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"name\" : \"ddddd\",\r\n\t\"password\": \"dddd\",\r\n\t\"email\": \"z111z@ds1s.ru\",\r\n\t\"contactPhone\": \"dasda\",\r\n\t\"role\": \"manager\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/api/admin/hotels?limit=0&offset=0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"admin",
+						"hotels"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "0"
+						},
+						{
+							"key": "offset",
+							"value": "0"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Users Admin",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/api/admin/users?limit=20&offset=2&name=&contactPhone=das",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"admin",
+						"users"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "20"
+						},
+						{
+							"key": "offset",
+							"value": "2"
+						},
+						{
+							"key": "email",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "name",
+							"value": ""
+						},
+						{
+							"key": "contactPhone",
+							"value": "das"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Users Manager",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/api/manager/users?limit=20&offset=3&contactPhone=das",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"manager",
+						"users"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "20"
+						},
+						{
+							"key": "offset",
+							"value": "3"
+						},
+						{
+							"key": "email",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "name",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "contactPhone",
+							"value": "das"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Reservations Manager By User ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/api/manager/reservations/63e4c7c7ec78815a35952690?limit=20&offset=0&startDate=2024-05-04&endDate=2029-05-07",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"manager",
+						"reservations",
+						"63e4c7c7ec78815a35952690"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "20"
+						},
+						{
+							"key": "offset",
+							"value": "0"
+						},
+						{
+							"key": "startDate",
+							"value": "2024-05-04"
+						},
+						{
+							"key": "endDate",
+							"value": "2029-05-07"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Reservation Manager",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/api/manager/reservations/63eb7a54d76efc11768a2d50",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"manager",
+						"reservations",
+						"63eb7a54d76efc11768a2d50"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Hotel Rooms Common",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/api/common/hotel-rooms?limit=20&offset=0&hotel=63e742ee2709479b12995771",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"common",
+						"hotel-rooms"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "20"
+						},
+						{
+							"key": "offset",
+							"value": "0"
+						},
+						{
+							"key": "hotel",
+							"value": "63e742ee2709479b12995771"
+						},
+						{
+							"key": "isEnabled",
+							"value": "false",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Hotel Room By ID Common",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/api/common/hotel-rooms/63e92f7b41c3f84b4c06f522",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"common",
+						"hotel-rooms",
+						"63e92f7b41c3f84b4c06f522"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Reservation By Client",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"room\" : \"63eb61ff3fe417735ea9282e\",\r\n    \"startDate\": \"2025-05-26T14:33:12.734Z\",\r\n    \"endDate\": \"2025-05-30T14:33:12.734Z\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/api/client/reservations",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"client",
+						"reservations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Reservations By Client",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"room\" : \"63eb61ff3fe417735ea9282e\",\r\n    \"startDate\": \"2028-05-04T14:33:12.734Z\",\r\n    \"endDate\": \"2028-05-06T14:33:12.734Z\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/api/client/reservations",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"client",
+						"reservations"
+					],
+					"query": [
+						{
+							"key": "startDate",
+							"value": "2023-05-04T14:33:12.734Z",
+							"disabled": true
+						},
+						{
+							"key": "endDate",
+							"value": "2026-05-06T14:33:12.734Z",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Reservation By Client",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/api/client/reservations/63eb881042cd96be0e6e4d4f",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"client",
+						"reservations",
+						"63eb881042cd96be0e6e4d4f"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Support  Request By Client",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"text\" : \"My first support request\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/api/client/support-requests",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"client",
+						"support-requests"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Support  Request By Client",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/api/client/support-requests",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"client",
+						"support-requests"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Support  Request By Manager",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"room\" : \"63eb61ff3fe417735ea9282e\",\r\n    \"startDate\": \"2025-05-27T14:33:12.734Z\",\r\n    \"endDate\": \"2025-05-27T14:33:12.734Z\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/api/manager/support-requests",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"manager",
+						"support-requests"
+					],
+					"query": [
+						{
+							"key": "user",
+							"value": "63e4c7c7ec78815a35952690",
+							"disabled": true
+						},
+						{
+							"key": "limit",
+							"value": "1",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Messages of Support Request By Manager or Client",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"room\" : \"63eb61ff3fe417735ea9282e\",\r\n    \"startDate\": \"2025-05-27T14:33:12.734Z\",\r\n    \"endDate\": \"2025-05-27T14:33:12.734Z\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/api/common/support-requests/63ef698898569435bbe6b45c/messages",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"common",
+						"support-requests",
+						"63ef698898569435bbe6b45c",
+						"messages"
+					],
+					"query": [
+						{
+							"key": "user",
+							"value": "63e4c7c7ec78815a35952690",
+							"disabled": true
+						},
+						{
+							"key": "limit",
+							"value": "1",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Send Message to Support Request By Manager or Client",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"text\": \"Привет малыш!!!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/api/common/support-requests/63f074fc502196cfdd39ee01/messages",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"common",
+						"support-requests",
+						"63f074fc502196cfdd39ee01",
+						"messages"
+					],
+					"query": [
+						{
+							"key": "user",
+							"value": "63e4c7c7ec78815a35952690",
+							"disabled": true
+						},
+						{
+							"key": "limit",
+							"value": "1",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Mark Message as Read By Manager or Client",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"createdBefore\" : \"2030-05-04T14:33:12.734Z\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/api/common/support-requests/63ef698898569435bbe6b45c/messages/read",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"common",
+						"support-requests",
+						"63ef698898569435bbe6b45c",
+						"messages",
+						"read"
+					],
+					"query": [
+						{
+							"key": "user",
+							"value": "63e4c7c7ec78815a35952690",
+							"disabled": true
+						},
+						{
+							"key": "limit",
+							"value": "1",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,4 +1,4 @@
-import { UseGuards, Req } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import {
     SubscribeMessage,
     WebSocketGateway,
@@ -24,13 +24,13 @@ export class SupportRequestsGateway {
 
     @UseGuards(WsAuthenticatedGuard)
     @SubscribeMessage('subscribeToChat')
-    handleMessage(
+    async handleMessage(
         @MessageBody('chatId') chatId: string,
         @ConnectedSocket() socket: Socket,
     ) {
         const { user } = socket.request as Request & { user: IUser };
 
-        this.supportRequestsService.hasSupportRequest(user, chatId);
+        await this.supportRequestsService.hasSupportRequest(user, chatId);
         this.supportRequestsService.subscribe(
             (supportRequest: SupportRequest, message: Message) => {
                 if (String(supportRequest) === chatId) {
