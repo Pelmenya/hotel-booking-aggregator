@@ -9,8 +9,8 @@ export class AppController {
 
     @Get()
     getHello(@Res() res: Response) {
-        return process.env.IS_DEV
+        return !!process.env.IS_DEV
             ? res.sendFile(`${path}/public/index.html`)
-            : 'API Hotel Booking Aggregator';
+            : res.send(this.appService.getHello());
     }
 }

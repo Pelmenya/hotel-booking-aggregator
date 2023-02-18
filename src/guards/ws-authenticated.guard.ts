@@ -1,9 +1,5 @@
-import {
-    Injectable,
-    CanActivate,
-    ExecutionContext,
-    UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import { WsException } from '@nestjs/websockets';
 import { Request } from 'express';
 import { IUser } from 'src/modules/users/types/i-user';
 import { ERRORS_USER } from 'src/modules/users/users.constants';
@@ -11,8 +7,8 @@ import { ERRORS_USER } from 'src/modules/users/users.constants';
 @Injectable()
 export class WsAuthenticatedGuard implements CanActivate {
     async canActivate(context: ExecutionContext) {
-        const client = context.switchToWs().getClient();
-        const { request } = client;
+        const socket = context.switchToWs().getClient();
+        const { request } = socket;
         let isValidUser = false;
         if (request.user) {
             const { user } = request as Request & { user: IUser };
@@ -25,6 +21,6 @@ export class WsAuthenticatedGuard implements CanActivate {
             return isValidUser && request.isAuthenticated();
         }
 
-        throw new UnauthorizedException(ERRORS_USER.UNAUTHORIZED);
+        throw new WsException(ERRORS_USER.UNAUTHORIZED);
     }
 }
