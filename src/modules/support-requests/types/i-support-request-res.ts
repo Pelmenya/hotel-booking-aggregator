@@ -6,5 +6,5 @@ export interface ISupportRequestRes extends ISupportRequest {
     _id?: ID;
     id?: ID;
     hasNewMessages: boolean;
-    client: User;
+    client: Partial<User & { id?: ID }>;
 }

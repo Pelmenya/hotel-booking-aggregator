@@ -92,7 +92,7 @@ export class ClientController {
 
     @Post('support-requests')
     @Roles('client')
-    async getSupportRequest(
+    async createSupportRequest(
         @Req() req: Express.Request & { user: IUser },
         @Body('text') text: string,
     ) {
@@ -105,7 +105,7 @@ export class ClientController {
     @Get('support-requests')
     @Roles('client')
     @UseInterceptors(SupportRequestsResponseInterceptor)
-    async createSupportRequest(
+    async getSupportRequest(
         @Req() req: Express.Request & { user: IUser },
         @Query() query: SearchChatListParams,
     ) {

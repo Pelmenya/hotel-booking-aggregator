@@ -1,4 +1,4 @@
-# Дипломный проект на курсе «Backend-разработка на Node.js»
+# Дипломный проект по курсу «Backend-разработка на Node.js»
 
 ## Описание проекта
 
@@ -33,7 +33,7 @@ type ID = string | ObjectId;
 
 ### 1.1. Модуль «Пользователи»
 
-Модуль «Пользователи» предназначается для создания, хранения и поиска профилей пользователей.
+Модуль «Пользователи» предназначен для создания, хранения и поиска профилей пользователей.
 
 Модуль «Пользователи» используется функциональными модулями для регистрации и аутентификации.
 
@@ -80,7 +80,7 @@ interface IUserService {
 
 ### 1.2. Модуль «Гостиницы»
 
-Модуль «Гостиницы» предназначается для хранения и поиска гостиниц и их номеров.
+Модуль «Гостиницы» предназначен для хранения и поиска гостиниц и их номеров.
 
 Модуль «Гостиницы» используется функциональными модулями для показа списка мест для бронирования, а также для их добавления, включения и выключения.
 
@@ -121,7 +121,7 @@ interface SearchHotelParams {
   title: string;
 }
 
-interface UpdateHotelParams {
+interface IUpdateHotelParams {
   title: string;
   description: string;
 }
@@ -130,7 +130,7 @@ interface IHotelService {
   create(data: any): Promise<Hotel>;
   findById(id: ID): Promise<Hotel>;
   search(params: SearchHotelParams): Promise<Hotel[]>;
-  update(id: ID, data: UpdateHotelParams): Promise<Hotel>;
+  update(id: ID, data: IUpdateHotelParams): Promise<Hotel>;
 }
 
 interface SearchRoomsParams {
@@ -140,11 +140,12 @@ interface SearchRoomsParams {
   isEnabled?: boolean;
 }
 
-interface HotelRoomService {
-  create(data: Partial<HotelRoom>): Promise<HotelRoom>;
-  findById(id: ID): Promise<HotelRoom>;
-  search(params: SearchRoomsParams): Promise<HotelRoom[]>;
-  update(id: ID, data: Partial<HotelRoom>): Promise<HotelRoom>;
+interface IHotelRoomsService {
+    create(dto: CreateHotelRoomDto): Promise<HotelRoomDataRes>;
+    findOne(id: ID): Promise<HotelRoomDataRes>;
+    findById(id: ID): Promise<HotelRoomDataRes>;
+    search(query: SearchRoomsParams): Promise<HotelRoomDataRes[]>;
+    update(id: ID, dto: Partial<CreateHotelRoomDto>): Promise<HotelRoomDataRes>;
 }
 ```
 
@@ -157,15 +158,9 @@ interface HotelRoomService {
 
 Модуль «Брони» предназначен для хранения и получения броней гостиниц конкретного пользователя.
 
-Модуль «Брони» **не должен** использовать модуль «Пользователи» и модуль «Гостиницы» для получения данных.
+Данные хранятся в MongoDB.
 
-Модуль «Брони» **не должен** хранить данные пользователей и гостиниц.
-
-Модуль «Брони» **должен** использовать соединение с базой данных.
-
-Данные должны храниться в MongoDB.
-
-Модель данных `Reservation` должна содержать поля:
+Модель данных `Reservation` содержит поля:
 
 | Название  |    Тип     | Обязательное | Уникальное | По умолчанию |
 | --------- | :--------: | :----------: | :--------: | :----------: |
@@ -178,42 +173,41 @@ interface HotelRoomService {
 
 ---
 
-Модуль «Брони» должен быть реализован в виде NestJS-модуля и экспортировать сервисы с интерфейсами:
+Модуль «Брони» реализован в виде NestJS-модуля и экспортирует сервисы с интерфейсами:
 
 ```ts
 interface ReservationDto {
-  userId: ID;
-  hotelId: ID;
-  roomId: ID;
-  dateStart: Date;
-  dateEnd: Date;
+  user: ID;
+  hotel: ID;
+  room: ID;
+  startDate: Date;
+  endDate: Date;
 }
 
-interface ReservationSearchOptions {
-  userId: ID;
-  dateStart: Date;
-  dateEnd: Date;
+interface SearchReservationsParams {
+  user: ID;
+  startDate: Date;
+  endDate: Date;
 }
-interface IReservation {
-  addReservation(data: ReservationDto): Promise<Reservation>;
-  removeReservation(id: ID): Promise<void>;
-  getReservations(
-    filter: ReservationSearchOptions
-  ): Promise<Array<Reservation>>;
+
+interface interface IReservationsService {
+    addReservation(dto: CreateReservationDto): Promise<Reservation>;
+    removeReservation(room: ID, user?: ID): Promise<Reservation>;
+    getReservations(query: SearchReservationsParams): Promise<Reservation[]>;
 }
 ```
 
-Метод `IReservation.addReservation` должен проверять, доступен ли номер на заданную дату.
+Метод `IReservation.addReservation` проверяет доступность номера на диапазон дат.
 
 ### 1.4. Модуль «Чат техподдержки»
 
-Модуль «Чат техподдержки» предназначается для хранения обращений в техподдержку и сообщений в чате обращения.
+Модуль «Чат техподдержки» предназначен для хранения обращений в техподдержку и сообщений в чате обращения.
 
 Модуль «Чат техподдержки» используется функциональными модулями для реализации возможности общения пользователей с поддержкой.
 
-Данные чатов должны храниться в MongoDB.
+Данные чатов хранятся в MongoDB.
 
-Модель данных чата `SupportRequest` должна содержать поля:
+Модель данных чата `SupportRequest` содержит поля:
 
 | Название  |     Тип     | Обязательное | Уникальное |
 | --------- | :---------: | :----------: | :--------: |
@@ -223,7 +217,7 @@ interface IReservation {
 | messages  | `Message[]` |     нет      |    нет     |
 | isActive  |   `bool`    |     нет      |    нет     |
 
-Модель сообщения `Message` должна содержать поля:
+Модель сообщения `Message` содержит поля:
 
 | Название |    Тип     | Обязательное | Уникальное |
 | -------- | :--------: | :----------: | :--------: |
@@ -250,15 +244,17 @@ interface SendMessageDto {
   supportRequest: ID;
   text: string;
 }
+
 interface MarkMessagesAsReadDto {
   user: ID;
   supportRequest: ID;
   createdBefore: Date;
 }
 
-interface GetChatListParams {
+interface SearchChatListParams {
   user: ID | null;
   isActive: bool;
+  _id: ID;
 }
 
 interface ISupportRequestService {
