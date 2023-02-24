@@ -41,12 +41,6 @@ export class SupportRequestsEmployeeService
             dto.supportRequest,
         ).populate({
             path: 'messages',
-            select: {
-                _id: 1,
-                author: 1,
-                sentAt: 1,
-                readAt: 1,
-            },
         });
 
         if (request) {
@@ -67,7 +61,6 @@ export class SupportRequestsEmployeeService
                 .map(
                     (filterMessage: Message & { _id: ID }) => filterMessage._id,
                 );
-            console.log(userMessages);
             await this.MessageModel.updateMany(
                 { _id: { $in: userMessages } },
                 {

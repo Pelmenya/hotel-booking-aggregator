@@ -66,12 +66,6 @@ export class SupportRequestsClientService
             dto.supportRequest,
         ).populate({
             path: 'messages',
-            select: {
-                _id: 1,
-                author: 1,
-                sentAt: 1,
-                readAt: 1,
-            },
         });
 
         if (request) {
