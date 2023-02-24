@@ -291,8 +291,8 @@ interface ISupportRequestsEmployeeService {
 2. Метод `ISupportRequestClientService.markMessagesAsRead` выставляет текущую дату в поле readAt всем сообщениям, которые не были прочитаны и были отправлены не пользователем.
 3. Метод `ISupportRequestEmployeeService.getUnreadCount` возвращает количество сообщений, которые были отправлены пользователем и не отмечены прочитанными.
 4. Метод `ISupportRequestEmployeeService.markMessagesAsRead` выставляет текущую дату в поле readAt всем сообщениям, которые не были прочитаны и были отправлены пользователем.
-5. Метод `ISupportRequestEmployeeService.closeRequest` должен менять флаг `isActive` на `false`.
-6. Оповещения должны быть реализованы через механизм `EventEmitter`.
+5. Метод `ISupportRequestEmployeeService.closeRequest` меняет флаг `isActive` на `false`.
+6. Оповещения реализованы через механизм `EventEmitter`.
 
 ## 2. Описание модулей WEB API
 
