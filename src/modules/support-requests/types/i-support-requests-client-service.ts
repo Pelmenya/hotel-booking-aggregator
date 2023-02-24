@@ -1,4 +1,3 @@
-import { type } from 'node:os';
 import { ID } from 'src/types/id';
 import { CreateSupportRequestDto } from './create-support-request.dto';
 import { ISupportRequestRes } from './i-support-request-res';

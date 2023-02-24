@@ -345,7 +345,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost/api/admin/hotels?limit=0&offset=0",
+					"raw": "http://localhost/api/admin/hotels",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -358,11 +358,18 @@
 					"query": [
 						{
 							"key": "limit",
-							"value": "0"
+							"value": "0",
+							"disabled": true
 						},
 						{
 							"key": "offset",
-							"value": "0"
+							"value": "0",
+							"disabled": true
+						},
+						{
+							"key": "title",
+							"value": "Игог",
+							"disabled": true
 						}
 					]
 				}
@@ -737,7 +744,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost/api/manager/support-requests",
+					"raw": "http://localhost/api/manager/support-requests?user=63e4c7c7ec78815a35952690",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -750,8 +757,7 @@
 					"query": [
 						{
 							"key": "user",
-							"value": "63e4c7c7ec78815a35952690",
-							"disabled": true
+							"value": "63e4c7c7ec78815a35952690"
 						},
 						{
 							"key": "limit",
@@ -781,7 +787,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost/api/common/support-requests/63ef698898569435bbe6b45c/messages",
+					"raw": "http://localhost/api/common/support-requests/63f8ae4e099efda9939a1cb7/messages?user=63e4c7c7ec78815a35952690",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -790,14 +796,13 @@
 						"api",
 						"common",
 						"support-requests",
-						"63ef698898569435bbe6b45c",
+						"63f8ae4e099efda9939a1cb7",
 						"messages"
 					],
 					"query": [
 						{
 							"key": "user",
-							"value": "63e4c7c7ec78815a35952690",
-							"disabled": true
+							"value": "63e4c7c7ec78815a35952690"
 						},
 						{
 							"key": "limit",
@@ -816,7 +821,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"text\": \"Привет малыш!!!\"\r\n}",
+					"raw": "{\r\n    \"text\": \"Привет !!!\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -824,7 +829,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost/api/common/support-requests/63f074fc502196cfdd39ee01/messages",
+					"raw": "http://localhost/api/common/support-requests/63f8ae4e099efda9939a1cb7/messages",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -833,7 +838,7 @@
 						"api",
 						"common",
 						"support-requests",
-						"63f074fc502196cfdd39ee01",
+						"63f8ae4e099efda9939a1cb7",
 						"messages"
 					],
 					"query": [
@@ -859,7 +864,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"createdBefore\" : \"2030-05-04T14:33:12.734Z\"\r\n}",
+					"raw": "{\r\n    \"createdBefore\" : \"2024-05-04T14:33:12.734Z\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -867,7 +872,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost/api/common/support-requests/63ef698898569435bbe6b45c/messages/read",
+					"raw": "http://localhost/api/common/support-requests/63f8ae4e099efda9939a1cb7/messages/read",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -876,7 +881,7 @@
 						"api",
 						"common",
 						"support-requests",
-						"63ef698898569435bbe6b45c",
+						"63f8ae4e099efda9939a1cb7",
 						"messages",
 						"read"
 					],

@@ -257,34 +257,40 @@ interface SearchChatListParams {
   _id: ID;
 }
 
-interface ISupportRequestService {
-  findSupportRequests(params: GetChatListParams): Promise<SupportRequest[]>;
-  sendMessage(data: SendMessageDto): Promise<Message>;
-  getMessages(supportRequest: ID): Promise<Message[]>;
-  subscribe(
-    handler: (supportRequest: SupportRequest, message: Message) => void
-  ): () => void;
+interface interface ISupportRequestsService {
+    findSupportRequests(
+        params: SearchChatListParams,
+    ): Promise<ISupportRequest[]>;
+    sendMessage(dto: SendMessageDto): Promise<Message>;
+    getMessages(supportRequest: ID): Promise<Message[]>;
+    subscribe(
+        cb: (supportRequest: SupportRequest, message: Message) => void,
+    ): () => void;
 }
 
-interface ISupportRequestClientService {
-  createSupportRequest(data: CreateSupportRequestDto): Promise<SupportRequest>;
-  markMessagesAsRead(params: MarkMessagesAsReadDto);
-  getUnreadCount(supportRequest: ID): Promise<Message[]>;
+interface ISupportRequestsClientService {
+    createSupportRequest(
+        dto: CreateSupportRequestDto,
+    ): Promise<Partial<ISupportRequestRes>>;
+    markMessagesAsRead(dto: MarkMessagesAsReadDto): Promise<TUnreadCountRes>;
+    getUnreadCount(supportRequest: ID): Promise<number>;
 }
 
-interface ISupportRequestEmployeeService {
-  markMessagesAsRead(params: MarkMessagesAsReadDto);
-  getUnreadCount(supportRequest: ID): Promise<Message[]>;
-  closeRequest(supportRequest: ID): Promise<void>;
+interface ISupportRequestsEmployeeService {
+    markMessagesAsRead(
+        dto: MarkMessagesAsReadDto,
+    ): Promise<{ succes: boolean; unreadCount: number }>;
+    getUnreadCount(supportRequest: ID): Promise<number>;
+    closeRequest(supportRequest: ID): Promise<void>;
 }
 ```
 
 ---
 
-1. Метод `ISupportRequestClientService.getUnreadCount` должен возвращать количество сообщений, которые были отправлены любым сотрудником поддержки и не отмечены прочитанным.
-2. Метод `ISupportRequestClientService.markMessagesAsRead` должен выставлять текущую дату в поле readAt всем сообщениям, которые не были прочитаны и были отправлены не пользователем.
-3. Метод `ISupportRequestEmployeeService.getUnreadCount` должен возвращать количество сообщений, которые были отправлены пользователем и не отмечены прочитанными.
-4. Метод `ISupportRequestEmployeeService.markMessagesAsRead` должен выставлять текущую дату в поле readAt всем сообщениям, которые не были прочитаны и были отправлены пользователем.
+1. Метод `ISupportRequestClientService.getUnreadCount` возвращает количество сообщений, которые были отправлены любым сотрудником поддержки и не отмечены прочитанным.
+2. Метод `ISupportRequestClientService.markMessagesAsRead` выставляет текущую дату в поле readAt всем сообщениям, которые не были прочитаны и были отправлены не пользователем.
+3. Метод `ISupportRequestEmployeeService.getUnreadCount` возвращает количество сообщений, которые были отправлены пользователем и не отмечены прочитанными.
+4. Метод `ISupportRequestEmployeeService.markMessagesAsRead` выставляет текущую дату в поле readAt всем сообщениям, которые не были прочитаны и были отправлены пользователем.
 5. Метод `ISupportRequestEmployeeService.closeRequest` должен менять флаг `isActive` на `false`.
 6. Оповещения должны быть реализованы через механизм `EventEmitter`.
 
@@ -292,11 +298,11 @@ interface ISupportRequestEmployeeService {
 
 ## 2.1. API Модуля «Гостиницы»
 
-Должно быть оформлено в виде отдельного NestJS-модуля.
+Оформлено в виде отдельного NestJS-модуля.
 
 ### **Ограничения**
 
-Если пользователь не аутентифицирован или его роль `client`, то при поиске всегда должен использоваться флаг `isEnabled: true`.
+Если пользователь не аутентифицирован или его роль `client`, то при поиске всегда используется флаг `isEnabled: true`.
 
 ### **2.1.1. Поиск номеров**
 
@@ -559,7 +565,7 @@ images[]: File | string
 
 При обновлении может быть отправлен одновременно список ссылок на уже загруженные картинки и список файлов с новыми картинками.
 
-При использовании [`multer`](https://docs.nestjs.com/techniques/file-upload) список загруженных файлов можно получить через `@UploadedFiles()`. Этот список нужно объединить со списком, который пришёл в `body`.
+При использовании [`multer`](https://docs.nestjs.com/techniques/file-upload) список загруженных файлов можно получить через `@UploadedFiles()`. Тогда список объединяется со списком, который пришёл в `body`.
 
 #### **Формат ответа**
 
@@ -774,16 +780,16 @@ DELETE /api/manager/reservations/:id
 
 ## 2.3. API Модуля «Аутентификация и авторизация»
 
-Должно быть оформлено в виде отдельного NestJS-модуля.
+Оформлено в виде отдельного NestJS-модуля.
 
 Модуль «Аутентификация и авторизация» предназначен для:
 
 - управления сессией пользователя,
 - регистрации пользователей.
 
-Хранение сессии должно реализовываться посредством библиотеки passport.js с хранением сессии в памяти приложения.
+Хранение сессии реализовано посредством библиотеки passport.js с хранением сессии в памяти приложения.
 
-Аутентификация пользователя производится с помощью модуля «Пользователи». Каждому пользователю назначается одна из ролей - клиент, администратор, консультант.
+Аутентификация пользователя производится с помощью модуля «Пользователи». Каждому пользователю назначается одна из ролей - клиент, администратор, консультант. Роль admin и manager назначает администратор БД.
 
 ### **2.3.1. Вход**
 
@@ -1268,35 +1274,17 @@ payload: chatId
 
 ## Запуск приложения
 
-Для запуска приложения в корне проекта должны находиться следующие файлы:
+Для запуска приложения в корне проекта находятся следующие файлы:
 
 - `package.json` и `package-lock.json` с описанными зависимостями,
 - `Dockerfile` для сборки образа приложения,
-- `docker-compose.yaml` с сервисом приложения и сервисом MondoDB,
+- `docker-compose.dev.yml` с сервисом приложения и сервисом MondoDB в режиме разработки,
+- `docker-compose.yml` с сервисом приложения и сервисом MondoDB,
 - `README.me` с описанием проекта и вариантами его запуска.
 
-Настройка параметров приложения должна производиться через переменные окружения. Это требование как для запуска в окружении хоста, так и при работе с Docker.
+Настройка приложения производиться через переменные окружения.
 
-Список переменных окружения должен быть описан в файле `.env-example`. Этот файл не должен содержать значений. Пример файла:
-
-```bash
-HTTP_HOST=
-HTTP_PORT=
-MONGO_URL=
-```
-
-Для запуска приложения должен использоваться скрипт `npm start`, описанный в `package.json`.
-
-## Как задавать вопросы руководителю по дипломной работе
-
-1. Если у вас возник вопрос, попробуйте сначала самостоятельно найти ответ в интернете. Навык поиска информации пригодится вам в любой профессиональной деятельности. Если ответ не нашёлся, можно уточнить у руководителя по дипломной работе.
-2. Если у вас набирается несколько вопросов, присылайте их в виде нумерованного списка. Так дипломному руководителю будет проще отвечать на каждый из них.
-3. Для лучшего понимания контекста прикрепите к вопросу скриншоты и стрелкой укажите, что именно вызывает вопрос. Программу для создания скриншотов можно скачать [по ссылке](https://app.prntscr.com/ru/).
-4. По возможности задавайте вопросы в комментариях к коду.
-5. Формулируйте свои вопросы чётко, дополняя их деталями. На сообщения «Ничего не работает», «Всё сломалось» дипломный руководитель не сможет дать комментарии без дополнительных уточнений. Это затянет процесс получения ответа. 
-6. Постарайтесь набраться терпения в ожидании ответа на свои вопросы. Дипломные руководители Нетологии – практикующие разработчики, поэтому они не всегда могут отвечать моментально. Зато их практика даёт возможность делиться с вами не только теорией, но и ценным прикладным опытом.  
-
-Рекомендации по работе над дипломом:
-
-1. Не откладывайте надолго начало работы над дипломом. В таком случае у вас останется больше времени на получение рекомендаций от руководителя и доработку диплома.
-2. Разбейте работу над дипломом на части и выполняйте их поочерёдно. Вы будете успевать учитывать комментарии от руководителя и не терять мотивацию на полпути. 
+Список переменных окружения описан в файле `.env-example`. Этот файл не содержит значений.
+Запуск команд в файле `commands.md`.
+В Dev-режиме доступен front-end-интерфейс по http://localhost/api/ для тестирования сокета.
+В папке postman коллекция запросов к API.
