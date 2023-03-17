@@ -20,7 +20,12 @@ async function bootstrap() {
     const app = await NestFactory.create(AppModule);
 
     app.setGlobalPrefix('api');
-    app.enableCors();
+    // обязательно для проставления cookie
+    app.enableCors({
+        origin: true,
+        credentials: true,
+        optionsSuccessStatus: 200,
+    });
     app.use(cookieParser());
     app.useGlobalPipes(new ValidationPipe());
     app.use(sessionMiddleware);
@@ -29,7 +34,7 @@ async function bootstrap() {
     app.useWebSocketAdapter(new SessionAdapter(sessionMiddleware, app));
 
     await app.listen(3000);
-
+    // dev режим
     if (module.hot) {
         module.hot.accept();
         module.hot.dispose(() => app.close());

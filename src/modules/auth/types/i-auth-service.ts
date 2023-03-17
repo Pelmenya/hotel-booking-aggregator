@@ -5,5 +5,5 @@ import { RegisterDto } from './register.dto';
 export interface IAuthService {
     login(dto: LoginDto): Promise<Omit<RegisterDto, 'password'>>;
     register(dto: RegisterDto): Promise<Omit<RegisterDto, 'password'>>;
-    logout(req: Request): void;
+    logout(req: Request): Record<string, boolean>;
 }
