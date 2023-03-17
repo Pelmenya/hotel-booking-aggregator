@@ -42,6 +42,6 @@ export class AuthService implements IAuthService {
 
     logout(req: Request): Record<string, boolean> {
         req.logout((err) => console.log(err));
-        return { succes: true };
+        return { success: true };
     }
 }
