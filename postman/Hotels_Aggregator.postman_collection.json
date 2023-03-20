@@ -149,7 +149,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n\t\"name\" : \"ddddd\",\r\n\t\"password\": \"dddd\",\r\n\t\"email\": \"z@ds.ru\",\r\n\t\"contactPhone\": \"dasda\",\r\n\t\"role\": \"manager\"\r\n}",
+					"raw": "{\r\n\t\"name\" : \"CopiWriter\",\r\n\t\"password\": \"111111\",\r\n\t\"email\": \"copiwriter@insurance.ru\",\r\n\t\"contactPhone\": \"+79166198852\",\r\n\t\"role\": \"manager\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -378,9 +378,19 @@
 		},
 		{
 			"name": "Get Users Admin",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
 				"method": "GET",
 				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "",
+						"variables": ""
+					}
+				},
 				"url": {
 					"raw": "http://localhost/api/admin/users?limit=20&offset=2&name=&contactPhone=das",
 					"protocol": "http",
@@ -557,6 +567,26 @@
 							"value": "false",
 							"disabled": true
 						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get User",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/api/common/user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"common",
+						"user"
 					]
 				}
 			},
@@ -787,7 +817,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost/api/common/support-requests/63f8ae4e099efda9939a1cb7/messages?user=63e4c7c7ec78815a35952690",
+					"raw": "http://localhost/api/common/support-requests/63f8ae4e099efda9939a1cb7/messages",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -802,7 +832,8 @@
 					"query": [
 						{
 							"key": "user",
-							"value": "63e4c7c7ec78815a35952690"
+							"value": "63e4c7c7ec78815a35952690",
+							"disabled": true
 						},
 						{
 							"key": "limit",

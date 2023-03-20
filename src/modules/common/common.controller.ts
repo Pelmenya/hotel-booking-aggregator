@@ -99,4 +99,18 @@ export class CommonController {
             createdBefore: dto.createdBefore,
         });
     }
+
+    @Roles('client', 'manager', 'admin')
+    @Get('user')
+    getUser(@Req() req: Express.Request & { user: IUser }) {
+        const { user } = req;
+        const { _id: id, email, name, role, contactPhone } = user;
+        return {
+            id,
+            email,
+            name,
+            role,
+            contactPhone,
+        };
+    }
 }

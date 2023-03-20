@@ -1,8 +1,8 @@
 import { INestApplicationContext } from '@nestjs/common/interfaces';
 import { IoAdapter } from '@nestjs/platform-socket.io';
-import { RequestHandler } from 'express';
+import { NextFunction, RequestHandler } from 'express';
 import * as passport from 'passport';
-import { Server, ServerOptions } from 'socket.io';
+import { Server, ServerOptions, Socket } from 'socket.io';
 
 export class SessionAdapter extends IoAdapter {
     private session: RequestHandler;
@@ -17,7 +17,7 @@ export class SessionAdapter extends IoAdapter {
     ): Server {
         const server = super.create(port, options);
 
-        const wrap = (middleware) => (socket, next) =>
+        const wrap = (middleware) => (socket: Socket, next: NextFunction) =>
             middleware(socket.request, {}, next);
 
         server.use(wrap(this.session));
