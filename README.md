@@ -1,6 +1,6 @@
 # «Backend Hotel Aggregator»
 
-## [«Fronend Hotel Aggregator»](https://github.com/Pelmenya/hotel-booking-aggregator-front)
+## [«Frontend Hotel Aggregator»](https://github.com/Pelmenya/hotel-booking-aggregator-front)
 
 ## Описание проекта
 

@@ -5,4 +5,5 @@ export class HotelData extends CreateHotelDto {
     _id: ID;
     createAt: Date;
     updateAt: Date;
+    images: string[];
 }

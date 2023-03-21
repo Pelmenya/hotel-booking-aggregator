@@ -14,8 +14,15 @@ export interface IAdminService {
         query: SearchUserParams,
     ): Promise<Omit<CreateUserDto, 'password'>[]>;
     getHotels(query: SearchBaseParams): Promise<HotelData[]>;
-    createHotel(dto: CreateHotelDto): Promise<THotelDataRes>;
-    updateHotel(id: ID, dto: Partial<CreateHotelDto>): Promise<THotelDataRes>;
+    createHotel(
+        files: Express.Multer.File[],
+        dto: CreateHotelDto,
+    ): Promise<THotelDataRes>;
+    updateHotel(
+        id: ID,
+        files: Express.Multer.File[],
+        dto: Partial<CreateHotelDto>,
+    ): Promise<THotelDataRes>;
     createHotelRoom(
         files: Express.Multer.File[],
         dto: CreateHotelRoomDto,

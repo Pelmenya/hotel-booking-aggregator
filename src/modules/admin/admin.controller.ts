@@ -36,14 +36,18 @@ export class AdminController {
 
     @Get('users')
     @Roles('admin')
+    @UseInterceptors(FilesInterceptor('images'))
     async getUsers(@Query() query: SearchUserParams) {
         return await this.adminService.getUsers(query);
     }
 
     @Post('hotels')
     @Roles('admin')
-    async creatHotel(@Body() dto: CreateHotelDto) {
-        return await this.adminService.createHotel(dto);
+    async creatHotel(
+        @UploadedFiles() files: Express.Multer.File[],
+        @Body() dto: CreateHotelDto,
+    ) {
+        return await this.adminService.createHotel(files, dto);
     }
 
     @Get('hotels')

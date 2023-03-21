@@ -55,21 +55,56 @@ export class AdminService implements IAdminService {
         return await this.hotelsService.search(query);
     }
 
-    async createHotel(dto: CreateHotelDto) {
+    async createHotel(files: Express.Multer.File[], dto: CreateHotelDto) {
         const hotel = await this.hotelsService.create(dto);
+        const { _id } = hotel;
+        const images = await this.filesService.saveFiles(_id, files);
+        const updateHotel = await this.hotelsService.update(_id, {
+            images,
+        });
         return {
-            id: hotel._id,
-            title: hotel.title,
-            description: hotel.description,
+            id: updateHotel._id,
+            title: updateHotel.title,
+            description: updateHotel.description,
+            images: updateHotel.images,
         };
     }
 
-    async updateHotel(id: ID, dto: UpdateHotelDto) {
-        const hotel = await this.hotelsService.update(id, dto);
+    async updateHotel(
+        id: ID,
+        files: Express.Multer.File[],
+        dto: UpdateHotelDto,
+    ) {
+        const hotel = await this.hotelsService.findById(id);
+        const { images: imagesDB } = hotel;
+        const { images: imagesBody = [] } = dto;
+        const imagesUpload = await this.filesService.saveFiles(id, files);
+        let imagesSave: string[] = [];
+        if (Array.isArray(imagesBody)) {
+            imagesSave = [
+                ...imagesUpload,
+                ...imagesBody.filter((image) => imagesDB.includes(image)),
+            ];
+        } else {
+            imagesSave = [...imagesUpload];
+            if (imagesDB.includes(imagesBody)) {
+                imagesSave.push(imagesBody);
+            }
+        }
+        const imagesRemove = imagesDB.filter(
+            (image) => !imagesSave.includes(image),
+        );
+        await this.filesService.removeFiles(imagesRemove);
+
+        const updateHotel = await this.hotelsService.update(id, {
+            ...dto,
+            images: imagesSave,
+        });
         return {
-            id: hotel._id,
-            title: hotel.title,
-            description: hotel.description,
+            id: updateHotel._id,
+            title: updateHotel.title,
+            description: updateHotel.description,
+            image: updateHotel.images,
         };
     }
 
@@ -81,7 +116,6 @@ export class AdminService implements IAdminService {
         const { _id } = hotelRoom;
         const images = await this.filesService.saveFiles(_id, files);
         const res = await this.hotelRoomsService.update(_id, {
-            ...dto,
             images,
         });
 

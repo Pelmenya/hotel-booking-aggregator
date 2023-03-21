@@ -7,10 +7,7 @@ import { MFile } from './mfile.class';
 
 @Injectable()
 export class FilesService {
-    async saveFiles(
-        hotelRoomId: ID,
-        files: Express.Multer.File[],
-    ): Promise<string[]> {
+    async saveFiles(id: ID, files: Express.Multer.File[]): Promise<string[]> {
         const saveArray: MFile[] = [];
 
         for (const file of files) {
@@ -25,7 +22,7 @@ export class FilesService {
             } else saveArray.push(new MFile(file));
         }
 
-        const uploadFolder = `${path}/api/uploads/${hotelRoomId}`;
+        const uploadFolder = `${path}/api/uploads/${id}`;
         await ensureDir(uploadFolder);
         const res: string[] = [];
         for (const file of saveArray) {
@@ -33,7 +30,7 @@ export class FilesService {
                 `${uploadFolder}/${file.originalname}`,
                 file.buffer,
             );
-            res.push(`/api/uploads/${hotelRoomId}/${file.originalname}`);
+            res.push(`/api/uploads/${id}/${file.originalname}`);
         }
         return res;
     }

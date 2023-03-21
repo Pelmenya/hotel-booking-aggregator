@@ -9,6 +9,9 @@ export class Hotel implements Omit<HotelData, '_id'> {
     @Prop()
     public description: string;
 
+    @Prop({ type: [String] })
+    public images: string[];
+
     @Prop({ required: true, default: new Date().toISOString() })
     public createAt: Date;
 
