@@ -95,6 +95,7 @@ interface IUserService {
 | \_id        | `ObjectId` |      да      |     да     |              |
 | title       | `ObjectId` |      да      |    нет     |              |
 | description |  `string`  |     нет      |    нет     |              |
+| images      | `string[]` |     нет      |    нет     |     `[]`     |
 | createdAt   |   `Date`   |      да      |    нет     |              |
 | updatedAt   |   `Date`   |      да      |    нет     |              |
 
@@ -126,6 +127,7 @@ interface SearchHotelParams {
 interface IUpdateHotelParams {
   title: string;
   description: string;
+  images: string[];
 }
 
 interface IHotelService {
@@ -992,6 +994,39 @@ GET /api/manager/users/
 
 - `401` - если пользователь не аутентифицирован;
 - `403` - если роль пользователя не подходит.
+
+### **2.4.1. Получение пользователя**
+
+#### **Описание**
+
+Позволяет аутентифицированым пользователям получить свои данные.
+
+#### **Адрес**
+
+```http
+GET /api/common/user/
+```
+
+
+#### **Формат ответа**
+
+```json
+{
+  "id": string,
+  "email": string,
+  "name": string,
+  "contactPhone": string,
+  "role": string
+}
+```
+
+#### **Доступ**
+
+Доступно только аутентифицированым пользователям.
+
+#### **Ошибки**
+
+- `401` - если пользователь не аутентифицирован;
 
 ## 2.5. API модуля «Чат с техподдрежкой»
 
