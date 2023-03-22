@@ -7,7 +7,6 @@ import { HotelData } from './types/hotel-data';
 import { IHotelService } from './types/i-hotel-service';
 import { THotelDocument } from './types/t-hotel-document';
 import { UpdateHotelDto } from './types/update-hotel.dto';
-import { title } from 'process';
 import { SearchHotelParams } from './types/search-hotel-params';
 
 @Injectable()
@@ -17,6 +16,7 @@ export class HotelsService implements IHotelService {
     ) {}
 
     async create(dto: Partial<Hotel>): Promise<HotelData> {
+        console.log(dto);
         return await this.HotelModel.create(dto);
     }
 
@@ -37,6 +37,10 @@ export class HotelsService implements IHotelService {
     }
 
     async update(id: ID, dto: UpdateHotelDto): Promise<HotelData> {
-        return await this.HotelModel.findOneAndUpdate({ _id: id }, dto);
+        const updateHotel = await this.HotelModel.findOneAndUpdate(
+            { _id: id },
+            dto,
+        ).exec();
+        return await this.findById(updateHotel._id);
     }
 }

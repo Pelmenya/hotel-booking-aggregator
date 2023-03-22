@@ -43,6 +43,7 @@ export class AdminController {
 
     @Post('hotels')
     @Roles('admin')
+    @UseInterceptors(FilesInterceptor('images'))
     async creatHotel(
         @UploadedFiles() files: Express.Multer.File[],
         @Body() dto: CreateHotelDto,
@@ -58,11 +59,13 @@ export class AdminController {
 
     @Put('hotels/:id')
     @Roles('admin')
+    @UseInterceptors(FilesInterceptor('images'))
     async updateHotel(
+        @UploadedFiles() files: Express.Multer.File[],
         @Param('id', IdValidationPipe) id: ID,
         @Body() dto: UpdateHotelDto,
     ) {
-        return await this.adminService.updateHotel(id, dto);
+        return await this.adminService.updateHotel(id, files, dto);
     }
 
     @Post('hotel-rooms')
