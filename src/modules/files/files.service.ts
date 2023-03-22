@@ -43,6 +43,34 @@ export class FilesService {
         }
     }
 
+    async updateFiles(
+        item: { _id: ID; images?: string[] },
+        files: Express.Multer.File[],
+        dto: { images?: string[] },
+    ): Promise<string[]> {
+        const { images: imagesDB = [] } = item;
+        const { images: imagesBody = [] } = dto;
+        const imagesUpload = await this.saveFiles(item._id, files);
+        let imagesSave: string[] = [];
+        if (Array.isArray(imagesBody)) {
+            imagesSave = [
+                ...imagesUpload,
+                ...imagesBody.filter((image) => imagesDB.includes(image)),
+            ];
+        } else {
+            imagesSave = [...imagesUpload];
+            if (imagesDB.includes(imagesBody)) {
+                imagesSave.push(imagesBody);
+            }
+        }
+        const imagesRemove = imagesDB.filter(
+            (image) => !imagesSave.includes(image),
+        );
+        await this.removeFiles(imagesRemove);
+
+        return imagesSave;
+    }
+
     convertToWebP(file: Buffer): Promise<Buffer> {
         return sharp(file).webp().toBuffer();
     }

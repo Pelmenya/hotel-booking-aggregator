@@ -76,26 +76,11 @@ export class AdminService implements IAdminService {
         dto: UpdateHotelDto,
     ) {
         const hotel = await this.hotelsService.findById(id);
-        const { images: imagesDB } = hotel;
-        const { images: imagesBody = [] } = dto;
-        const imagesUpload = await this.filesService.saveFiles(id, files);
-        let imagesSave: string[] = [];
-        if (Array.isArray(imagesBody)) {
-            imagesSave = [
-                ...imagesUpload,
-                ...imagesBody.filter((image) => imagesDB.includes(image)),
-            ];
-        } else {
-            imagesSave = [...imagesUpload];
-            if (imagesDB.includes(imagesBody)) {
-                imagesSave.push(imagesBody);
-            }
-        }
-        const imagesRemove = imagesDB.filter(
-            (image) => !imagesSave.includes(image),
+        const imagesSave = await this.filesService.updateFiles(
+            hotel,
+            files,
+            dto,
         );
-        await this.filesService.removeFiles(imagesRemove);
-
         const updateHotel = await this.hotelsService.update(id, {
             ...dto,
             images: imagesSave,
@@ -128,25 +113,11 @@ export class AdminService implements IAdminService {
         dto: CreateHotelRoomDto,
     ) {
         const hotelRoom = await this.hotelRoomsService.findOne(id);
-        const { images: imagesDB } = hotelRoom;
-        const { images: imagesBody = [] } = dto;
-        const imagesUpload = await this.filesService.saveFiles(id, files);
-        let imagesSave: string[] = [];
-        if (Array.isArray(imagesBody)) {
-            imagesSave = [
-                ...imagesUpload,
-                ...imagesBody.filter((image) => imagesDB.includes(image)),
-            ];
-        } else {
-            imagesSave = [...imagesUpload];
-            if (imagesDB.includes(imagesBody)) {
-                imagesSave.push(imagesBody);
-            }
-        }
-        const imagesRemove = imagesDB.filter(
-            (image) => !imagesSave.includes(image),
+        const imagesSave = await this.filesService.updateFiles(
+            hotelRoom,
+            files,
+            dto,
         );
-        await this.filesService.removeFiles(imagesRemove);
         const res = await this.hotelRoomsService.update(id, {
             ...dto,
             images: imagesSave,
