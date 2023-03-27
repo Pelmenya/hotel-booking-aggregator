@@ -16,7 +16,6 @@ export class HotelsService implements IHotelService {
     ) {}
 
     async create(dto: Partial<Hotel>): Promise<HotelData> {
-        console.log(dto);
         return await this.HotelModel.create(dto);
     }
 
@@ -33,7 +32,13 @@ export class HotelsService implements IHotelService {
         return await this.HotelModel.find(searchParams)
             .limit(limit)
             .skip(offset)
-            .select({ _id: 0, id: '$_id', title: 1, description: 1 });
+            .select({
+                _id: 0,
+                id: '$_id',
+                title: 1,
+                description: 1,
+                images: 1,
+            });
     }
 
     async update(id: ID, dto: UpdateHotelDto): Promise<HotelData> {

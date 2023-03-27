@@ -14,6 +14,7 @@ import { RolesGuard } from 'src/guards/roles.guard';
 import { IdValidationPipe } from 'src/pipes/id-validation/id-validation.pipe';
 import { ID } from 'src/types/id';
 import { SearchRoomsParams } from '../hotel-rooms/types/search-rooms-params';
+import { SearchHotelParams } from '../hotels/types/search-hotel-params';
 import { SupportRequestsClientService } from '../support-requests/support-requests-client.service';
 import { SupportRequestsEmployeeService } from '../support-requests/support-requests-employee.service';
 import { SupportRequestsService } from '../support-requests/support-requests.service';
@@ -30,6 +31,12 @@ export class CommonController {
         private readonly supportRequestsClientService: SupportRequestsClientService,
         private readonly supportRequestsEmployeeService: SupportRequestsEmployeeService,
     ) {}
+
+    // Доделать
+    @Get('hotels')
+    async getHotels(@Query() params: SearchHotelParams) {
+        return await this.commonService.getHotels(params);
+    }
 
     @Get('hotel-rooms')
     async getHotelRooms(
