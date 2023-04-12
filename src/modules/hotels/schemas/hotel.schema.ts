@@ -3,7 +3,7 @@ import { HotelData } from '../types/hotel-data';
 
 @Schema()
 export class Hotel implements Omit<HotelData, '_id'> {
-    @Prop({ required: true })
+    @Prop({ required: true, unique: true })
     public title: string;
 
     @Prop()

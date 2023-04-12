@@ -89,7 +89,7 @@ export class AdminService implements IAdminService {
             id: updateHotel._id,
             title: updateHotel.title,
             description: updateHotel.description,
-            image: updateHotel.images,
+            images: updateHotel.images,
         };
     }
 
