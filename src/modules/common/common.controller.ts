@@ -38,6 +38,11 @@ export class CommonController {
         return await this.commonService.getHotels(params);
     }
 
+    @Get('hotels/:id')
+    async getHotelById(@Param('id', IdValidationPipe) id: ID) {
+        return await this.commonService.getHotelById(id);
+    }
+
     @Get('hotel-rooms')
     async getHotelRooms(
         @Req() req: Express.Request & { user: IUser },
