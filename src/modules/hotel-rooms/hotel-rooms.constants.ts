@@ -11,6 +11,7 @@ export const populateHotelParam = {
 export const selectHotelRoomParam = {
     _id: 0,
     id: '$_id',
+    title: 1,
     description: 1,
     images: 1,
     isEnabled: 1,
@@ -21,6 +22,7 @@ export const populateHotelRoomParam = {
     select: {
         _id: 0,
         id: '$_id',
+        title: 1,
         description: 1,
         images: 1,
     },

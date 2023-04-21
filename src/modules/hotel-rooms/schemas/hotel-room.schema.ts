@@ -5,8 +5,11 @@ import { IHotelRoom } from '../types/i-hotel-room';
 
 @Schema()
 export class HotelRoom implements Omit<IHotelRoom, '_id'> {
-    @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Hotel' })
+    @Prop({ required: true, type: MongooseSchema.Types.ObjectId, ref: 'Hotel' })
     public hotel: Hotel;
+
+    @Prop({ required: true })
+    public title: string;
 
     @Prop()
     public description: string;
