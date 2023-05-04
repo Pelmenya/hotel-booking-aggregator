@@ -8,6 +8,7 @@ import { HotelData } from '../hotels/types/hotel-data';
 import { SearchHotelParams } from '../hotels/types/search-hotel-params';
 import { UsersService } from '../users/users.service';
 import { IUser } from '../users/types/i-user';
+import { UpdateUserDto } from '../users/types/update-user-dto';
 
 @Injectable()
 export class CommonService {
@@ -20,6 +21,14 @@ export class CommonService {
     async getUser(id: ID): Promise<IUser> {
         const user = this.userService.findById(id);
         return user;
+    }
+
+    async updateUser(
+        user: IUser,
+        files: Express.Multer.File[],
+        dto: UpdateUserDto,
+    ): Promise<IUser> {
+        return await this.userService.updateUser(user, files, dto);
     }
 
     async getHotels(params: SearchHotelParams): Promise<HotelData[]> {

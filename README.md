@@ -47,10 +47,11 @@ type ID = string | ObjectId;
 | ------------ | :--------: | :----------: | :--------: | :----------: |
 | \_id         | `ObjectId` |      да      |     да     |              |
 | email        |  `string`  |      да      |     да     |              |
-| passwordHash |  `string`  |      да      |    нет     |              |
-| name         |  `string`  |      да      |    нет     |              |
-| contactPhone |  `string`  |     нет      |    нет     |              |
-| role         |  `string`  |      да      |    нет     |   `client`   |
+| passwordHash |  `string`  |      да      |     нет    |              |
+| name         |  `string`  |      да      |     нет    |              |
+| contactPhone |  `string`  |      нет     |     нет    |              |
+| role         |  `string`  |      да      |     нет    |   `client`   |
+| avatars      |  `string`  |      нет     |     нет    |     `[]`     |
 
 ---
 
@@ -62,7 +63,8 @@ interface SearchUserParams {
   offset: number;
   email: string;
   name: string;
-  contactPhone: string;
+  contactPhone?: string;
+  avatars?: string[];
 }
 interface IUserService {
     create(dto: CreateUserDto): Promise<IUser>;
@@ -1016,7 +1018,8 @@ GET /api/common/user/
   "email": string,
   "name": string,
   "contactPhone": string,
-  "role": string
+  "role": string,
+  "avatars": string[],
 }
 ```
 
@@ -1027,6 +1030,51 @@ GET /api/common/user/
 #### **Ошибки**
 
 - `401` - если пользователь не аутентифицирован;
+
+### **2.4.1. Изменение данных пользователя**
+
+#### **Описание**
+
+Позволяет аутентифицированым пользователям изменить свои данные.
+
+#### **Адрес**
+
+```http
+PUT /api/common/user
+```
+#### **Body-параметры FormData** 
+
+```json
+{
+  "email"?: string,
+  "name"?: string,
+  "contactPhone"?: string,
+  "avatars"?: Files,
+}
+```
+
+#### **Формат ответа**
+
+```json
+{
+  "id": string,
+  "email": string,
+  "name": string,
+  "contactPhone": string,
+  "role": string,
+  "avatars": string[],
+}
+```
+
+#### **Доступ**
+
+Доступно только аутентифицированым пользователям.
+
+#### **Ошибки**
+
+- `401` - если пользователь не аутентифицирован;
+
+## 2.5. API модуля «Чат с техподдрежкой»
 
 ## 2.5. API модуля «Чат с техподдрежкой»
 

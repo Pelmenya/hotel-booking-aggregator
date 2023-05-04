@@ -11,7 +11,7 @@ import { IUserService } from './types/i-user-service';
 import { TUserDocument } from './types/t-user-document';
 import { User } from './schemas/users.schema';
 import { CreateUserDto } from './types/create-user.dto';
-import { ERRORS_USER } from './users.constants';
+import { ERRORS_USER, selectUserParam } from './users.constants';
 import { SearchUserParams } from './types/search-user-params';
 import { TQueryUserMongoParams } from './types/t-query-user-mongo-params';
 import { UpdateUserDto } from './types/update-user-dto';
@@ -88,11 +88,13 @@ export class UsersService implements IUserService {
             { ...dto, images: dto?.avatars },
         );
 
-        await this.UserModel.findByIdAndUpdate(user._id, {
+        const updateUser = await this.UserModel.findByIdAndUpdate(user._id, {
             ...dto,
             avatars: imagesSave,
-        }).exec();
+        });
 
-        return await this.UserModel.findById(user._id);
+        return await this.UserModel.findById(updateUser._id).select(
+            selectUserParam,
+        );
     }
 }

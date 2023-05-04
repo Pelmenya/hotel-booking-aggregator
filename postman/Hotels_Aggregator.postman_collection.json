@@ -177,13 +177,36 @@
 				"method": "POST",
 				"header": [],
 				"body": {
-					"mode": "raw",
-					"raw": "{\r\n\t\"title\" : \"Leonardo Yalta Beach hotels\",\r\n\t\"description\": \"Хороший отель на берегу моря\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "description",
+							"value": "Leonardo Yalta Beach hotels",
+							"type": "text"
+						},
+						{
+							"key": "title",
+							"value": "Bulka",
+							"type": "text"
+						},
+						{
+							"key": "images",
+							"type": "file",
+							"src": [
+								"/C:/Users/Diamond/Downloads/valo3/L2.jpg",
+								"/C:/Users/Diamond/Downloads/valo3/L3.jpg",
+								"/C:/Users/Diamond/Downloads/valo3/L4.jpg",
+								"/C:/Users/Diamond/Downloads/valo3/L5.jpg",
+								"/C:/Users/Diamond/Downloads/valo3/L6.jpg",
+								"/C:/Users/Diamond/Downloads/valo3/L7.jpg",
+								"/C:/Users/Diamond/Downloads/valo3/L8.jpg",
+								"/C:/Users/Diamond/Downloads/valo3/L9.jpg",
+								"/C:/Users/Diamond/Downloads/valo3/L10.jpg",
+								"/C:/Users/Diamond/Downloads/valo3/L11.jpg",
+								"/C:/Users/Diamond/Downloads/valo3/L12.jpg"
+							]
 						}
-					}
+					]
 				},
 				"url": {
 					"raw": "http://localhost/api/admin/hotels",
@@ -201,6 +224,51 @@
 			"response": []
 		},
 		{
+			"name": "Update Hotel Admin",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "description",
+							"value": "Leonardo Yalta Beach hotels",
+							"type": "text"
+						},
+						{
+							"key": "title",
+							"value": "Bulka",
+							"type": "text"
+						},
+						{
+							"key": "images",
+							"type": "file",
+							"src": [
+								"/C:/Users/Diamond/Downloads/icons8-калькулятор.svg",
+								"/C:/Users/Diamond/Downloads/Group 2.svg",
+								"/C:/Users/Diamond/Downloads/selector.svg"
+							]
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/api/admin/hotels/641a9ad166fc27fe3a274202",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"admin",
+						"hotels",
+						"641a9ad166fc27fe3a274202"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Create Hotel  Room Admin",
 			"request": {
 				"method": "POST",
@@ -210,21 +278,23 @@
 					"formdata": [
 						{
 							"key": "description",
-							"value": "sadasdas asd asd asd asd",
+							"value": "Стандартный номер",
 							"type": "text"
 						},
 						{
 							"key": "hotel",
-							"value": "63e742ee2709479b12995771",
+							"value": "6436adadd92c375d0fff986e",
 							"type": "text"
 						},
 						{
 							"key": "images",
 							"type": "file",
-							"src": [
-								"/C:/Users/Diamond/Downloads/attach_1041204341_5399876864899662037.jpeg",
-								"/C:/Users/Diamond/Downloads/library.svg"
-							]
+							"src": "/C:/Users/Diamond/Downloads/Group 2.svg"
+						},
+						{
+							"key": "title",
+							"value": "Стандарт",
+							"type": "text"
 						}
 					]
 				},
@@ -298,36 +368,6 @@
 			"response": []
 		},
 		{
-			"name": "Update Hotel Admin",
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n\t\"title\" : \"Leonardo Yalta Beach hotels\",\r\n\t\"description\": \"Хороший отель на берегу моря\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost/api/admin/hotels/63e742f32709479b12995777",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"path": [
-						"api",
-						"admin",
-						"hotels",
-						"63e742f32709479b12995777"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "Get Hotels Admin Query",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
@@ -345,14 +385,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost/api/admin/hotels",
+					"raw": "http://localhost/api/common/hotels",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"path": [
 						"api",
-						"admin",
+						"common",
 						"hotels"
 					],
 					"query": [
@@ -539,7 +579,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost/api/common/hotel-rooms?limit=20&offset=0&hotel=63e742ee2709479b12995771",
+					"raw": "http://localhost/api/common/hotel-rooms?limit=20&offset=0&hotel=6436adadd92c375d0fff986e",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -560,7 +600,7 @@
 						},
 						{
 							"key": "hotel",
-							"value": "63e742ee2709479b12995771"
+							"value": "6436adadd92c375d0fff986e"
 						},
 						{
 							"key": "isEnabled",
@@ -598,7 +638,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost/api/common/hotel-rooms/63e92f7b41c3f84b4c06f522",
+					"raw": "http://localhost/api/common/hotel-rooms/6448de562609cbff7564f22c",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -607,7 +647,7 @@
 						"api",
 						"common",
 						"hotel-rooms",
-						"63e92f7b41c3f84b4c06f522"
+						"6448de562609cbff7564f22c"
 					]
 				}
 			},
@@ -927,6 +967,41 @@
 							"value": "1",
 							"disabled": true
 						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update User",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "Leonardo Pumas",
+							"type": "text"
+						},
+						{
+							"key": "avatars",
+							"type": "file",
+							"src": "/C:/Users/Diamond/Downloads/S1.jpeg"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/api/common/user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"common",
+						"user"
 					]
 				}
 			},

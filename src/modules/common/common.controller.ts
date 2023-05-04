@@ -5,9 +5,12 @@ import {
     HttpCode,
     Param,
     Post,
+    Put,
     Query,
     Req,
+    UploadedFiles,
     UseGuards,
+    UseInterceptors,
 } from '@nestjs/common';
 import { Roles } from 'src/decorators/roles.decorator';
 import { RolesGuard } from 'src/guards/roles.guard';
@@ -21,6 +24,8 @@ import { SupportRequestsService } from '../support-requests/support-requests.ser
 import { MarkMessagesAsReadDto } from '../support-requests/types/mark-messages-as-read.dto';
 import { IUser } from '../users/types/i-user';
 import { CommonService } from './common.service';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import { UpdateUserDto } from '../users/types/update-user-dto';
 
 @UseGuards(RolesGuard)
 @Controller('common')
@@ -125,5 +130,24 @@ export class CommonController {
             contactPhone,
             avatars,
         };
+    }
+
+    @Roles('client', 'manager', 'admin')
+    @Put('user')
+    @UseInterceptors(FilesInterceptor('avatars'))
+    async updateUserAvatar(
+        @UploadedFiles() files: Express.Multer.File[],
+        @Req() req: Express.Request & { user: IUser },
+        @Body()
+        dto: UpdateUserDto,
+    ) {
+        const { user } = req;
+        const updateUser = await this.commonService.updateUser(
+            user,
+            files,
+            dto,
+        );
+
+        return updateUser;
     }
 }

@@ -5,14 +5,12 @@ export const ERRORS_USER = {
     UNAUTHORIZED: 'Пользователь не авторизирован',
 };
 
-export const populateUserParam = {
-    path: 'user',
-    select: {
-        _id: 0,
-        id: '$_id',
-        name: 1,
-        email: 1,
-        role: 1,
-        avatars: 1,
-    },
+export const selectUserParam = {
+    _id: 0,
+    id: '$_id',
+    name: 1,
+    email: 1,
+    role: 1,
+    avatars: 1,
+    contactPhone: 1,
 };
