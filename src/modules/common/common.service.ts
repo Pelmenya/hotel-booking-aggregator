@@ -28,7 +28,7 @@ export class CommonService {
         files: Express.Multer.File[],
         dto: UpdateUserDto,
     ): Promise<IUser> {
-        return await this.userService.updateUser(user, files, dto);
+        return await this.userService.updateUser(user._id, files, dto);
     }
 
     async getHotels(params: SearchHotelParams): Promise<HotelData[]> {
