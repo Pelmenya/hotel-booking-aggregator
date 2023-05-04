@@ -6,13 +6,21 @@ import { SearchRoomsParams } from '../hotel-rooms/types/search-rooms-params';
 import { HotelsService } from '../hotels/hotels.service';
 import { HotelData } from '../hotels/types/hotel-data';
 import { SearchHotelParams } from '../hotels/types/search-hotel-params';
+import { UsersService } from '../users/users.service';
+import { IUser } from '../users/types/i-user';
 
 @Injectable()
 export class CommonService {
     constructor(
         private readonly hotelRoomsService: HotelRoomsService,
         private readonly hotelsService: HotelsService,
+        private readonly userService: UsersService,
     ) {}
+
+    async getUser(id: ID): Promise<IUser> {
+        const user = this.userService.findById(id);
+        return user;
+    }
 
     async getHotels(params: SearchHotelParams): Promise<HotelData[]> {
         return await this.hotelsService.search(params);

@@ -14,10 +14,13 @@ import { CreateUserDto } from './types/create-user.dto';
 import { ERRORS_USER } from './users.constants';
 import { SearchUserParams } from './types/search-user-params';
 import { TQueryUserMongoParams } from './types/t-query-user-mongo-params';
+import { UpdateUserDto } from './types/update-user-dto';
+import { FilesService } from '../files/files.service';
 
 @Injectable()
 export class UsersService implements IUserService {
     constructor(
+        private readonly filesService: FilesService,
         @InjectModel(User.name) private UserModel: Model<TUserDocument>,
     ) {}
 
@@ -72,5 +75,24 @@ export class UsersService implements IUserService {
             .exec();
 
         return users;
+    }
+
+    async updateUser(
+        user: IUser,
+        files: Express.Multer.File[],
+        dto: UpdateUserDto,
+    ) {
+        const imagesSave = await this.filesService.updateFiles(
+            { ...user, images: user?.avatars },
+            files,
+            { ...dto, images: dto?.avatars },
+        );
+
+        await this.UserModel.findByIdAndUpdate(user._id, {
+            ...dto,
+            avatars: imagesSave,
+        }).exec();
+
+        return await this.UserModel.findById(user._id);
     }
 }

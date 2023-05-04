@@ -16,6 +16,9 @@ export class User implements Omit<IUser, '_id'> {
     @Prop()
     public contactPhone: string;
 
+    @Prop({ type: [String], default: [] })
+    public avatars: string[];
+
     @Prop({
         type: String,
         default: 'client',

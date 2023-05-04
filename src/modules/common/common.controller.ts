@@ -114,15 +114,16 @@ export class CommonController {
 
     @Roles('client', 'manager', 'admin')
     @Get('user')
-    getUser(@Req() req: Express.Request & { user: IUser }) {
-        const { user } = req;
-        const { _id: id, email, name, role, contactPhone } = user;
+    async getUser(@Req() req: Express.Request & { user: IUser }) {
+        const user = await this.commonService.getUser(req.user._id);
+        const { _id: id, email, name, role, contactPhone, avatars } = user;
         return {
             id,
             email,
             name,
             role,
             contactPhone,
+            avatars,
         };
     }
 }

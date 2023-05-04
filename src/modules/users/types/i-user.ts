@@ -7,4 +7,5 @@ export interface IUser {
     name: string;
     contactPhone?: string;
     role?: TRole;
+    avatars?: string[];
 }
