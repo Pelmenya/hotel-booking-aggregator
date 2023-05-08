@@ -118,7 +118,7 @@ export class CommonController {
     }
 
     @Roles('client', 'manager', 'admin')
-    @Get('user')
+    @Get('profile')
     async getUser(@Req() req: Express.Request & { user: IUser }) {
         const user = await this.commonService.getUser(req.user._id);
         const { _id: id, email, name, role, contactPhone, avatars } = user;
@@ -133,7 +133,7 @@ export class CommonController {
     }
 
     @Roles('client', 'manager', 'admin')
-    @Put('user')
+    @Put('profile')
     @UseInterceptors(FilesInterceptor('avatars'))
     async updateUserAvatar(
         @UploadedFiles() files: Express.Multer.File[],
