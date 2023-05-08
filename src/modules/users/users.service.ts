@@ -79,11 +79,13 @@ export class UsersService implements IUserService {
 
     async updateUser(id: ID, files: Express.Multer.File[], dto: UpdateUserDto) {
         const user = await this.UserModel.findById(id);
-        const imagesSave = await this.filesService.updateFiles(
-            { _id: user._id, images: user?.avatars },
-            files,
-            { images: dto?.avatars },
-        );
+        const imagesSave = files
+            ? await this.filesService.updateFiles(
+                  { _id: user._id, images: user?.avatars },
+                  files,
+                  { images: dto?.avatars },
+              )
+            : user.avatars;
 
         const updateUser = await this.UserModel.findByIdAndUpdate(user._id, {
             ...dto,
