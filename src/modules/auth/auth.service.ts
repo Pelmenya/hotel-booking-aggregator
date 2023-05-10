@@ -1,4 +1,8 @@
-import { UnauthorizedException, Injectable } from '@nestjs/common';
+import {
+    UnauthorizedException,
+    BadRequestException,
+    Injectable,
+} from '@nestjs/common';
 import { CreateUserDto } from '../users/types/create-user.dto';
 import { UsersService } from '../users/users.service';
 import { IAuthService } from './types/i-auth-service';
@@ -7,6 +11,9 @@ import { RegisterDto } from './types/register.dto';
 import { genSalt, hash, compare } from 'bcrypt';
 import { ERRORS_USER } from '../users/users.constants';
 import { Request } from 'express';
+import { UpdatePasswordDto } from './types/update-password.dto';
+import { IUser } from '../users/types/i-user';
+import { UpdateUserDto } from '../users/types/update-user-dto';
 
 @Injectable()
 export class AuthService implements IAuthService {
@@ -43,5 +50,25 @@ export class AuthService implements IAuthService {
     logout(req: Request): Record<string, boolean> {
         req.logout((err) => console.log(err));
         return { success: true };
+    }
+
+    async updatePassword(
+        req: Request & { user: IUser },
+        dto: UpdatePasswordDto,
+    ): Promise<{ succes: boolean }> {
+        const { user } = req;
+        const { newPassword, oldPassword } = dto;
+        const userInfo = await this.usersService.findById(user._id);
+        const isValidUser = await compare(oldPassword, userInfo.passwordHash);
+        if (isValidUser) {
+            const salt = await genSalt(10);
+            const passwordHash = await hash(newPassword, salt);
+            await this.usersService.updateUser(user._id, [], {
+                passwordHash,
+            } as UpdateUserDto);
+
+            return Promise.resolve({ succes: true });
+        }
+        throw new BadRequestException(ERRORS_USER.BAD_PASSWORD);
     }
 }

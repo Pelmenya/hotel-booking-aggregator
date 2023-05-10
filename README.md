@@ -1,6 +1,7 @@
 # «Backend Hotel Aggregator»
 
 ## [«Frontend Hotel Aggregator»](https://github.com/Pelmenya/hotel-booking-aggregator-front)
+## [«API»](https://documenter.getpostman.com/view/9455686/2s93eZzCAR)
 
 ## Описание проекта
 
@@ -71,6 +72,7 @@ interface IUserService {
     findById(id: ID): Promise<IUser>;
     findByEmail(email: string): Promise<IUser>;
     findAll(params: SearchUserParams): Promise<IUser[]>;
+    updateUser(id: ID, files: Express.Multer.File[], dto: UpdateUserDto): Promise<IUser>;
 }
 ```
 
@@ -836,7 +838,40 @@ POST /api/auth/login
 
 - `401` - если пользователя с указанным email не существует или пароль неверный.
 
-### **2.3.2. Выход**
+### **2.3.2. Смена пароля**
+
+#### **Описание**
+
+Заменяет пароль пользователя на новый.
+
+#### **Адрес**
+
+```http
+PUT /api/auth/password
+```
+#### **Body-параметры**
+
+```json
+{
+  "newPassword": string,
+  "oldPassword": string
+}
+```
+#### **Формат ответа**
+
+```json
+{
+  "success": true
+}
+```
+#### **Доступ**
+
+Доступно только аутентифицированным пользователям.
+#### **Ошибки**
+
+- `400` - если старый пароль пользователя неверный.
+- `401` - если пользователь аутентифицирован.
+### **2.3.3. Выход**
 
 #### **Описание**
 
@@ -847,16 +882,20 @@ POST /api/auth/login
 ```http
 POST /api/auth/logout
 ```
-
 #### **Формат ответа**
 
-Пустой ответ.
+```json
+{
+  "success": true
+}
+```
 
 #### **Доступ**
 
 Доступно только аутентифицированным пользователям.
 
-### **2.3.3. Регистрация**
+
+### **2.3.4. Регистрация**
 
 #### **Описание**
 

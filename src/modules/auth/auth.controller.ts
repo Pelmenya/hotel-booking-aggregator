@@ -5,12 +5,15 @@ import {
     UseGuards,
     HttpCode,
     Req,
+    Put,
 } from '@nestjs/common';
 import { Request } from 'express';
 import { AuthService } from './auth.service';
 import { AuthenticatedGuard } from '../../guards/authenticated.guard';
 import { LoginGuard } from '../../guards/login.guard';
 import { LoginDto } from './types/login.dto';
+import { UpdatePasswordDto } from './types/update-password.dto';
+import { IUser } from '../users/types/i-user';
 
 @Controller('auth')
 export class AuthController {
@@ -30,5 +33,14 @@ export class AuthController {
     @Post('logout')
     logout(@Req() req: Request) {
         return this.authService.logout(req);
+    }
+
+    @UseGuards(AuthenticatedGuard)
+    @Put('password')
+    async updatePassword(
+        @Req() req: Request & { user: IUser },
+        @Body() dto: UpdatePasswordDto,
+    ) {
+        return this.authService.updatePassword(req, dto);
     }
 }

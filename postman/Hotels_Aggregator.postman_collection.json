@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n\t\"password\": \"dddd\",\r\n\t\"email\": \"z7zz777d@rr.yye\"\r\n}",
+					"raw": "{\r\n\t\"password\": \"111112\",\r\n\t\"email\": \"lyapindm@yandex.ru\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -618,7 +618,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost/api/common/user",
+					"raw": "http://localhost/api/common/profile",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -626,7 +626,7 @@
 					"path": [
 						"api",
 						"common",
-						"user"
+						"profile"
 					]
 				}
 			},
@@ -988,12 +988,12 @@
 						{
 							"key": "avatars",
 							"type": "file",
-							"src": "/C:/Users/Diamond/Downloads/S1.jpeg"
+							"src": "/C:/Users/Diamond/Desktop/i.jpeg"
 						}
 					]
 				},
 				"url": {
-					"raw": "http://localhost/api/common/user",
+					"raw": "http://localhost/api/common/profile",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -1001,7 +1001,36 @@
 					"path": [
 						"api",
 						"common",
-						"user"
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Password",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"newPassword\": \"111111\",\r\n    \"oldPassword\": \"111112\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/api/auth/password",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"auth",
+						"password"
 					]
 				}
 			},

@@ -84,7 +84,6 @@ export class UsersService implements IUserService {
             files,
             { images: dto?.avatars },
         );
-
         const updateUser = await this.UserModel.findByIdAndUpdate(user._id, {
             ...dto,
             avatars: imagesSave,

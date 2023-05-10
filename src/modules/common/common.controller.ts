@@ -135,7 +135,7 @@ export class CommonController {
     @Roles('client', 'manager', 'admin')
     @Put('profile')
     @UseInterceptors(FilesInterceptor('avatars'))
-    async updateUserAvatar(
+    async updateUser(
         @UploadedFiles() files: Express.Multer.File[],
         @Req() req: Express.Request & { user: IUser },
         @Body()
