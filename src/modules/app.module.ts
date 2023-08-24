@@ -15,6 +15,9 @@ import { ManagerModule } from './manager/manager.module';
 import { HotelRoomsModule } from './hotel-rooms/hotel-rooms.module';
 import { SupportRequestsModule } from './support-requests/support-requests.module';
 import { FilesModule } from './files/files.module';
+import { MailModule } from './mail/mail.module';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { getMailConfig } from 'src/configs/mail.config';
 
 @Module({
     imports: [
@@ -23,6 +26,11 @@ import { FilesModule } from './files/files.module';
             imports: [ConfigModule],
             inject: [ConfigService],
             useFactory: getMongoConfig,
+        }),
+        MailerModule.forRootAsync({
+            imports: [ConfigModule],
+            inject: [ConfigService],
+            useFactory: getMailConfig,
         }),
         UsersModule,
         ClientModule,
@@ -35,6 +43,7 @@ import { FilesModule } from './files/files.module';
         ManagerModule,
         SupportRequestsModule,
         FilesModule,
+        MailModule,
     ],
     controllers: [AppController],
     providers: [AppService],
