@@ -11,6 +11,7 @@ export const selectUserParam = {
     id: '$_id',
     name: 1,
     email: 1,
+    emailIsConfirm: 1,
     role: 1,
     avatars: 1,
     contactPhone: 1,
