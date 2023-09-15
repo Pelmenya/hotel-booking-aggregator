@@ -14,7 +14,7 @@ export class AppController {
     @Get()
     async getHello(@Res() res: Response) {
         await this.mailService.sendUserConfirmation(
-            { name: 'Dmiry', email: 'lyapindm@ya.ru' },
+            { name: 'dear friend', email: 'lyapindm@ya.ru' },
             '444',
         );
         return !!process.env.IS_DEV
