@@ -11,7 +11,7 @@ services:
     build: ./
     container_name: hotel-aggregator
     ports:
-      - ${PORT}:${PORT}
+      - ${PORT}:3000
     environment:      
       - PORT=${PORT}
     command: sh -c "cd /app; rm -rf node_modules; npm i -g @nestjs/cli; npm install; npm run build; npm run start:prod"
