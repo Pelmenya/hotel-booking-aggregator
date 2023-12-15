@@ -33,7 +33,7 @@ async function bootstrap() {
     app.use(passport.session());
     app.useWebSocketAdapter(new SessionAdapter(sessionMiddleware, app));
 
-    await app.listen(3000);
+    await app.listen(process.env.PORT || 3000);
     // dev режим
     if (module.hot) {
         module.hot.accept();
