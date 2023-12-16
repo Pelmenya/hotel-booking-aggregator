@@ -71,7 +71,14 @@ export class UsersService implements IUserService {
         const users = await this.UserModel.find(queryParams)
             .skip(offset)
             .limit(limit)
-            .select({ _id: 0, id: '$_id', name: 1, email: 1, contactPhone: 1 })
+            .select({
+                _id: 0,
+                id: '$_id',
+                name: 1,
+                email: 1,
+                contactPhone: 1,
+                avatars: 1,
+            })
             .exec();
 
         return users;
