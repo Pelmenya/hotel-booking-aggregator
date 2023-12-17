@@ -78,6 +78,8 @@ export class UsersService implements IUserService {
                 email: 1,
                 contactPhone: 1,
                 avatars: 1,
+                role: 1,
+                emailIsConfirm: 1,
             })
             .exec();
 
