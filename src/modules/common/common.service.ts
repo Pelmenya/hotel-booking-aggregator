@@ -36,9 +36,24 @@ export class CommonService {
     }
 
     async getHotelById(id: ID): Promise<Omit<HotelData & { id: ID }, '_id'>> {
-        const { _id, title, description, createAt, updateAt, images } =
-            await this.hotelsService.findById(id);
-        return { id: _id, title, description, createAt, updateAt, images };
+        const {
+            _id,
+            title,
+            description,
+            createAt,
+            updateAt,
+            images,
+            coordinates,
+        } = await this.hotelsService.findById(id);
+        return {
+            id: _id,
+            title,
+            description,
+            createAt,
+            updateAt,
+            images,
+            coordinates,
+        };
     }
 
     async getHotelRooms(

@@ -67,6 +67,7 @@ export class AdminService implements IAdminService {
             title: updateHotel.title,
             description: updateHotel.description,
             images: updateHotel.images,
+            coordinates: updateHotel.coordinates,
         };
     }
 
@@ -90,6 +91,7 @@ export class AdminService implements IAdminService {
             title: updateHotel.title,
             description: updateHotel.description,
             images: updateHotel.images,
+            coordinates: updateHotel.coordinates,
         };
     }
 

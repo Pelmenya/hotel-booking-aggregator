@@ -9,6 +9,7 @@ import {
     Param,
     UseInterceptors,
     UploadedFiles,
+    BadRequestException,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { Roles } from 'src/decorators/roles.decorator';
@@ -48,6 +49,17 @@ export class AdminController {
         @UploadedFiles() files: Express.Multer.File[],
         @Body() dto: CreateHotelDto,
     ) {
+        if (dto.coordinates) {
+            if (
+                /^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?),\s*[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$/.test(
+                    `${dto.coordinates[0]},${dto.coordinates[1]}`,
+                ) === false
+            ) {
+                throw new BadRequestException(
+                    'Только действительные числа: -90..90,-180..180',
+                );
+            }
+        }
         return await this.adminService.createHotel(files, dto);
     }
 

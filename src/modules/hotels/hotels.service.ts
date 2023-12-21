@@ -38,6 +38,7 @@ export class HotelsService implements IHotelService {
                 title: 1,
                 description: 1,
                 images: 1,
+                coordinates: 1,
             });
     }
 
