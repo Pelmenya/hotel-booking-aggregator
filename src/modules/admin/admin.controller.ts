@@ -23,6 +23,7 @@ import { UpdateHotelDto } from '../hotels/types/update-hotel.dto';
 import { CreateUserDto } from '../users/types/create-user.dto';
 import { SearchUserParams } from '../users/types/search-user-params';
 import { AdminService } from './admin.service';
+import { validateCoordinates } from './types/utils/validateCoordinates';
 
 @UseGuards(RolesGuard)
 @Controller('admin')
@@ -49,17 +50,7 @@ export class AdminController {
         @UploadedFiles() files: Express.Multer.File[],
         @Body() dto: CreateHotelDto,
     ) {
-        if (dto.coordinates) {
-            if (
-                /^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?),\s*[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$/.test(
-                    `${dto.coordinates[0]},${dto.coordinates[1]}`,
-                ) === false
-            ) {
-                throw new BadRequestException(
-                    'Только действительные числа: -90..90,-180..180',
-                );
-            }
-        }
+        validateCoordinates(dto.coordinates);
         return await this.adminService.createHotel(files, dto);
     }
 
@@ -77,6 +68,7 @@ export class AdminController {
         @Param('id', IdValidationPipe) id: ID,
         @Body() dto: UpdateHotelDto,
     ) {
+        validateCoordinates(dto.coordinates);
         return await this.adminService.updateHotel(id, files, dto);
     }
 
