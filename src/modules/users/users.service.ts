@@ -96,6 +96,11 @@ export class UsersService implements IUserService {
               )
             : undefined;
 
+        // удаляет дирректорию, если пуста
+        if (!imagesSave.length) {
+            await this.filesService.removeDirImages(id);
+        }
+
         const updateUser = await this.UserModel.findByIdAndUpdate(user._id, {
             ...dto,
             avatars: imagesSave,

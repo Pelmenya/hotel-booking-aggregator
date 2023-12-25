@@ -82,6 +82,10 @@ export class AdminService implements IAdminService {
             files,
             dto,
         );
+        // удаляет дирректорию, если пуста
+        if (!imagesSave.length) {
+            await this.filesService.removeDirImages(id);
+        }
         const updateHotel = await this.hotelsService.update(id, {
             ...dto,
             images: imagesSave,
@@ -120,6 +124,10 @@ export class AdminService implements IAdminService {
             files,
             dto,
         );
+        // удаляет дирректорию, если пуста
+        if (!imagesSave.length) {
+            await this.filesService.removeDirImages(id);
+        }
         const res = await this.hotelRoomsService.update(id, {
             ...dto,
             images: imagesSave,

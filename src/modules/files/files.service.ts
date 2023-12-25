@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { path } from 'app-root-path';
-import { ensureDir, writeFile, remove } from 'fs-extra';
+import pathResolve from 'path';
+
+import fs from 'fs';
+
+import { ensureDir, writeFile, readFile, remove, emptyDir } from 'fs-extra';
 import * as sharp from 'sharp';
 import { ID } from 'src/types/id';
 import { MFile } from './mfile.class';
@@ -43,6 +47,10 @@ export class FilesService {
         }
     }
 
+    async removeDirImages(id: ID) {
+        remove(`${path}/api/uploads/${id}`);
+    }
+
     async updateFiles(
         item: { _id: ID; images?: string[] },
         files: Express.Multer.File[],
@@ -67,7 +75,6 @@ export class FilesService {
             (image) => !imagesSave.includes(image),
         );
         await this.removeFiles(imagesRemove);
-
         return imagesSave;
     }
 
