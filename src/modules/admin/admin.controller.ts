@@ -9,7 +9,6 @@ import {
     Param,
     UseInterceptors,
     UploadedFiles,
-    BadRequestException,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { Roles } from 'src/decorators/roles.decorator';
