@@ -5,24 +5,31 @@ import { ConfirmEmailCode } from './schemas/confirm-email-code';
 import { TConfirmEmailCodeDocument } from './types/t-confirm-email-code-document';
 import { Model } from 'mongoose';
 import { v4 as uuid4 } from 'uuid';
+import { MailService } from '../mail/mail.service';
 
 @Injectable()
 export class ConfirmService {
     constructor(
         @InjectModel(ConfirmEmailCode.name)
         private ConfirmEmailCodeModel: Model<TConfirmEmailCodeDocument>,
+        private readonly mailService: MailService,
     ) {}
 
-    async createEmailCode(req: Request & { user: IUser }) {
+    async createOrUpdateEmailCode(req: Request & { user: IUser }) {
         const user = req.user;
-        const confirm = await this.ConfirmEmailCodeModel.findOne({
+        let confirm = await this.ConfirmEmailCodeModel.findOne({
             user: user._id,
         });
 
         if (!confirm) {
-            return await this.ConfirmEmailCodeModel.create({
+            const newConfirm = await this.ConfirmEmailCodeModel.create({
                 user: user._id,
             });
+            await this.mailService.sendUserConfirmationEmail(
+                { name: user.name, email: user.email },
+                newConfirm.code,
+            );
+            return newConfirm;
         } else {
             await this.ConfirmEmailCodeModel.updateOne(
                 { user: user._id },
@@ -30,8 +37,13 @@ export class ConfirmService {
             );
         }
 
-        return await this.ConfirmEmailCodeModel.findOne({
+        confirm = await this.ConfirmEmailCodeModel.findOne({
             user: user._id,
         });
+        await this.mailService.sendUserConfirmationEmail(
+            { name: user.name, email: user.email },
+            confirm.code,
+        );
+        return confirm;
     }
 }

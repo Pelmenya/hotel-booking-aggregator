@@ -6,12 +6,14 @@ import {
     ConfirmEmailCode,
     ConfirmEmailCodeSchema,
 } from './schemas/confirm-email-code';
+import { MailModule } from '../mail/mail.module';
 
 @Module({
     imports: [
         MongooseModule.forFeature([
             { name: ConfirmEmailCode.name, schema: ConfirmEmailCodeSchema },
         ]),
+        MailModule,
     ],
     controllers: [ConfirmController],
     providers: [ConfirmService],

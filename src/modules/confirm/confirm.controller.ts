@@ -19,7 +19,7 @@ export class ConfirmController {
     @UseGuards(AuthenticatedGuard)
     @Post('email-code')
     async createEmailCode(@Req() req: Request & { user: IUser }) {
-        return this.confirmService.createEmailCode(req);
+        return this.confirmService.createOrUpdateEmailCode(req);
     }
 
     @HttpCode(200)

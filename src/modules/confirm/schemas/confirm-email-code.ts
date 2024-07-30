@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Schema as MongooseSchema } from 'mongoose';
 import { User } from 'src/modules/users/schemas/users.schema';
 import { IConfirmEmailCode } from '../types/i-confirm-email-code';
-import { v4 as uuid4} from 'uuid';
+import { v4 as uuid4 } from 'uuid';
 
 @Schema()
 export class ConfirmEmailCode implements Omit<IConfirmEmailCode, '_id'> {
