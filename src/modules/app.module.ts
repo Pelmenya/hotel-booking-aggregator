@@ -18,6 +18,7 @@ import { FilesModule } from './files/files.module';
 import { MailModule } from './mail/mail.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { getMailConfig } from 'src/configs/mail.config';
+import { ConfirmModule } from './confirm/confirm.module';
 
 @Module({
     imports: [
@@ -44,6 +45,7 @@ import { getMailConfig } from 'src/configs/mail.config';
         SupportRequestsModule,
         FilesModule,
         MailModule,
+        ConfirmModule,
     ],
     controllers: [AppController],
     providers: [AppService],
