@@ -10,6 +10,7 @@ import {
 import { AuthenticatedGuard } from 'src/guards/authenticated.guard';
 import { IUser } from '../users/types/i-user';
 import { ConfirmService } from './confirm.service';
+import { CreateConfirmEmailCodeDto } from './types/create-confirm-email-code.dto';
 
 @Controller('confirm')
 export class ConfirmController {
@@ -27,8 +28,8 @@ export class ConfirmController {
     @Put('email')
     async confirmEmail(
         @Req() req: Request & { user: IUser },
-        @Body() dto: any,
+        @Body() dto: CreateConfirmEmailCodeDto,
     ) {
-        return '';
+        return this.confirmService.confirmEmail(req.user._id, dto);
     }
 }

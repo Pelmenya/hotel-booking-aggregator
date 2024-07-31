@@ -94,7 +94,7 @@ export class UsersService implements IUserService {
                   files,
                   { images: dto?.avatars },
               )
-            : undefined;
+            : user.avatars;
 
         // удаляет дирректорию, если пуста
         if (!imagesSave.length) {

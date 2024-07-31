@@ -7,6 +7,7 @@ import {
     ConfirmEmailCodeSchema,
 } from './schemas/confirm-email-code';
 import { MailModule } from '../mail/mail.module';
+import { UsersModule } from '../users/users.module';
 
 @Module({
     imports: [
@@ -14,6 +15,7 @@ import { MailModule } from '../mail/mail.module';
             { name: ConfirmEmailCode.name, schema: ConfirmEmailCodeSchema },
         ]),
         MailModule,
+        UsersModule,
     ],
     controllers: [ConfirmController],
     providers: [ConfirmService],
