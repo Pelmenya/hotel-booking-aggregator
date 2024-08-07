@@ -10,6 +10,8 @@ services:
   hotel-aggregator:
     build: ./
     container_name: hotel-aggregator
+    volumes:
+      - .:/app
     ports:
       - ${PORT}:${PORT}
     environment:      
