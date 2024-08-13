@@ -24,11 +24,13 @@ services:
     volumes:
       - .:/app
     ports:
-      - ${PORT}:${PORT}
+      - ${DEV_PORT}:${DEV_PORT}
     depends_on:
       - mongo
     environment:
+      - PORT=${DEV_PORT}
       - SECRET=${SECRET}
       - IS_DEV=true
     working_dir: /app
     command: sh -c "cd /app; rm -rf dist; npm i -g @nestjs/cli; npm install; npm run start:dev"
+
