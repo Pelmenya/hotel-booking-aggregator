@@ -18,9 +18,9 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGODB_ADMINPASSWORD}
       ME_CONFIG_MONGODB_URL: ${MONGODB_URL}
   
-  hotel-aggregator:
+  hotel-aggregator-dev:
     build: ./
-    container_name: hotel-aggregator
+    container_name: hotel-aggregator-dev
     volumes:
       - .:/app
     ports:
