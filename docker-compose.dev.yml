@@ -23,6 +23,7 @@ services:
     container_name: hotel-aggregator-dev
     volumes:
       - .:/app
+      - /app/node_modules    
     ports:
       - ${DEV_PORT}:${DEV_PORT}
     depends_on:
