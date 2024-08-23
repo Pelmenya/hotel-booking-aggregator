@@ -101,8 +101,23 @@ export class UsersService implements IUserService {
             await this.filesService.removeDirImages(id);
         }
 
+        // Для подтверждения почты
+        let emailIsConfirm = user.emailIsConfirm;
+
+        if (dto.email) {
+            if (dto.email !== user.email) {
+                emailIsConfirm = false;
+            }
+        }
+
+        // Для сервиса Confirm при подтверждении
+        if (dto.emailIsConfirm === true) {
+            emailIsConfirm = true;
+        }
+
         const updateUser = await this.UserModel.findByIdAndUpdate(user._id, {
             ...dto,
+            emailIsConfirm,
             avatars: imagesSave,
         });
 
