@@ -6,14 +6,38 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    volumes:
+      - mongo_data:/data/db
+
+  postgres_postgis_db:
+    image: postgis/postgis
+    container_name: postgres_postgis_db
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DATA: ${POSTGRES_DATA}
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
 
   hotel-aggregator:
-    build: ./
+    build: ./ 
     container_name: hotel-aggregator
     volumes:
       - .:/app
     ports:
       - ${PORT}:${PORT}
+    depends_on:
+      - mongo
+      - postgres_postgis_db
     environment:      
       - PORT=${PORT}
+      - SECRET=${SECRET}
     command: sh -c "cd /app; rm -rf node_modules; npm i -g @nestjs/cli; npm install; npm run build; npm run start:prod"
+
+volumes:
+  mongo_data:
+  postgres_data:
+

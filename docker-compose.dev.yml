@@ -7,6 +7,8 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    volumes:
+      - mongo_data:/data/db
 
   mongo-express:
     image: mongo-express
@@ -17,13 +19,38 @@ services:
       ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGODB_ADMINUSERNAME}
       ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGODB_ADMINPASSWORD}
       ME_CONFIG_MONGODB_URL: ${MONGODB_URL}
-  
+
+  postgres_postgis_db:
+    image: postgis/postgis
+    container_name: postgres_postgis_db
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DATA: ${POSTGRES_DATA}
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+
+  adminer_pgadmin4:
+    image: dpage/pgadmin4
+    container_name: adminer_pgadmin4
+    restart: always
+    environment: 
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - 8090:80
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+
   hotel-aggregator-dev:
-    build: ./
+    build: ./ 
     container_name: hotel-aggregator-dev
     volumes:
       - .:/app
-      - /app/node_modules    
+      - /app/node_modules
     ports:
       - ${DEV_PORT}:${DEV_PORT}
     depends_on:
@@ -35,3 +62,7 @@ services:
     working_dir: /app
     command: sh -c "cd /app; rm -rf dist; npm i -g @nestjs/cli; npm install; npm run start:dev"
 
+volumes:
+  mongo_data:
+  postgres_data:
+  pgadmin_data:
