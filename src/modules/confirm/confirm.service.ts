@@ -10,12 +10,16 @@ import { CreateConfirmEmailCodeDto } from './types/create-confirm-email-code.dto
 import { ID } from 'src/types/id';
 import { UsersService } from '../users/users.service';
 import { ERRORS_CONFIRM } from './confirm.constants';
+import { TConfirmSmsCodeDocument } from './types/t-confirm-sms-code-document';
+import { ConfirmSmsCode } from './schemas/confirm-sms-code';
 
 @Injectable()
 export class ConfirmService {
     constructor(
         @InjectModel(ConfirmEmailCode.name)
         private ConfirmEmailCodeModel: Model<TConfirmEmailCodeDocument>,
+        @InjectModel(ConfirmSmsCode.name)
+        private ConfirmSmsCodeModel: Model<TConfirmSmsCodeDocument>,
         private readonly mailService: MailService,
         private readonly usersService: UsersService,
     ) {}
@@ -77,5 +81,36 @@ export class ConfirmService {
             }
         }
         throw new BadRequestException(ERRORS_CONFIRM.NOT_UPDATE_CONFRIM);
+    }
+
+    async createOrUpdateSmsCode(
+        req: Request & { user: IUser },
+    ): Promise<{ succes: boolean }> {
+        const user = req.user;
+        let confirm = await this.ConfirmSmsCodeModel.findOne({
+            user: user._id,
+        });
+
+        if (!confirm) {
+            const newConfirm = await this.ConfirmSmsCodeModel.create({
+                user: user._id,
+            });
+            await this.mailService.sendUserConfirmationEmail(
+                { name: user.name, email: user.email },
+                newConfirm.code,
+            );
+            return { succes: true };
+        } else {
+            await this.ConfirmEmailCodeModel.updateOne(
+                { user: user._id },
+                { code: uuid4() },
+            );
+        }
+
+        confirm = await this.ConfirmEmailCodeModel.findOne({
+            user: user._id,
+        });
+
+        return { succes: true };
     }
 }

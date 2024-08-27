@@ -32,4 +32,21 @@ export class ConfirmController {
     ) {
         return this.confirmService.confirmEmail(req.user._id, dto);
     }
+
+    @HttpCode(200)
+    @UseGuards(AuthenticatedGuard)
+    @Post('sms-code')
+    async createSmsCode(@Req() req: Request & { user: IUser }) {
+        return this.confirmService.createOrUpdateEmailCode(req);
+    }
+
+    @HttpCode(200)
+    @UseGuards(AuthenticatedGuard)
+    @Put('sms')
+    async confirmSms(
+        @Req() req: Request & { user: IUser },
+        @Body() dto: CreateConfirmEmailCodeDto,
+    ) {
+        return this.confirmService.confirmEmail(req.user._id, dto);
+    }
 }
