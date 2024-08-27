@@ -19,6 +19,7 @@ import { MailModule } from './mail/mail.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { getMailConfig } from 'src/configs/mail.config';
 import { ConfirmModule } from './confirm/confirm.module';
+import { PostgresModule } from './postgres/postgres.module';
 
 @Module({
     imports: [
@@ -33,6 +34,7 @@ import { ConfirmModule } from './confirm/confirm.module';
             inject: [ConfigService],
             useFactory: getMailConfig,
         }),
+        PostgresModule,
         UsersModule,
         ClientModule,
         HotelsModule,
