@@ -55,7 +55,7 @@ export class AuthService implements IAuthService {
     async updatePassword(
         req: Request & { user: IUser },
         dto: UpdatePasswordDto,
-    ): Promise<{ succes: boolean }> {
+    ): Promise<{ success: boolean }> {
         const { user } = req;
         const { newPassword, oldPassword } = dto;
         const userInfo = await this.usersService.findById(user._id);
@@ -67,7 +67,7 @@ export class AuthService implements IAuthService {
                 passwordHash,
             } as UpdateUserDto);
 
-            return Promise.resolve({ succes: true });
+            return Promise.resolve({ success: true });
         }
         throw new BadRequestException(ERRORS_USER.BAD_PASSWORD);
     }

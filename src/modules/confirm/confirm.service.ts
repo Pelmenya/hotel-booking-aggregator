@@ -13,6 +13,7 @@ import { ERRORS_CONFIRM } from './confirm.constants';
 import { TConfirmSmsCodeDocument } from './types/t-confirm-sms-code-document';
 import { ConfirmSmsCode } from './schemas/confirm-sms-code';
 import { SmsService } from '../sms/sms.service';
+import { generateConfirmationCode } from 'src/functions/generate-confirmation-code';
 
 @Injectable()
 export class ConfirmService {
@@ -28,7 +29,7 @@ export class ConfirmService {
 
     async createOrUpdateEmailCode(
         req: Request & { user: IUser },
-    ): Promise<{ succes: boolean }> {
+    ): Promise<{ success: boolean }> {
         const user = req.user;
         let confirm = await this.ConfirmEmailCodeModel.findOne({
             user: user._id,
@@ -42,7 +43,7 @@ export class ConfirmService {
                 { name: user.name, email: user.email },
                 newConfirm.code,
             );
-            return { succes: true };
+            return { success: true };
         } else {
             await this.ConfirmEmailCodeModel.updateOne(
                 { user: user._id },
@@ -59,13 +60,13 @@ export class ConfirmService {
             confirm.code,
         );
 
-        return { succes: true };
+        return { success: true };
     }
 
     async confirmEmail(
         userId: ID,
         dto: CreateConfirmEmailCodeDto,
-    ): Promise<{ succes: boolean }> {
+    ): Promise<{ success: boolean }> {
         const { code } = dto;
         const confirm = await this.ConfirmEmailCodeModel.findOne({
             user: userId,
@@ -79,7 +80,7 @@ export class ConfirmService {
                     { _id: confirm._id },
                     { code: NIL_UUID },
                 );
-                return { succes: true };
+                return { success: true };
             }
         }
         throw new BadRequestException(ERRORS_CONFIRM.NOT_UPDATE_CONFRIM);
@@ -87,8 +88,9 @@ export class ConfirmService {
 
     async createOrUpdateSmsCode(
         req: Request & { user: IUser },
-    ): Promise<{ succes: boolean }> {
+    ): Promise<{ success: any }> {
         const user = req.user;
+        await this.smsService.validatePhone(user.contactPhone);
         let confirm = await this.ConfirmSmsCodeModel.findOne({
             user: user._id,
         });
@@ -97,20 +99,28 @@ export class ConfirmService {
             const newConfirm = await this.ConfirmSmsCodeModel.create({
                 user: user._id,
             });
-            return {
-                succes: await this.smsService.validatePhone(user.contactPhone),
-            };
+
+            await this.smsService.sendUserConfirmationSms(
+                user.contactPhone,
+                newConfirm.code,
+            );
+            return { success: true };
         } else {
-            await this.ConfirmEmailCodeModel.updateOne(
+            await this.ConfirmSmsCodeModel.updateOne(
                 { user: user._id },
-                { code: uuid4() },
+                { code: generateConfirmationCode(4) },
             );
         }
 
-        confirm = await this.ConfirmEmailCodeModel.findOne({
+        confirm = await this.ConfirmSmsCodeModel.findOne({
             user: user._id,
         });
 
-        return { succes: true };
+        await this.smsService.sendUserConfirmationSms(
+            user.contactPhone,
+            confirm.code,
+        );
+
+        return { success: true };
     }
 }

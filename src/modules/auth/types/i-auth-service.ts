@@ -11,5 +11,5 @@ export interface IAuthService {
     updatePassword(
         req: Request,
         dto: UpdatePasswordDto,
-    ): Promise<{ succes: boolean }>;
+    ): Promise<{ success: boolean }>;
 }

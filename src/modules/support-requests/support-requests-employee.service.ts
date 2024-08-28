@@ -68,7 +68,7 @@ export class SupportRequestsEmployeeService
                 },
             );
             const unreadCount = await this.getUnreadCount(dto.supportRequest);
-            return { succes: true, unreadCount };
+            return { success: true, unreadCount };
         }
 
         throw new NotFoundException(ERRORS_SUPPORT_REQUESTS.NOT_FOUND);

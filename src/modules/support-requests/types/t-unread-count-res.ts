@@ -1,4 +1,4 @@
 export type TUnreadCountRes = {
-    succes: boolean;
+    success: boolean;
     unreadCount: number;
 };
