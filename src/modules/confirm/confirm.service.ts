@@ -38,6 +38,7 @@ export class ConfirmService {
         if (!confirm) {
             const newConfirm = await this.ConfirmEmailCodeModel.create({
                 user: user._id,
+                code: uuid4(),
             });
             await this.mailService.sendUserConfirmationEmail(
                 { name: user.name, email: user.email },
@@ -98,6 +99,7 @@ export class ConfirmService {
         if (!confirm) {
             const newConfirm = await this.ConfirmSmsCodeModel.create({
                 user: user._id,
+                code: generateConfirmationCode(4),
             });
 
             await this.smsService.sendUserConfirmationSms(
