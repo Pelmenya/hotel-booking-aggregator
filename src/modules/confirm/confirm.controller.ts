@@ -37,7 +37,7 @@ export class ConfirmController {
     @UseGuards(AuthenticatedGuard)
     @Post('sms-code')
     async createSmsCode(@Req() req: Request & { user: IUser }) {
-        return this.confirmService.createOrUpdateEmailCode(req);
+        return this.confirmService.createOrUpdateSmsCode(req);
     }
 
     @HttpCode(200)

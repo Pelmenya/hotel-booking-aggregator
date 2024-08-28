@@ -12,6 +12,7 @@ import { UsersService } from '../users/users.service';
 import { ERRORS_CONFIRM } from './confirm.constants';
 import { TConfirmSmsCodeDocument } from './types/t-confirm-sms-code-document';
 import { ConfirmSmsCode } from './schemas/confirm-sms-code';
+import { SmsService } from '../sms/sms.service';
 
 @Injectable()
 export class ConfirmService {
@@ -21,6 +22,7 @@ export class ConfirmService {
         @InjectModel(ConfirmSmsCode.name)
         private ConfirmSmsCodeModel: Model<TConfirmSmsCodeDocument>,
         private readonly mailService: MailService,
+        private readonly smsService: SmsService,
         private readonly usersService: UsersService,
     ) {}
 
@@ -95,11 +97,9 @@ export class ConfirmService {
             const newConfirm = await this.ConfirmSmsCodeModel.create({
                 user: user._id,
             });
-            await this.mailService.sendUserConfirmationEmail(
-                { name: user.name, email: user.email },
-                newConfirm.code,
-            );
-            return { succes: true };
+            return {
+                succes: await this.smsService.validatePhone(user.contactPhone),
+            };
         } else {
             await this.ConfirmEmailCodeModel.updateOne(
                 { user: user._id },

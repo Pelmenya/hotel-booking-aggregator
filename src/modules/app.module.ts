@@ -17,6 +17,7 @@ import { MailModule } from './mail/mail.module';
 import { ConfirmModule } from './confirm/confirm.module';
 import { PostgresModule } from './postgres/postgres.module';
 import { MongoModule } from './mongo/mongo.module';
+import { SmsModule } from './sms/sms.module';
 
 @Module({
     imports: [
@@ -36,6 +37,7 @@ import { MongoModule } from './mongo/mongo.module';
         FilesModule,
         MailModule,
         ConfirmModule,
+        SmsModule,
     ],
     controllers: [AppController],
     providers: [AppService],

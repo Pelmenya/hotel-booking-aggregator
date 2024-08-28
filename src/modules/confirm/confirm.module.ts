@@ -12,6 +12,7 @@ import {
     ConfirmEmailSmsSchema,
     ConfirmSmsCode,
 } from './schemas/confirm-sms-code';
+import { SmsModule } from '../sms/sms.module';
 
 @Module({
     imports: [
@@ -20,6 +21,7 @@ import {
             { name: ConfirmSmsCode.name, schema: ConfirmEmailSmsSchema },
         ]),
         MailModule,
+        SmsModule,
         UsersModule,
     ],
     controllers: [ConfirmController],
