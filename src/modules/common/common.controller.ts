@@ -157,6 +157,7 @@ export class CommonController {
             dto,
         );
 
+        req.user = updateUser;
         return updateUser;
     }
 }
