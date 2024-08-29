@@ -14,6 +14,7 @@ import { Request } from 'express';
 import { UpdatePasswordDto } from './types/update-password.dto';
 import { IUser } from '../users/types/i-user';
 import { UpdateUserDto } from '../users/types/update-user-dto';
+import { TSuccess } from 'src/types/t-success';
 
 @Injectable()
 export class AuthService implements IAuthService {
@@ -47,7 +48,7 @@ export class AuthService implements IAuthService {
         };
     }
 
-    logout(req: Request): Record<string, boolean> {
+    logout(req: Request): TSuccess {
         req.logout((err) => console.log(err));
         return { success: true };
     }

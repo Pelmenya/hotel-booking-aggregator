@@ -15,6 +15,7 @@ import { ConfirmSmsCode } from './schemas/confirm-sms-code';
 import { SmsService } from '../sms/sms.service';
 import { generateConfirmationCode } from 'src/functions/generate-confirmation-code';
 import { CreateConfirmSmsCodeDto } from './types/create-confirm-sms-code';
+import { TSuccess } from 'src/types/t-success';
 
 @Injectable()
 export class ConfirmService {
@@ -30,7 +31,7 @@ export class ConfirmService {
 
     async createOrUpdateEmailCode(
         req: Request & { user: IUser },
-    ): Promise<{ success: boolean }> {
+    ): Promise<TSuccess> {
         const user = req.user;
         let confirm = await this.ConfirmEmailCodeModel.findOne({
             user: user._id,
@@ -90,7 +91,7 @@ export class ConfirmService {
 
     async createOrUpdateSmsCode(
         req: Request & { user: IUser },
-    ): Promise<{ success: any }> {
+    ): Promise<TSuccess> {
         const user = req.user;
         await this.smsService.validatePhone(user.contactPhone);
         let confirm = await this.ConfirmSmsCodeModel.findOne({
@@ -130,7 +131,7 @@ export class ConfirmService {
     async confirmSms(
         userId: ID,
         dto: CreateConfirmSmsCodeDto,
-    ): Promise<{ success: boolean }> {
+    ): Promise<TSuccess> {
         const { code } = dto;
         const confirm = await this.ConfirmSmsCodeModel.findOne({
             user: userId,

@@ -42,7 +42,7 @@ export class ConfirmController {
 
     @HttpCode(200)
     @UseGuards(AuthenticatedGuard)
-    @Put('sms')
+    @Put('phone')
     async confirmSms(
         @Req() req: Request & { user: IUser },
         @Body() dto: CreateConfirmEmailCodeDto,
