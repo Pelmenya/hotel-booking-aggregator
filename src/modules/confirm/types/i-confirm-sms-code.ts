@@ -5,5 +5,5 @@ export interface IConfirmSmsCode {
     _id: ID;
     user: User;
     code: number;
-    createAt: Date;
+    createdAt: Date;
 }

@@ -16,7 +16,7 @@ export class ConfirmSmsCode implements Omit<IConfirmSmsCode, '_id'> {
     public code: number;
 
     @Prop({ required: true, default: new Date() })
-    public createAt: Date;
+    public createdAt: Date;
 }
 
 export const ConfirmEmailSmsSchema =

@@ -15,4 +15,9 @@ export const selectUserParam = {
     role: 1,
     avatars: 1,
     contactPhone: 1,
+    phoneIsConfirm: 1,
+    birthday: 1,
+    address: 1,
+    gender: 1,
+    company: 1,
 };

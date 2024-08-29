@@ -6,5 +6,5 @@ export interface IConfirmEmailCode {
     _id: ID;
     user: User;
     code: MongooseSchema.Types.UUID;
-    createAt: Date;
+    createdAt: Date;
 }

@@ -9,7 +9,11 @@ import { MailService } from '../mail/mail.service';
 import { CreateConfirmEmailCodeDto } from './types/create-confirm-email-code.dto';
 import { ID } from 'src/types/id';
 import { UsersService } from '../users/users.service';
-import { ERRORS_CONFIRM } from './confirm.constants';
+import {
+    ERRORS_CONFIRM,
+    onceTimeEmail,
+    onceTimeSms,
+} from './confirm.constants';
 import { TConfirmSmsCodeDocument } from './types/t-confirm-sms-code-document';
 import { ConfirmSmsCode } from './schemas/confirm-sms-code';
 import { SmsService } from '../sms/sms.service';
@@ -33,6 +37,25 @@ export class ConfirmService {
         req: Request & { user: IUser },
     ): Promise<TSuccess> {
         const user = req.user;
+        if (user.emailIsConfirm) {
+            throw new BadRequestException(
+                ERRORS_CONFIRM.EMAIL_ALREDY_CONFIRMED,
+            );
+        }
+
+        const lastEmail = await this.ConfirmSmsCodeModel.findOne({
+            user: user._id,
+        });
+
+        const now = new Date();
+        if (
+            lastEmail &&
+            now.getTime() - new Date(lastEmail.createdAt).getTime() <
+                onceTimeEmail
+        ) {
+            throw new BadRequestException(ERRORS_CONFIRM.EMAIL_LIMIT);
+        }
+
         let confirm = await this.ConfirmEmailCodeModel.findOne({
             user: user._id,
         });
@@ -93,6 +116,24 @@ export class ConfirmService {
         req: Request & { user: IUser },
     ): Promise<TSuccess> {
         const user = req.user;
+
+        if (user.phoneIsConfirm) {
+            throw new BadRequestException(
+                ERRORS_CONFIRM.PHONE_ALREDY_CONFIRMED,
+            );
+        }
+        const lastSms = await this.ConfirmSmsCodeModel.findOne({
+            user: user._id,
+        });
+
+        const now = new Date();
+        if (
+            lastSms &&
+            now.getTime() - new Date(lastSms.createdAt).getTime() < onceTimeSms
+        ) {
+            throw new BadRequestException(ERRORS_CONFIRM.SMS_LIMIT);
+        }
+
         await this.smsService.validatePhone(user.contactPhone);
         let confirm = await this.ConfirmSmsCodeModel.findOne({
             user: user._id,

@@ -16,7 +16,7 @@ export class ConfirmEmailCode implements Omit<IConfirmEmailCode, '_id'> {
     public code: MongooseSchema.Types.UUID;
 
     @Prop({ required: true, default: new Date() })
-    public createAt: Date;
+    public createdAt: Date;
 }
 
 export const ConfirmEmailCodeSchema =

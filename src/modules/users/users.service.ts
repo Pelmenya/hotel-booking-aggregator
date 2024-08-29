@@ -103,10 +103,17 @@ export class UsersService implements IUserService {
 
         // Для подтверждения почты
         let emailIsConfirm = user.emailIsConfirm;
+        let phoneIsConfirm = user.phoneIsConfirm;
 
         if (dto.email) {
             if (dto.email !== user.email) {
                 emailIsConfirm = false;
+            }
+        }
+
+        if (dto.contactPhone) {
+            if (dto.contactPhone !== user.contactPhone) {
+                phoneIsConfirm = false;
             }
         }
 
@@ -115,9 +122,14 @@ export class UsersService implements IUserService {
             emailIsConfirm = true;
         }
 
+        if (dto.emailIsConfirm === true) {
+            phoneIsConfirm = true;
+        }
+
         const updateUser = await this.UserModel.findByIdAndUpdate(user._id, {
             ...dto,
             emailIsConfirm,
+            phoneIsConfirm,
             avatars: imagesSave,
         });
 
