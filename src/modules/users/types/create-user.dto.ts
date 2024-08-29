@@ -17,6 +17,6 @@ export class CreateUserDto {
     @IsEmpty() @NotEquals('') @NotEquals(null) role?: TRole; // чтоб кто-то c фронта не создал
     @IsString() @IsOptional() company?: string;
     @IsString() @IsOptional() address?: string;
-    @IsDate() @IsOptional() birthday?: string;
+    @IsDate() @IsOptional() birthday?: Date;
     @IsString() @IsOptional() gender?: string;
 }
