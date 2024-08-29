@@ -14,6 +14,7 @@ import { TConfirmSmsCodeDocument } from './types/t-confirm-sms-code-document';
 import { ConfirmSmsCode } from './schemas/confirm-sms-code';
 import { SmsService } from '../sms/sms.service';
 import { generateConfirmationCode } from 'src/functions/generate-confirmation-code';
+import { CreateConfirmSmsCodeDto } from './types/create-confirm-sms-code';
 
 @Injectable()
 export class ConfirmService {
@@ -124,5 +125,28 @@ export class ConfirmService {
         );
 
         return { success: true };
+    }
+
+    async confirmSms(
+        userId: ID,
+        dto: CreateConfirmSmsCodeDto,
+    ): Promise<{ success: boolean }> {
+        const { code } = dto;
+        const confirm = await this.ConfirmSmsCodeModel.findOne({
+            user: userId,
+        });
+        if (code === confirm.code) {
+            const updateUser = await this.usersService.updateUser(userId, [], {
+                phoneIsConfirm: true,
+            });
+            if (updateUser.phoneIsConfirm) {
+                await this.ConfirmEmailCodeModel.findByIdAndUpdate(
+                    { _id: confirm._id },
+                    { code: 0 },
+                );
+                return { success: true };
+            }
+        }
+        throw new BadRequestException(ERRORS_CONFIRM.NOT_UPDATE_CONFRIM);
     }
 }

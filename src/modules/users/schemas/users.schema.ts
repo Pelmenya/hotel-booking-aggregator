@@ -10,6 +10,9 @@ export class User implements Omit<IUser, '_id'> {
     @Prop({ type: Boolean, default: false })
     public emailIsConfirm: boolean;
 
+    @Prop({ type: Boolean, default: false })
+    public phoneIsConfirm: boolean;
+
     @Prop({ required: true })
     public passwordHash: string;
 

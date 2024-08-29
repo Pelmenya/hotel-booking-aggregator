@@ -1,4 +1,11 @@
-import { IsOptional, IsString, IsEmail } from 'class-validator';
+import {
+    IsOptional,
+    IsString,
+    IsEmail,
+    IsDate,
+    IsEmpty,
+    NotEquals,
+} from 'class-validator';
 import { TRole } from './t-role';
 
 export class CreateUserDto {
@@ -7,5 +14,9 @@ export class CreateUserDto {
     @IsString() name: string;
     @IsOptional() @IsString() passwordHash?: string;
     @IsOptional() @IsString() contactPhone?: string;
-    @IsOptional() @IsString() role?: TRole;
+    @IsEmpty() @NotEquals('') @NotEquals(null) role?: TRole; // чтоб кто-то c фронта не создал
+    @IsString() @IsOptional() company?: string;
+    @IsString() @IsOptional() address?: string;
+    @IsDate() @IsOptional() birthday?: string;
+    @IsString() @IsOptional() gender?: string;
 }

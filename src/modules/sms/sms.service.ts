@@ -79,7 +79,10 @@ export class SmsService {
                     }),
                 ),
         );
-        console.log(data);
-        return true;
+        if (data.result.toUpperCase() === 'CREATED') {
+            return true;
+        } else {
+            throw new BadRequestException(ERRORS_SMS.NOT_CREATED_SMS);
+        }
     }
 }

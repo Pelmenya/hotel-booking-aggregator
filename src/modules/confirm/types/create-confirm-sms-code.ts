@@ -1,5 +1,5 @@
 import { IsNumber } from 'class-validator';
 
-export class CreateConfirmEmailCodeDto {
+export class CreateConfirmSmsCodeDto {
     @IsNumber() code: number;
 }
