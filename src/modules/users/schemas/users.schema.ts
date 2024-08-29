@@ -22,6 +22,18 @@ export class User implements Omit<IUser, '_id'> {
     @Prop()
     public contactPhone: string;
 
+    @Prop()
+    public company: string;
+
+    @Prop()
+    public gender: 'male' | 'femail';
+
+    @Prop()
+    public birthday: Date;
+
+    @Prop()
+    public address: string;
+
     @Prop({ type: [String], default: [] })
     public avatars: string[];
 

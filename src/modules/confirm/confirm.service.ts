@@ -140,7 +140,7 @@ export class ConfirmService {
                 phoneIsConfirm: true,
             });
             if (updateUser.phoneIsConfirm) {
-                await this.ConfirmEmailCodeModel.findByIdAndUpdate(
+                await this.ConfirmSmsCodeModel.findByIdAndUpdate(
                     { _id: confirm._id },
                     { code: 0 },
                 );
