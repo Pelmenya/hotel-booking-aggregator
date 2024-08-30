@@ -11,6 +11,7 @@ import { AuthenticatedGuard } from 'src/guards/authenticated.guard';
 import { IUser } from '../users/types/i-user';
 import { ConfirmService } from './confirm.service';
 import { CreateConfirmEmailCodeDto } from './types/create-confirm-email-code.dto';
+import { CreateConfirmSmsCodeDto } from './types/create-confirm-sms-code';
 
 @Controller('confirm')
 export class ConfirmController {
@@ -45,8 +46,8 @@ export class ConfirmController {
     @Put('phone')
     async confirmSms(
         @Req() req: Request & { user: IUser },
-        @Body() dto: CreateConfirmEmailCodeDto,
+        @Body() dto: CreateConfirmSmsCodeDto,
     ) {
-        return this.confirmService.confirmEmail(req.user._id, dto);
+        return this.confirmService.confirmSms(req.user._id, dto);
     }
 }
