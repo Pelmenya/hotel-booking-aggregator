@@ -43,7 +43,7 @@ export class ConfirmService {
             );
         }
 
-        const confirm = await this.ConfirmEmailCodeModel.findOne({
+        let confirm = await this.ConfirmEmailCodeModel.findOne({
             user: user._id,
         });
 
@@ -67,15 +67,18 @@ export class ConfirmService {
             ) {
                 throw new BadRequestException(ERRORS_CONFIRM.EMAIL_LIMIT);
             }
+            await this.ConfirmEmailCodeModel.updateOne(
+                { user: user._id },
+                { code: uuid4(), updatedAt: new Date() },
+            );
+
+            confirm = await this.ConfirmEmailCodeModel.findOne({
+                user: user._id,
+            });
 
             await this.mailService.sendUserConfirmationEmail(
                 { name: user.name, email: user.email },
                 confirm.code,
-            );
-
-            await this.ConfirmEmailCodeModel.updateOne(
-                { user: user._id },
-                { code: uuid4(), updatedAt: new Date() },
             );
         }
 
@@ -118,7 +121,7 @@ export class ConfirmService {
             );
         }
 
-        const confirm = await this.ConfirmSmsCodeModel.findOne({
+        let confirm = await this.ConfirmSmsCodeModel.findOne({
             user: user._id,
         });
 
@@ -143,14 +146,17 @@ export class ConfirmService {
             ) {
                 throw new BadRequestException(ERRORS_CONFIRM.SMS_LIMIT);
             }
+            await this.ConfirmSmsCodeModel.updateOne(
+                { user: user._id },
+                { code: generateConfirmationCode(4), updatedAt: new Date() },
+            );
+            confirm = await this.ConfirmSmsCodeModel.findOne({
+                user: user._id,
+            });
 
             await this.smsService.sendUserConfirmationSms(
                 user.contactPhone,
                 confirm.code,
-            );
-            await this.ConfirmSmsCodeModel.updateOne(
-                { user: user._id },
-                { code: generateConfirmationCode(4), updatedAt: new Date() },
             );
         }
 
