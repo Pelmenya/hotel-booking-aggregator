@@ -43,20 +43,7 @@ export class ConfirmService {
             );
         }
 
-        const lastEmail = await this.ConfirmSmsCodeModel.findOne({
-            user: user._id,
-        });
-
-        const now = new Date();
-        if (
-            lastEmail &&
-            now.getTime() - new Date(lastEmail.createdAt).getTime() <
-                onceTimeEmail
-        ) {
-            throw new BadRequestException(ERRORS_CONFIRM.EMAIL_LIMIT);
-        }
-
-        let confirm = await this.ConfirmEmailCodeModel.findOne({
+        const confirm = await this.ConfirmEmailCodeModel.findOne({
             user: user._id,
         });
 
@@ -71,20 +58,26 @@ export class ConfirmService {
             );
             return { success: true };
         } else {
+            // Ограничение по времени отправки email
+            const now = new Date();
+            if (
+                confirm &&
+                now.getTime() - new Date(confirm.updatedAt).getTime() <
+                    onceTimeEmail
+            ) {
+                throw new BadRequestException(ERRORS_CONFIRM.EMAIL_LIMIT);
+            }
+
+            await this.mailService.sendUserConfirmationEmail(
+                { name: user.name, email: user.email },
+                confirm.code,
+            );
+
             await this.ConfirmEmailCodeModel.updateOne(
                 { user: user._id },
-                { code: uuid4() },
+                { code: uuid4(), updatedAt: new Date() },
             );
         }
-
-        confirm = await this.ConfirmEmailCodeModel.findOne({
-            user: user._id,
-        });
-
-        await this.mailService.sendUserConfirmationEmail(
-            { name: user.name, email: user.email },
-            confirm.code,
-        );
 
         return { success: true };
     }
@@ -104,7 +97,7 @@ export class ConfirmService {
             if (updateUser.emailIsConfirm) {
                 await this.ConfirmEmailCodeModel.findByIdAndUpdate(
                     { _id: confirm._id },
-                    { code: NIL_UUID },
+                    { code: NIL_UUID, updatedAt: new Date() },
                 );
                 return { success: true };
             }
@@ -117,25 +110,15 @@ export class ConfirmService {
     ): Promise<TSuccess> {
         const user = req.user;
 
+        await this.smsService.validatePhone(user.contactPhone);
+
         if (user.phoneIsConfirm) {
             throw new BadRequestException(
                 ERRORS_CONFIRM.PHONE_ALREDY_CONFIRMED,
             );
         }
-        const lastSms = await this.ConfirmSmsCodeModel.findOne({
-            user: user._id,
-        });
 
-        const now = new Date();
-        if (
-            lastSms &&
-            now.getTime() - new Date(lastSms.createdAt).getTime() < onceTimeSms
-        ) {
-            throw new BadRequestException(ERRORS_CONFIRM.SMS_LIMIT);
-        }
-
-        await this.smsService.validatePhone(user.contactPhone);
-        let confirm = await this.ConfirmSmsCodeModel.findOne({
+        const confirm = await this.ConfirmSmsCodeModel.findOne({
             user: user._id,
         });
 
@@ -151,20 +134,25 @@ export class ConfirmService {
             );
             return { success: true };
         } else {
+            // Ограничение по времени отправки sms
+            const now = new Date();
+            if (
+                confirm &&
+                now.getTime() - new Date(confirm.updatedAt).getTime() <
+                    onceTimeSms
+            ) {
+                throw new BadRequestException(ERRORS_CONFIRM.SMS_LIMIT);
+            }
+
+            await this.smsService.sendUserConfirmationSms(
+                user.contactPhone,
+                confirm.code,
+            );
             await this.ConfirmSmsCodeModel.updateOne(
                 { user: user._id },
-                { code: generateConfirmationCode(4) },
+                { code: generateConfirmationCode(4), updatedAt: new Date() },
             );
         }
-
-        confirm = await this.ConfirmSmsCodeModel.findOne({
-            user: user._id,
-        });
-
-        await this.smsService.sendUserConfirmationSms(
-            user.contactPhone,
-            confirm.code,
-        );
 
         return { success: true };
     }
@@ -184,7 +172,7 @@ export class ConfirmService {
             if (updateUser.phoneIsConfirm) {
                 await this.ConfirmSmsCodeModel.findByIdAndUpdate(
                     { _id: confirm._id },
-                    { code: 0 },
+                    { code: 0, updatedAt: new Date() },
                 );
                 return { success: true };
             }
