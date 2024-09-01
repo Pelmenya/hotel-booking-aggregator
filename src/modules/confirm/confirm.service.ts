@@ -10,6 +10,7 @@ import { CreateConfirmEmailCodeDto } from './types/create-confirm-email-code.dto
 import { ID } from 'src/types/id';
 import { UsersService } from '../users/users.service';
 import {
+    countNumPhoneCode,
     ERRORS_CONFIRM,
     onceTimeEmail,
     onceTimeSms,
@@ -128,7 +129,7 @@ export class ConfirmService {
         if (!confirm) {
             const newConfirm = await this.ConfirmSmsCodeModel.create({
                 user: user._id,
-                code: generateConfirmationCode(4),
+                code: generateConfirmationCode(countNumPhoneCode),
             });
 
             await this.smsService.sendUserConfirmationSms(
@@ -148,7 +149,10 @@ export class ConfirmService {
             }
             await this.ConfirmSmsCodeModel.updateOne(
                 { user: user._id },
-                { code: generateConfirmationCode(4), updatedAt: new Date() },
+                {
+                    code: generateConfirmationCode(countNumPhoneCode),
+                    updatedAt: new Date(),
+                },
             );
             confirm = await this.ConfirmSmsCodeModel.findOne({
                 user: user._id,
@@ -171,7 +175,8 @@ export class ConfirmService {
         const confirm = await this.ConfirmSmsCodeModel.findOne({
             user: userId,
         });
-        if (code === confirm.code) {
+        console.log(Number(code) === confirm.code);
+        if (Number(code) === confirm.code) {
             const updateUser = await this.usersService.updateUser(userId, [], {
                 phoneIsConfirm: true,
             });

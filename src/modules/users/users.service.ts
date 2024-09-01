@@ -122,7 +122,7 @@ export class UsersService implements IUserService {
             emailIsConfirm = true;
         }
 
-        if (dto.emailIsConfirm === true) {
+        if (dto.phoneIsConfirm === true) {
             phoneIsConfirm = true;
         }
 

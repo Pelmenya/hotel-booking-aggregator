@@ -3,6 +3,7 @@ import { Schema as MongooseSchema } from 'mongoose';
 import { User } from 'src/modules/users/schemas/users.schema';
 import { IConfirmSmsCode } from '../types/i-confirm-sms-code';
 import { generateConfirmationCode } from 'src/functions/generate-confirmation-code';
+import { countNumPhoneCode } from '../confirm.constants';
 
 @Schema()
 export class ConfirmSmsCode implements Omit<IConfirmSmsCode, '_id'> {
@@ -11,7 +12,7 @@ export class ConfirmSmsCode implements Omit<IConfirmSmsCode, '_id'> {
 
     @Prop({
         type: Number,
-        default: generateConfirmationCode(4),
+        default: generateConfirmationCode(countNumPhoneCode),
     })
     public code: number;
 
