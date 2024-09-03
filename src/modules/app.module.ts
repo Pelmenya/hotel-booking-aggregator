@@ -18,6 +18,7 @@ import { ConfirmModule } from './confirm/confirm.module';
 import { PostgresModule } from './postgres/postgres.module';
 import { MongoModule } from './mongo/mongo.module';
 import { SmsModule } from './sms/sms.module';
+import { UserSettingsModule } from './user-settings/user-settings.module';
 
 @Module({
     imports: [
@@ -38,6 +39,7 @@ import { SmsModule } from './sms/sms.module';
         MailModule,
         ConfirmModule,
         SmsModule,
+        UserSettingsModule,
     ],
     controllers: [AppController],
     providers: [AppService],
