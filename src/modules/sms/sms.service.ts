@@ -33,6 +33,8 @@ export class SmsService {
     }
 
     async validatePhone(contactPhone: string): Promise<boolean> {
+        console.log('Valid phone', this.config);
+
         const { data } = await firstValueFrom<TValidatePhone>(
             this.httpService
                 .get(
@@ -66,7 +68,7 @@ export class SmsService {
             receiver: phone,
             text: String(code),
         };
-
+        console.log('Send SMS', this.config);
         const { data } = await firstValueFrom<TResponseSendSms>(
             this.httpService
                 .post(`${this.host}/sms/messages`, body, this.config)
