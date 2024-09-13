@@ -12,6 +12,6 @@ export interface IUser {
     avatars?: string[];
     birthday?: Date;
     address?: string;
-    gender?: 'male' | 'femail';
+    gender?: 'male' | 'female';
     company?: string;
 }

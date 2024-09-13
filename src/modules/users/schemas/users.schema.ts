@@ -26,7 +26,7 @@ export class User implements Omit<IUser, '_id'> {
     public company: string;
 
     @Prop()
-    public gender: 'male' | 'femail';
+    public gender: 'male' | 'female';
 
     @Prop()
     public birthday: Date;

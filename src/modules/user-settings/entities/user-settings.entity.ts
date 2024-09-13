@@ -6,8 +6,17 @@ export class UserSettings {
     id: number;
 
     @Column()
+    language: 'ru' | 'en';
+
+    @Column()
+    currency: '₽' | '$' | '€' | '¥';
+
+    @Column()
     phoneChanel: boolean;
 
     @Column()
     emailChanel: boolean;
+
+    @Column()
+    pushChanel: boolean;
 }

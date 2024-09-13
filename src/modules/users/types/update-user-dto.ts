@@ -1,25 +1,31 @@
 import {
-    IsBoolean,
-    IsDate,
-    IsEmail,
-    IsEmpty,
     IsOptional,
     IsString,
+    IsEmail,
+    IsDate,
+    IsEmpty,
     NotEquals,
 } from 'class-validator';
+import { Transform } from 'class-transformer';
 import { TRole } from './t-role';
 
-export class UpdateUserDto {
-    @IsString() @IsEmail() @IsOptional() email?: string;
-    @IsString() @IsOptional() name?: string;
-    @IsString() @IsOptional() contactPhone?: string;
-    @IsEmpty() @NotEquals('') @NotEquals(null) role?: TRole; // чтоб кто-то не проапдейтил с фронта
-    @IsString() @IsOptional() passwordHash?: string;
-    @IsBoolean() @IsOptional() emailIsConfirm?: boolean;
-    @IsBoolean() @IsOptional() phoneIsConfirm?: boolean;
+export class CreateUserDto {
+    @IsString() @IsEmail() email: string;
+    @IsString() password: string;
+    @IsString() name: string;
+    @IsOptional() @IsString() passwordHash?: string;
+    @IsOptional() @IsString() contactPhone?: string;
+    @IsEmpty() @NotEquals('') @NotEquals(null) role?: TRole;
     @IsString() @IsOptional() company?: string;
     @IsString() @IsOptional() address?: string;
+
+    @IsOptional()
+    @Transform(({ value }) => {
+        const date = new Date(value);
+        return date;
+    })
+    @IsDate()
+    birthday?: Date;
+
     @IsString() @IsOptional() gender?: string;
-    @IsDate() @IsOptional() birthday?: string;
-    avatars?: string[];
 }
