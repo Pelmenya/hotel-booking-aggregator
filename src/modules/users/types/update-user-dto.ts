@@ -9,7 +9,7 @@ import {
 import { Transform } from 'class-transformer';
 import { TRole } from './t-role';
 
-export class CreateUserDto {
+export class UpdateUserDto {
     @IsString() @IsEmail() email: string;
     @IsString() password: string;
     @IsString() name: string;
