@@ -5,19 +5,22 @@ import {
     IsDate,
     IsEmpty,
     NotEquals,
+    IsBoolean,
 } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { TRole } from './t-role';
 
 export class UpdateUserDto {
-    @IsString() @IsEmail() email: string;
-    @IsString() password: string;
-    @IsString() name: string;
+    @IsString() @IsEmail() email?: string;
+    @IsString() password?: string;
+    @IsString() name?: string;
     @IsOptional() @IsString() passwordHash?: string;
     @IsOptional() @IsString() contactPhone?: string;
     @IsEmpty() @NotEquals('') @NotEquals(null) role?: TRole;
     @IsString() @IsOptional() company?: string;
     @IsString() @IsOptional() address?: string;
+    @IsBoolean() @IsOptional() emailIsConfirm?: boolean;
+    @IsBoolean() @IsOptional() phoneIsConfirm?: boolean;
 
     @IsOptional()
     @Transform(({ value }) => {
@@ -28,4 +31,6 @@ export class UpdateUserDto {
     birthday?: Date;
 
     @IsString() @IsOptional() gender?: string;
+    
+    @IsOptional() avatars?: string[];
 }
