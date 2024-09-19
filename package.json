@@ -5,6 +5,17 @@
   "author": "Dmitry Lyapin",
   "private": true,
   "license": "UNLICENSED",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "npm run lint",
+      "git add"
+    ]
+  },
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
@@ -14,6 +25,7 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix --config eslint.config.js",
+    "postinstall": "husky install",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
