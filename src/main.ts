@@ -37,7 +37,7 @@ async function bootstrap() {
         new ValidationPipe({
             exceptionFactory: (errors) => {
                 console.log(errors);
-                return new BadRequestExceptio(errors);
+                return new BadRequestException(errors);
             },
         }),
     );
