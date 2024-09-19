@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@nestjs-modules/mailer": "1.9.1",
-    "@nestjs/axios": "^3.0.3",
+    "@nestjs/axios": "3.0.3",
     "@nestjs/common": "9.0.0",
     "@nestjs/config": "2.2.0",
     "@nestjs/core": "9.0.0",
@@ -35,7 +35,7 @@
     "@nestjs/websockets": "9.1.6",
     "@types/express-session": "1.17.5",
     "app-root-path": "3.1.0",
-    "axios": "^1.7.5",
+    "axios": "1.7.5",
     "bcrypt": "5.1.0",
     "class-transformer": "0.5.1",
     "class-validator": "0.14.0",
@@ -73,12 +73,14 @@
     "@types/socket.io": "3.0.2",
     "@types/supertest": "2.0.11",
     "@types/uuid": "10.0.0",
-    "@typescript-eslint/eslint-plugin": "5.0.0",
-    "@typescript-eslint/parser": "5.0.0",
-    "eslint": "8.0.1",
+    "@typescript-eslint/eslint-plugin": "8.6.0",
+    "@typescript-eslint/parser": "^8.6.0",
+    "eslint": "9.10.0",
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-prettier": "4.0.0",
+    "husky": "9.1.6",
     "jest": "28.1.3",
+    "lint-staged": "^15.2.10",
     "prettier": "2.3.2",
     "run-script-webpack-plugin": "^0.1.1",
     "source-map-support": "0.5.20",
@@ -92,6 +94,17 @@
     "webpack-cli": "5.1.4",
     "webpack-hot-middleware": "2.26.1",
     "webpack-node-externals": "3.0.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "npm run lint",
+      "git add"
+    ]
   },
   "jest": {
     "moduleFileExtensions": [
