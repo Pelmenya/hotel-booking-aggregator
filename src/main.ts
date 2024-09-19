@@ -33,12 +33,14 @@ async function bootstrap() {
     app.use(cookieParser());
 
     // Глобальная настройка ValidationPipe с логированием ошибок
-    app.useGlobalPipes(new ValidationPipe({
-        exceptionFactory: (errors) => {
-            console.log(errors);
-            return new BadRequestException(errors);
-        },
-    }));
+    app.useGlobalPipes(
+        new ValidationPipe({
+            exceptionFactory: (errors) => {
+                console.log(errors);
+                return new BadRequestException(errors);
+            },
+        }),
+    );
 
     // Настройка сессий и Passport.js для аутентификации
     app.use(sessionMiddleware);
