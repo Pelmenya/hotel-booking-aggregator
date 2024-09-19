@@ -14,7 +14,7 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix --config eslint.config.js",
-    "postinstall": "npx husky init",
+    "postinstall": "npx husky init && echo npm run lint > .husky/pre-commit",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
