@@ -12,8 +12,7 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": [
-      "npm run lint",
-      "git add"
+      "npm run lint"
     ]
   },
   "scripts": {
