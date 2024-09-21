@@ -1,22 +1,43 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { TCurrency } from '../types/t-currency';
+import { TLanguage } from '../types/t-language';
 
 @Entity()
 export class UserSettings {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
-    language: 'ru' | 'en';
+    @Column({
+        unique: true,
+    })
+    userId: string;
 
-    @Column()
-    currency: '₽' | '$' | '€' | '¥';
+    @Column({
+        type: 'varchar',
+        length: 2,
+        default: 'ru',
+    })
+    language: TLanguage;
 
-    @Column()
+    @Column({
+        type: 'varchar',
+        length: 1,
+        default: '₽',
+    })
+    currency: TCurrency;
+
+    @Column({
+        default: true,
+    })
     phoneChanel: boolean;
 
-    @Column()
+    @Column({
+        default: true,
+    })
     emailChanel: boolean;
 
-    @Column()
+    @Column({
+        default: true,
+    })
     pushChanel: boolean;
 }

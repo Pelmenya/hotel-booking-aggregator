@@ -19,7 +19,7 @@ const sessionMiddleware = session({
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
 
-    // Установите глобальный префикс для всех маршрутов API
+    // Глобальный префикс для всех маршрутов API
     app.setGlobalPrefix('api');
 
     // Настройте CORS для работы с кросс-доменными запросами
