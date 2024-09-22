@@ -170,4 +170,16 @@ export class CommonController {
         req.user = updateUser;
         return updateUser;
     }
+
+    @Roles('client', 'manager', 'admin')
+    @Put('user-settings')
+    async updateUserSettings(
+        @Req() req: Express.Request & { user: IUser },
+        @Body()
+        dto: any,
+    ) {
+        const { user } = req;
+
+        return { ...user, ...dto };
+    }
 }
