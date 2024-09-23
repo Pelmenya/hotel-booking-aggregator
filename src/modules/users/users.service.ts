@@ -16,22 +16,27 @@ import { SearchUserParams } from './types/search-user-params';
 import { TQueryUserMongoParams } from './types/t-query-user-mongo-params';
 import { UpdateUserDto } from './types/update-user-dto';
 import { FilesService } from '../files/files.service';
+import { UserSettingsService } from '../user-settings/user-settings.service';
 
 @Injectable()
 export class UsersService implements IUserService {
     constructor(
         private readonly filesService: FilesService,
+        private readonly userSettingsService: UserSettingsService,
         @InjectModel(User.name) private UserModel: Model<TUserDocument>,
     ) {}
 
     async create(dto: Omit<CreateUserDto, 'password'>): Promise<IUser> {
         try {
-            return await this.UserModel.create(dto);
+            const user = await this.UserModel.create(dto);
+            this.userSettingsService.createUserSettings(user._id); // при создании юзера настройки по умолчагию
+            return user;
         } catch (e) {
             if (
                 e.message.indexOf('E11000 duplicate key error collection') === 0
-            )
+            ) {
                 throw new BadRequestException(ERRORS_USER.ALREADY_EXISTS);
+            }
             throw new BadRequestException(e.message);
         }
     }

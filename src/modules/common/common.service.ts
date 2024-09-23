@@ -9,6 +9,9 @@ import { SearchHotelParams } from '../hotels/types/search-hotel-params';
 import { UsersService } from '../users/users.service';
 import { IUser } from '../users/types/i-user';
 import { UpdateUserDto } from '../users/types/update-user-dto';
+import { UpdateUserSettingsDTO } from '../user-settings/types/update-user-settings.dto';
+import { UserSettingsService } from '../user-settings/user-settings.service';
+import { TUserSettings } from '../user-settings/types/t-user-settings';
 
 @Injectable()
 export class CommonService {
@@ -16,6 +19,7 @@ export class CommonService {
         private readonly hotelRoomsService: HotelRoomsService,
         private readonly hotelsService: HotelsService,
         private readonly userService: UsersService,
+        private readonly userSettingsService: UserSettingsService,
     ) {}
 
     async getUser(id: ID): Promise<IUser> {
@@ -64,5 +68,12 @@ export class CommonService {
 
     async getHotelRoom(id: ID): Promise<HotelRoomDataRes> {
         return this.hotelRoomsService.findById(id);
+    }
+
+    async updateUserSettings(
+        userId: ID,
+        dto: Partial<UpdateUserSettingsDTO>,
+    ): Promise<Partial<TUserSettings>> {
+        return await this.userSettingsService.updateUserSettings(userId, dto);
     }
 }

@@ -26,6 +26,7 @@ import { IUser } from '../users/types/i-user';
 import { CommonService } from './common.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { UpdateUserDto } from '../users/types/update-user-dto';
+import { TUserSettings } from '../user-settings/types/t-user-settings';
 
 @UseGuards(RolesGuard)
 @Controller('common')
@@ -176,10 +177,9 @@ export class CommonController {
     async updateUserSettings(
         @Req() req: Express.Request & { user: IUser },
         @Body()
-        dto: any,
+        dto: Partial<TUserSettings>,
     ) {
         const { user } = req;
-
-        return { ...user, ...dto };
+        return await this.commonService.updateUserSettings(user._id, dto);
     }
 }

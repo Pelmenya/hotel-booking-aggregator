@@ -5,12 +5,14 @@ import { SupportRequestsModule } from '../support-requests/support-requests.modu
 import { CommonController } from './common.controller';
 import { CommonService } from './common.service';
 import { UsersModule } from '../users/users.module';
+import { UserSettingsModule } from '../user-settings/user-settings.module';
 
 @Module({
     imports: [
         HotelRoomsModule,
         HotelsModule,
         UsersModule,
+        UserSettingsModule,
         SupportRequestsModule,
     ],
     controllers: [CommonController],
