@@ -1,6 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 import { TCurrency } from '../types/t-currency';
 import { TLanguage } from '../types/t-language';
+import { TTheme } from '../types/t-theme';
 
 @Entity()
 export class UserSettings {
@@ -18,6 +19,13 @@ export class UserSettings {
         default: 'ru',
     })
     language: TLanguage;
+
+    @Column({
+        type: 'varchar',
+        length: 10,
+        default: 'light',
+    })
+    theme: TTheme;
 
     @Column({
         type: 'varchar',
