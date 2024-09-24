@@ -6,7 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserSettings } from './entities/user-settings.entity';
 import { Repository } from 'typeorm';
 import { UpdateUserSettingsDTO } from './types/update-user-settings.dto';
-import { ERRORS_USER } from '../users/users.constants';
+import { ERRORS_USER_SETTINGS } from './user-settings.constants';
 
 @Injectable()
 export class UserSettingsService implements IUserSettingsService {
@@ -19,6 +19,12 @@ export class UserSettingsService implements IUserSettingsService {
         userId: ID,
         dto: Partial<UpdateUserSettingsDTO>,
     ): Promise<TUserSettings> {
+        const userSettings = await this.findByUserId(userId);
+        if (userSettings) {
+            throw new BadRequestException(
+                ERRORS_USER_SETTINGS.EXIST_USER_SETTINGS,
+            );
+        }
         await this.userSettingsRepository
             .createQueryBuilder()
             .insert()
@@ -56,6 +62,8 @@ export class UserSettingsService implements IUserSettingsService {
             return await this.findByUserId(userId);
         }
 
-        throw new BadRequestException(ERRORS_USER.NOT_EXIST_USER_SETTINGS);
+        throw new BadRequestException(
+            ERRORS_USER_SETTINGS.NOT_EXIST_USER_SETTINGS,
+        );
     }
 }
