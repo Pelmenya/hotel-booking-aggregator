@@ -172,6 +172,13 @@ export class CommonController {
     }
 
     @Roles('client', 'manager', 'admin')
+    @Get('user-settings')
+    async findUserSettings(@Req() req: Express.Request & { user: IUser }) {
+        const { user } = req;
+        return await this.commonService.findUserSettings(user._id);
+    }
+
+    @Roles('client', 'manager', 'admin')
     @Post('user-settings')
     async createUserSettings(
         @Req() req: Express.Request & { user: IUser },

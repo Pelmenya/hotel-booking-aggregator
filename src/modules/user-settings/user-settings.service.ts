@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+    BadRequestException,
+    NotFoundException,
+    Injectable,
+} from '@nestjs/common';
 import { IUserSettingsService } from './types/i-user-settings-service';
 import { ID } from 'src/types/id';
 import { TUserSettings } from './types/t-user-settings';
@@ -41,7 +45,13 @@ export class UserSettingsService implements IUserSettingsService {
                 userId: String(userId),
             },
         });
-        return userSettings;
+        if (userSettings) {
+            return userSettings;
+        }
+
+        throw new NotFoundException(
+            ERRORS_USER_SETTINGS.NOT_EXIST_USER_SETTINGS,
+        );
     }
 
     async updateUserSettings(

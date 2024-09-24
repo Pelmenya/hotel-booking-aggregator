@@ -10,10 +10,12 @@ import { Transform } from 'class-transformer';
 import { TRole } from './t-role';
 
 export class UpdateUserDto {
+    @IsOptional()
     @IsString({ message: 'Email must be a string.' })
     @IsEmail({}, { message: 'Email must be a valid email address.' })
     email?: string;
 
+    @IsOptional()
     @IsString({ message: 'Name must be a string.' })
     name?: string;
 

@@ -83,4 +83,8 @@ export class CommonService {
     ): Promise<Partial<TUserSettings>> {
         return await this.userSettingsService.updateUserSettings(userId, dto);
     }
+
+    async findUserSettings(userId: ID): Promise<Partial<TUserSettings>> {
+        return await this.userSettingsService.findByUserId(userId);
+    }
 }
