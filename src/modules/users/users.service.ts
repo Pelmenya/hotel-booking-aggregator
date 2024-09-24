@@ -29,7 +29,6 @@ export class UsersService implements IUserService {
     async create(dto: Omit<CreateUserDto, 'password'>): Promise<IUser> {
         try {
             const user = await this.UserModel.create(dto);
-            this.userSettingsService.createUserSettings(user._id); // при создании юзера настройки по умолчагию
             return user;
         } catch (e) {
             if (

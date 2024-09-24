@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { IUserSettingsService } from './types/i-user-settings-service';
 import { ID } from 'src/types/id';
 import { TUserSettings } from './types/t-user-settings';
@@ -6,6 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserSettings } from './entities/user-settings.entity';
 import { Repository } from 'typeorm';
 import { UpdateUserSettingsDTO } from './types/update-user-settings.dto';
+import { ERRORS_USER } from '../users/users.constants';
 
 @Injectable()
 export class UserSettingsService implements IUserSettingsService {
@@ -14,12 +15,16 @@ export class UserSettingsService implements IUserSettingsService {
         private userSettingsRepository: Repository<UserSettings>,
     ) {}
 
-    async createUserSettings(userId: ID): Promise<TUserSettings> {
+    async createUserSettings(
+        userId: ID,
+        dto: Partial<UpdateUserSettingsDTO>,
+    ): Promise<TUserSettings> {
         await this.userSettingsRepository
             .createQueryBuilder()
             .insert()
             .into(UserSettings)
-            .values({ userId: String(userId) })
+            .values({ userId: String(userId), ...dto })
+            .orIgnore()
             .execute();
         return await this.findByUserId(userId);
     }
@@ -37,17 +42,20 @@ export class UserSettingsService implements IUserSettingsService {
         userId: ID,
         dto: Partial<UpdateUserSettingsDTO>,
     ): Promise<TUserSettings> {
-        console.log(dto);
-        const userSettingsUpdateResult = await this.userSettingsRepository
-            .createQueryBuilder()
-            .update(UserSettings)
-            .set({
-                ...dto,
-            })
-            .where('userId = :userId', { userId })
-            .execute();
-        console.log(userSettingsUpdateResult);
+        const userSettings = await this.findByUserId(userId);
+        if (userSettings) {
+            await this.userSettingsRepository
+                .createQueryBuilder()
+                .update(UserSettings)
+                .set({
+                    ...dto,
+                })
+                .where('id = :id', { id: userSettings.id })
+                .execute();
 
-        return await this.findByUserId(userId);
+            return await this.findByUserId(userId);
+        }
+
+        throw new BadRequestException(ERRORS_USER.NOT_EXIST_USER_SETTINGS);
     }
 }

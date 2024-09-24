@@ -5,7 +5,7 @@ import { TTheme } from '../types/t-theme';
 
 @Entity()
 export class UserSettings {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn({ type: 'bigint' })
     id: number;
 
     @Column({

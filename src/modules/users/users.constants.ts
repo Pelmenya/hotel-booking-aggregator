@@ -4,6 +4,7 @@ export const ERRORS_USER = {
     BAD_PASSWORD: 'Неправильный старый пароль',
     ALREADY_EXISTS: 'Пользователь c таким email уже зарегистрирован',
     UNAUTHORIZED: 'Пользователь не авторизирован',
+    NOT_EXIST_USER_SETTINGS: 'Настроек пользователя не существует',
 };
 
 export const selectUserParam = {

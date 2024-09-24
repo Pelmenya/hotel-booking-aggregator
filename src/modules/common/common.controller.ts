@@ -167,9 +167,19 @@ export class CommonController {
             files,
             dto,
         );
-
         req.user = updateUser;
         return updateUser;
+    }
+
+    @Roles('client', 'manager', 'admin')
+    @Post('user-settings')
+    async createUserSettings(
+        @Req() req: Express.Request & { user: IUser },
+        @Body()
+        dto: Partial<TUserSettings>,
+    ) {
+        const { user } = req;
+        return await this.commonService.createUserSettings(user._id, dto);
     }
 
     @Roles('client', 'manager', 'admin')

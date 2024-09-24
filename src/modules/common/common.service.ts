@@ -70,6 +70,13 @@ export class CommonService {
         return this.hotelRoomsService.findById(id);
     }
 
+    async createUserSettings(
+        userId: ID,
+        dto: Partial<UpdateUserSettingsDTO>,
+    ): Promise<Partial<TUserSettings>> {
+        return await this.userSettingsService.createUserSettings(userId, dto);
+    }
+
     async updateUserSettings(
         userId: ID,
         dto: Partial<UpdateUserSettingsDTO>,
