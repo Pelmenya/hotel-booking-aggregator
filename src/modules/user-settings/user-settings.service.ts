@@ -23,12 +23,6 @@ export class UserSettingsService implements IUserSettingsService {
         userId: ID,
         dto: Partial<UpdateUserSettingsDTO>,
     ): Promise<TUserSettings> {
-        const userSettings = await this.findByUserId(userId);
-        if (userSettings) {
-            throw new BadRequestException(
-                ERRORS_USER_SETTINGS.EXIST_USER_SETTINGS,
-            );
-        }
         await this.userSettingsRepository
             .createQueryBuilder()
             .insert()
