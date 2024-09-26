@@ -9,7 +9,7 @@ import { SearchHotelParams } from '../hotels/types/search-hotel-params';
 import { UsersService } from '../users/users.service';
 import { IUser } from '../users/types/i-user';
 import { UpdateUserDto } from '../users/types/update-user-dto';
-import { UpdateUserSettingsDTO } from '../user-settings/types/update-user-settings.dto';
+import { CreateUserSettingsDTO } from '../user-settings/types/create-user-settings.dto';
 import { UserSettingsService } from '../user-settings/user-settings.service';
 import { TUserSettings } from '../user-settings/types/t-user-settings';
 
@@ -72,14 +72,14 @@ export class CommonService {
 
     async createUserSettings(
         userId: ID,
-        dto: Partial<UpdateUserSettingsDTO>,
+        dto: CreateUserSettingsDTO,
     ): Promise<Partial<TUserSettings>> {
         return await this.userSettingsService.createUserSettings(userId, dto);
     }
 
     async updateUserSettings(
         userId: ID,
-        dto: Partial<UpdateUserSettingsDTO>,
+        dto: Partial<CreateUserSettingsDTO>,
     ): Promise<Partial<TUserSettings>> {
         return await this.userSettingsService.updateUserSettings(userId, dto);
     }
