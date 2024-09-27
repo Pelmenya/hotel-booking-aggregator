@@ -19,7 +19,6 @@ export class UserSettingsService implements IUserSettingsService {
         userId: ID,
         dto: CreateUserSettingsDTO,
     ): Promise<TUserSettings> {
-        console.log(dto);
         await this.userSettingsRepository
             .createQueryBuilder()
             .insert()
@@ -60,7 +59,7 @@ export class UserSettingsService implements IUserSettingsService {
     ): Promise<TUserSettings> {
         const userSettings = await this.findByUserId(userId);
         if (userSettings) {
-            const result = await this.userSettingsRepository
+            await this.userSettingsRepository
                 .createQueryBuilder()
                 .update(UserSettings)
                 .set({
@@ -68,10 +67,6 @@ export class UserSettingsService implements IUserSettingsService {
                 })
                 .where('id = :id', { id: userSettings.id })
                 .execute();
-            console.log(result);
-            return await this.findByUserId(userId);
-        } else {
-            await this.createUserSettings(userId, dto);
             return await this.findByUserId(userId);
         }
     }
