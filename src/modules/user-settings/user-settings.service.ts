@@ -1,8 +1,4 @@
-import {
-    BadRequestException,
-    NotFoundException,
-    Injectable,
-} from '@nestjs/common';
+import { NotFoundException, Injectable } from '@nestjs/common';
 import { IUserSettingsService } from './types/i-user-settings-service';
 import { ID } from 'src/types/id';
 import { TUserSettings } from './types/t-user-settings';
@@ -75,11 +71,8 @@ export class UserSettingsService implements IUserSettingsService {
             console.log(result);
             return await this.findByUserId(userId);
         } else {
-            this.createUserSettings(userId, dto);
+            await this.createUserSettings(userId, dto);
+            return await this.findByUserId(userId);
         }
-
-        throw new BadRequestException(
-            ERRORS_USER_SETTINGS.NOT_EXIST_USER_SETTINGS,
-        );
     }
 }
