@@ -74,6 +74,8 @@ export class UserSettingsService implements IUserSettingsService {
                 .execute();
             console.log(result);
             return await this.findByUserId(userId);
+        } else {
+            this.createUserSettings(userId, dto);
         }
 
         throw new BadRequestException(
