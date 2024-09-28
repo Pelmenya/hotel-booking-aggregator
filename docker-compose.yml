@@ -25,10 +25,10 @@ services:
       - ${POSTGRES_PORT}:${POSTGRES_PORT}
 
   hotel-aggregator:
-    build: ./backend
+    build: ./
     container_name: hotel-aggregator
     volumes:
-      - ./backend:/app
+      - .:/app
     ports:
       - ${PORT}:${PORT}
     depends_on:
@@ -37,9 +37,8 @@ services:
     environment:
       - PORT=${PORT}
       - SECRET=${SECRET}
-    command: sh -c "cd /app && npm install && npm run build && npm run start:prod"
+    command: sh -c "cd /app; rm -rf node_modules; npm i -g @nestjs/cli; npm install; npm run build; npm run start:prod"
 
 volumes:
   mongo_data:
   postgres_data:
-
