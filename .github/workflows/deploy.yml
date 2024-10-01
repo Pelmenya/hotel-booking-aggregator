@@ -45,9 +45,8 @@ jobs:
         '
 
     - name: Wait for logs to be fully written
-      run: sleep 120
+      run: sleep 150
 
     - name: Fetch deployment logs
       run: |
         ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 'cat /home/hotel-booking-aggregator/deploy.log'
-      continue-on-error: true
