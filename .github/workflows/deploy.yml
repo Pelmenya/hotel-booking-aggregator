@@ -1,0 +1,53 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches:
+      - main  # Запускать на пуш в ветку main
+  pull_request:
+    branches:
+      - main  # Запускать на мердж пулл-реквеста в ветку main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup SSH agent
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - name: Execute remote command using nohup
+      run: |
+        ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} '
+          nohup bash /home/hotel-booking-aggregator/cmd/docker_cleanup_and_restart.sh > /home/hotel-booking-aggregator/deploy.log 2>&1 &
+          sleep 10
+          if [ -f /home/hotel-booking-aggregator/deploy_status.txt ]; then
+            STATUS=$(cat /home/hotel-booking-aggregator/deploy_status.txt)
+            if [ "$STATUS" == "FAILED" ]; then
+              echo "Deployment failed. See deploy.log for details."
+              cat /home/hotel-booking-aggregator/deploy.log
+              exit 1
+            else
+              echo "Deployment completed successfully."
+              cat /home/hotel-booking-aggregator/deploy.log
+              exit 0
+            fi
+          else
+            echo "Deployment status file not found. Assuming failure."
+            cat /home/hotel-booking-aggregator/deploy.log
+            exit 1
+          fi
+        '
+
+    - name: Wait for logs to be fully written
+      run: sleep 120
+
+    - name: Fetch deployment logs
+      run: |
+        ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 'cat /home/hotel-booking-aggregator/deploy.log'
+      continue-on-error: true
