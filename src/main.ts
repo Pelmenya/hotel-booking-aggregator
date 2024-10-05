@@ -5,6 +5,7 @@ import * as cookieParser from 'cookie-parser';
 import * as session from 'express-session';
 import * as passport from 'passport';
 import { SessionAdapter } from './modules/auth/session-adapter';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 declare const module: any;
 
@@ -49,6 +50,16 @@ async function bootstrap() {
 
     // Настройка WebSocket адаптера с поддержкой сессий
     app.useWebSocketAdapter(new SessionAdapter(sessionMiddleware, app));
+
+    // Настройка Swagger
+    const config = new DocumentBuilder()
+        .setTitle('Hotel Aggregator API')
+        .setDescription('API documentation for Hotel Aggregator')
+        .setVersion('1.0')
+        .addCookieAuth('connect.sid') // Указание на использование куки для аутентификации
+        .build();
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('api/docs', app, document);
 
     // Запуск приложения на заданном порту
     await app.listen(process.env.PORT || 3000);
