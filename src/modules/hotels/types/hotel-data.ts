@@ -6,7 +6,8 @@ export class HotelData extends CreateHotelDto {
     @ApiProperty({
         type: 'string',
         example: '507f1f77bcf86cd799439011',
-        description: 'Unique identifier for the hotel  - id',
+        description:
+            'Unique identifier for the hotel. Warning return property name id',
     })
     _id: ID;
 
