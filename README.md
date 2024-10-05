@@ -4,7 +4,8 @@
 ### [Top-hotels.su](http://top-hotels.su)
 
 ## [«Frontend Hotel Aggregator»](https://github.com/Pelmenya/hotel-booking-aggregator-front)
-## [«API»](https://documenter.getpostman.com/view/9455686/2s93eZzCAR)
+## [«Swagger Hotel Aggregator API 1.0»](https://api.top-hotels.su/api/docs)
+## [«Postman API»](https://documenter.getpostman.com/view/9455686/2s93eZzCAR)
 
 ## Описание проекта
 
