@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ID } from 'src/types/id';
@@ -20,7 +20,9 @@ export class HotelsService implements IHotelService {
     }
 
     async findById(id: ID): Promise<HotelData> {
-        return await this.HotelModel.findById(id);
+        const hotel = await this.HotelModel.findById(id);
+        if (hotel) return hotel;
+        throw new NotFoundException('Hotel not found');
     }
 
     async search(params: SearchHotelParams): Promise<HotelData[]> {

@@ -27,8 +27,11 @@ import { CommonService } from './common.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { UpdateUserDto } from '../users/types/update-user-dto';
 import { TUserSettings } from '../user-settings/types/t-user-settings';
+import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { HotelData } from '../hotels/types/hotel-data';
 
 @UseGuards(RolesGuard)
+@ApiTags('common')
 @Controller('common')
 export class CommonController {
     constructor(
@@ -40,11 +43,35 @@ export class CommonController {
 
     // Доделать
     @Get('hotels')
+    @ApiOperation({ summary: 'Get hotels by params' })
+    @ApiResponse({
+        status: 200,
+        description:
+            'Return an array of hotels or an empty array if no hotels found',
+        type: HotelData,
+        isArray: true,
+    })
     async getHotels(@Query() params: SearchHotelParams) {
         return await this.commonService.getHotels(params);
     }
 
     @Get('hotels/:id')
+    @ApiOperation({ summary: 'Get hotel by ID' })
+    @ApiParam({
+        name: 'id',
+        required: true,
+        description: 'The ID of the hotel',
+        type: String,
+    })
+    @ApiResponse({
+        status: 200,
+        description: 'Return the hotel data for the specified ID',
+        type: HotelData,
+    })
+    @ApiResponse({
+        status: 404,
+        description: 'Hotel not found',
+    })
     async getHotelById(@Param('id', IdValidationPipe) id: ID) {
         return await this.commonService.getHotelById(id);
     }
