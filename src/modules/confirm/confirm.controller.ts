@@ -12,7 +12,9 @@ import { IUser } from '../users/types/i-user';
 import { ConfirmService } from './confirm.service';
 import { CreateConfirmEmailCodeDto } from './types/create-confirm-email-code.dto';
 import { CreateConfirmSmsCodeDto } from './types/create-confirm-sms-code';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('confirm')
 @Controller('confirm')
 export class ConfirmController {
     constructor(private readonly confirmService: ConfirmService) {}
@@ -25,7 +27,6 @@ export class ConfirmController {
     }
 
     @HttpCode(200)
-    @UseGuards(AuthenticatedGuard)
     @Put('email')
     async confirmEmail(
         @Req() req: Request & { user: IUser },

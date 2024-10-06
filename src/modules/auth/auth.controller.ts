@@ -14,7 +14,9 @@ import { LoginGuard } from '../../guards/login.guard';
 import { LoginDto } from './types/login.dto';
 import { UpdatePasswordDto } from './types/update-password.dto';
 import { IUser } from '../users/types/i-user';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
     constructor(private readonly authService: AuthService) {}

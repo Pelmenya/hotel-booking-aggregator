@@ -31,8 +31,10 @@ import { SupportRequestsClientService } from '../support-requests/support-reques
 import { SupportRequestsService } from '../support-requests/support-requests.service';
 import { SearchChatListParams } from '../support-requests/types/search-chat-list-params';
 import { IUser } from '../users/types/i-user';
+import { ApiTags } from '@nestjs/swagger';
 
 @UseGuards(RolesGuard)
+@ApiTags('client')
 @Controller('client')
 export class ClientController {
     constructor(

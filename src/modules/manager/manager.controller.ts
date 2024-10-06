@@ -14,8 +14,10 @@ import {
 import { SupportRequestsService } from '../support-requests/support-requests.service';
 import { SearchChatListParams } from '../support-requests/types/search-chat-list-params';
 import { SearchUserParams } from '../users/types/search-user-params';
+import { ApiTags } from '@nestjs/swagger';
 
 @UseGuards(RolesGuard)
+@ApiTags('manager')
 @Controller('manager')
 export class ManagerController {
     constructor(

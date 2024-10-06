@@ -23,8 +23,10 @@ import { CreateUserDto } from '../users/types/create-user.dto';
 import { SearchUserParams } from '../users/types/search-user-params';
 import { AdminService } from './admin.service';
 import { validateCoordinates } from './types/utils/validateCoordinates';
+import { ApiTags } from '@nestjs/swagger';
 
 @UseGuards(RolesGuard)
+@ApiTags('admin')
 @Controller('admin')
 export class AdminController {
     constructor(private readonly adminService: AdminService) {}
