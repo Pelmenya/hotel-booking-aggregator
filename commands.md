@@ -13,5 +13,3 @@
 
 * Все IP контейнеров 
     docker inspect -f '{{.Name}} - {{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps -q)
-
-* new
