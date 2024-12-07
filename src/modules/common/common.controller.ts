@@ -29,6 +29,7 @@ import { UpdateUserDto } from '../users/types/update-user-dto';
 import { TUserSettings } from '../user-settings/types/t-user-settings';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { HotelData } from '../hotels/types/hotel-data';
+import { HotelRoomDataRes } from '../hotel-rooms/types/hotel-room-data-res';
 
 @UseGuards(RolesGuard)
 @ApiTags('common')
@@ -76,6 +77,14 @@ export class CommonController {
         return await this.commonService.getHotelById(id);
     }
 
+    @ApiOperation({ summary: 'Get hotel rooms by params' })
+    @ApiResponse({
+        status: 200,
+        description:
+            'Return an array of hotel rooms data  or an empty array if no hotel rooms found',
+        type: HotelRoomDataRes,
+        isArray: true,
+    })
     @Get('hotel-rooms')
     async getHotelRooms(
         @Req() req: Express.Request & { user: IUser },

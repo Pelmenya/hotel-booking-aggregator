@@ -12,8 +12,8 @@ export class MailService {
     ) {
         await this.mailerService.sendMail({
             to: user.email,
-            from: '"Top-Hotels.su" <Top-Hotels.su@yandex.ru>', // override default from
-            subject: 'Добро пожаловать на Top-Hotels.su! Подтвердите Ваш Email',
+            from: '"На-День.рф" <on-day.rf@yandex.ru>', // override default from
+            subject: 'Добро пожаловать на На-День.рф! Подтвердите Ваш Email',
             template: './confirm-email',
             // either change to ./transactional or rename transactional.html to confirmation.html
             context: {
