@@ -8,6 +8,9 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
     volumes:
       - mongo_data:/data/db
+    networks:
+      - hotels_network
+
 
   mongo-express:
     image: mongo-express
@@ -18,6 +21,8 @@ services:
       ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGODB_ADMINUSERNAME}
       ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGODB_ADMINPASSWORD}
       ME_CONFIG_MONGODB_URL: ${MONGODB_URL}
+    networks:
+      - hotels_network
 
   postgres_postgis:
     image: postgis/postgis
@@ -33,6 +38,8 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
     ports:
       - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    networks:
+      - hotels_network
 
   adminer_pgadmin4:
     image: dpage/pgadmin4
@@ -45,6 +52,8 @@ services:
       - 8090:80
     volumes:
       - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - hotels_network
 
   hotel-aggregator-dev:
     build: ./ 
@@ -63,8 +72,14 @@ services:
       - IS_DEV=true
     working_dir: /app
     command: sh -c "cd /app; rm -rf dist; npm i -g @nestjs/cli; npm install; npm run start:dev"
+    networks:
+      - hotels_network
 
 volumes:
   mongo_data:
   postgres_data:
   pgadmin_data:
+
+networks:
+  hotels_network:
+    driver: bridge

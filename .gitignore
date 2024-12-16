@@ -41,3 +41,6 @@ lerna-debug.log*
 
 # MongoDB dumps
 mongodumps
+
+#dumps PostgreSQL
+dump
