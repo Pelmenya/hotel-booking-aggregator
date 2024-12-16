@@ -1,1 +1,1 @@
-export type TDistanceMeasurement = 'km' | 'm' | 'км' |'м';
+export type TDistanceMeasurement = 'km' | 'm' | 'км' | 'м';
