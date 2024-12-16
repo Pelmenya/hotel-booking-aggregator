@@ -60,6 +60,15 @@ async function bootstrap() {
         );
     });
 
+    try {
+        await AppDataSource.initialize();
+        logger.info('Data Source has been initialized!');
+    } catch (err) {
+        logger.error(
+            `Error during Data Source initialization: ${err.stack || err}`,
+        );
+    }
+
     const app = await NestFactory.create(AppModule, {
         logger: WinstonModule.createLogger({
             instance: logger,
