@@ -38,7 +38,7 @@
     "@nestjs/websockets": "9.1.6",
     "@types/express-session": "1.17.5",
     "app-root-path": "3.1.0",
-    "aws-sdk": "^.1692.0",
+    "aws-sdk": "2.1692.0",
     "axios": "1.7.5",
     "bcrypt": "5.1.0",
     "bottleneck": "2.19.5",
