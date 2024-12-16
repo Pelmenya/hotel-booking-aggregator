@@ -1,34 +1,34 @@
 import { TCategory } from 'src/types/t-category';
 import { TLanguage } from 'src/types/t-language';
-import { 
-    Entity, 
-    Column, 
-    PrimaryGeneratedColumn, 
-    CreateDateColumn, 
+import {
+    Entity,
+    Column,
+    PrimaryGeneratedColumn,
+    CreateDateColumn,
     UpdateDateColumn,
     Index,
     ManyToOne,
-    JoinColumn, 
-  } from 'typeorm';
+    JoinColumn,
+} from 'typeorm';
 import { Hotels } from '../hotels/hotels.entity';
 import { TGeoData } from './geo-data.types';
-  
-  @Entity()
-  @Index(['hotel', 'language', 'title'], { unique: true })
-  export class GeoData {
-    @PrimaryGeneratedColumn("uuid")
+
+@Entity()
+@Index(['hotel', 'language', 'title'], { unique: true })
+export class GeoData {
+    @PrimaryGeneratedColumn('uuid')
     id: string;
 
     @Column({ nullable: true })
     title: string;
 
     @Column('jsonb')
-    geo_list: TGeoData[] = []
+    geo_list: TGeoData[] = [];
 
-    @Column({type: String, nullable: true })
+    @Column({ type: String, nullable: true })
     type: TCategory;
 
-    @Column({type: String, nullable: true })
+    @Column({ type: String, nullable: true })
     language: TLanguage;
 
     @Index()
@@ -41,6 +41,4 @@ import { TGeoData } from './geo-data.types';
 
     @UpdateDateColumn({ type: 'timestamp' }) // Автоматическое обновление даты изменения
     updated_at: Date;
-
 }
-  

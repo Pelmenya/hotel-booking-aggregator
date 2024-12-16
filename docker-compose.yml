@@ -7,6 +7,8 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
     volumes:
       - mongo_data:/data/db
+    networks:
+      - hotels_network
 
   postgres_postgis:
     image: postgis/postgis
@@ -22,6 +24,8 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
     ports:
       - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    networks:
+      - hotels_network
 
   hotel-aggregator:
     build: ./
@@ -37,7 +41,13 @@ services:
       - PORT=${PORT}
       - SECRET=${SECRET}
     command: sh -c "cd /app; rm -rf node_modules; npm i -g @nestjs/cli; npm install; npm run build; npm run start:prod"
+    networks:
+      - hotels_network
 
 volumes:
   mongo_data:
   postgres_data:
+
+networks:
+  hotels_network:
+    driver: bridge
