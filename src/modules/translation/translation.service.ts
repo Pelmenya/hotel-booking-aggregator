@@ -7,7 +7,7 @@ import Bottleneck from 'bottleneck';
 import { TranslationRepository } from './translation.repository';
 import { TransportService } from '../transport/transport.service';
 import { TTranslationName } from './translation.types';
-import { setDelay } from 'src/helpers/delay';
+import { setDelay } from 'src/helpers/set-delay';
 import { TLanguage } from 'src/types/t-language';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
