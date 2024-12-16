@@ -30,8 +30,8 @@ services:
   hotel-aggregator:
     build: ./
     container_name: hotel-aggregator
-    volumes:
-      - .:/app
+    # volumes:
+    #   - .:/app
     ports:
       - ${PORT}:${PORT}
     depends_on:
@@ -40,9 +40,9 @@ services:
     environment:
       - PORT=${PORT}
       - SECRET=${SECRET}
-    command: sh -c "cd /app; rm -rf node_modules; rm -rf dist; npm i -g @nestjs/cli; npm install; npm run build; npm run start:prod"
     networks:
       - hotels_network
+    command: sh -c "cd /app; rm -rf node_modules; npm i -g @nestjs/cli; npm install; npm run build; npm run start:prod"
 
 volumes:
   mongo_data:
