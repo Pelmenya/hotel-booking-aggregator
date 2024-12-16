@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Hotel } from 'src/modules/hotels/schemas/hotel.schema';
+import { Hotel } from 'src/modules/hotels-mongo/schemas/hotel.schema';
 import { ID } from 'src/types/id';
 
 export class HotelRoomDataRes {

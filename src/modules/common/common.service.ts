@@ -3,9 +3,9 @@ import { ID } from 'src/types/id';
 import { HotelRoomsService } from '../hotel-rooms/hotel-rooms.service';
 import { HotelRoomDataRes } from '../hotel-rooms/types/hotel-room-data-res';
 import { SearchRoomsParams } from '../hotel-rooms/types/search-rooms-params';
-import { HotelsService } from '../hotels/hotels.service';
-import { HotelData } from '../hotels/types/hotel-data';
-import { SearchHotelParams } from '../hotels/types/search-hotel-params';
+import { HotelsMongoService } from '../hotels-mongo/hotels.mongo.service';
+import { HotelData } from '../hotels-mongo/types/hotel-data';
+import { SearchHotelParams } from '../hotels-mongo/types/search-hotel-params';
 import { UsersService } from '../users/users.service';
 import { IUser } from '../users/types/i-user';
 import { UpdateUserDto } from '../users/types/update-user-dto';
@@ -17,7 +17,7 @@ import { TUserSettings } from '../user-settings/types/t-user-settings';
 export class CommonService {
     constructor(
         private readonly hotelRoomsService: HotelRoomsService,
-        private readonly hotelsService: HotelsService,
+        private readonly hotelsService: HotelsMongoService,
         private readonly userService: UsersService,
         private readonly userSettingsService: UserSettingsService,
     ) {}
@@ -35,7 +35,7 @@ export class CommonService {
         return await this.userService.updateUser(user._id, files, dto);
     }
 
-    async getHotels(params: SearchHotelParams): Promise<HotelData[]> {
+    async getHotelsMongo(params: SearchHotelParams): Promise<HotelData[]> {
         return await this.hotelsService.search(params);
     }
 

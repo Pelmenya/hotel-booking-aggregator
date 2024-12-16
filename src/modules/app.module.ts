@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
-import { HotelsModule } from './hotels/hotels.module';
+import { HotelsMongoModule } from './hotels-mongo/hotels.mongo.module';
 import { ReservationsModule } from './reservations/reservations.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
@@ -27,7 +27,7 @@ import { UserSettingsModule } from './user-settings/user-settings.module';
         PostgresModule,
         UsersModule,
         ClientModule,
-        HotelsModule,
+        HotelsMongoModule,
         HotelRoomsModule,
         AuthModule,
         ReservationsModule,

@@ -16,9 +16,9 @@ import { RolesGuard } from 'src/guards/roles.guard';
 import { IdValidationPipe } from 'src/pipes/id-validation/id-validation.pipe';
 import { ID } from 'src/types/id';
 import { CreateHotelRoomDto } from '../hotel-rooms/types/create-hotel-room.dto';
-import { CreateHotelDto } from '../hotels/types/create-hotel.dto';
+import { CreateHotelDto } from '../hotels-mongo/types/create-hotel.dto';
 import { SearchBaseParams } from '../../types/search-base-params';
-import { UpdateHotelDto } from '../hotels/types/update-hotel.dto';
+import { UpdateHotelDto } from '../hotels-mongo/types/update-hotel.dto';
 import { CreateUserDto } from '../users/types/create-user.dto';
 import { SearchUserParams } from '../users/types/search-user-params';
 import { AdminService } from './admin.service';
@@ -57,8 +57,8 @@ export class AdminController {
 
     @Get('hotels')
     @Roles('admin')
-    async getHotels(@Query() query: SearchBaseParams) {
-        return await this.adminService.getHotels(query);
+    async getHotelsMongo(@Query() query: SearchBaseParams) {
+        return await this.adminService.getHotelsMongo(query);
     }
 
     @Put('hotels/:id')

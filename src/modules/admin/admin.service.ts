@@ -4,11 +4,11 @@ import { ID } from 'src/types/id';
 import { FilesService } from '../files/files.service';
 import { HotelRoomsService } from '../hotel-rooms/hotel-rooms.service';
 import { CreateHotelRoomDto } from '../hotel-rooms/types/create-hotel-room.dto';
-import { HotelsService } from '../hotels/hotels.service';
-import { CreateHotelDto } from '../hotels/types/create-hotel.dto';
-import { HotelData } from '../hotels/types/hotel-data';
+import { HotelsMongoService } from '../hotels-mongo/hotels.mongo.service';
+import { CreateHotelDto } from '../hotels-mongo/types/create-hotel.dto';
+import { HotelData } from '../hotels-mongo/types/hotel-data';
 import { SearchBaseParams } from '../../types/search-base-params';
-import { UpdateHotelDto } from '../hotels/types/update-hotel.dto';
+import { UpdateHotelDto } from '../hotels-mongo/types/update-hotel.dto';
 import { CreateUserDto } from '../users/types/create-user.dto';
 import { SearchUserParams } from '../users/types/search-user-params';
 import { UsersService } from '../users/users.service';
@@ -18,7 +18,7 @@ import { IAdminService } from './types/i-admin-service';
 export class AdminService implements IAdminService {
     constructor(
         private readonly usersService: UsersService,
-        private readonly hotelsService: HotelsService,
+        private readonly hotelsService: HotelsMongoService,
         private readonly hotelRoomsService: HotelRoomsService,
         private readonly filesService: FilesService,
     ) {}
@@ -51,7 +51,7 @@ export class AdminService implements IAdminService {
         return users;
     }
 
-    async getHotels(query: SearchBaseParams): Promise<HotelData[]> {
+    async getHotelsMongo(query: SearchBaseParams): Promise<HotelData[]> {
         return await this.hotelsService.search(query);
     }
 

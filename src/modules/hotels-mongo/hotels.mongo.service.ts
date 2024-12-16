@@ -10,7 +10,7 @@ import { UpdateHotelDto } from './types/update-hotel.dto';
 import { SearchHotelParams } from './types/search-hotel-params';
 
 @Injectable()
-export class HotelsService implements IHotelService {
+export class HotelsMongoService implements IHotelService {
     constructor(
         @InjectModel(Hotel.name) private HotelModel: Model<THotelDocument>,
     ) {}

@@ -22,4 +22,4 @@ export class Hotel implements Omit<HotelData, '_id'> {
     public updateAt: Date;
 }
 
-export const HotelsSchema = SchemaFactory.createForClass(Hotel);
+export const HotelsMongoSchema = SchemaFactory.createForClass(Hotel);

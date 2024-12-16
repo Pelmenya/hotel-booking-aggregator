@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Schema as MongooseSchema } from 'mongoose';
 import { HotelRoom } from 'src/modules/hotel-rooms/schemas/hotel-room.schema';
-import { Hotel } from 'src/modules/hotels/schemas/hotel.schema';
+import { Hotel } from 'src/modules/hotels-mongo/schemas/hotel.schema';
 import { User } from 'src/modules/users/schemas/users.schema';
 import { IReservation } from '../types/i-reservation';
 

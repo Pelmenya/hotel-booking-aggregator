@@ -17,7 +17,7 @@ import { RolesGuard } from 'src/guards/roles.guard';
 import { IdValidationPipe } from 'src/pipes/id-validation/id-validation.pipe';
 import { ID } from 'src/types/id';
 import { SearchRoomsParams } from '../hotel-rooms/types/search-rooms-params';
-import { SearchHotelParams } from '../hotels/types/search-hotel-params';
+import { SearchHotelParams } from '../hotels-mongo/types/search-hotel-params';
 import { SupportRequestsClientService } from '../support-requests/support-requests-client.service';
 import { SupportRequestsEmployeeService } from '../support-requests/support-requests-employee.service';
 import { SupportRequestsService } from '../support-requests/support-requests.service';
@@ -28,7 +28,7 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { UpdateUserDto } from '../users/types/update-user-dto';
 import { TUserSettings } from '../user-settings/types/t-user-settings';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { HotelData } from '../hotels/types/hotel-data';
+import { HotelData } from '../hotels-mongo/types/hotel-data';
 import { HotelRoomDataRes } from '../hotel-rooms/types/hotel-room-data-res';
 
 @UseGuards(RolesGuard)
@@ -52,8 +52,8 @@ export class CommonController {
         type: HotelData,
         isArray: true,
     })
-    async getHotels(@Query() params: SearchHotelParams) {
-        return await this.commonService.getHotels(params);
+    async getHotelsMongo(@Query() params: SearchHotelParams) {
+        return await this.commonService.getHotelsMongo(params);
     }
 
     @Get('hotels/:id')

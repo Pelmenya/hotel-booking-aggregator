@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Schema as MongooseSchema } from 'mongoose';
-import { Hotel } from 'src/modules/hotels/schemas/hotel.schema';
+import { Hotel } from 'src/modules/hotels-mongo/schemas/hotel.schema';
 import { IHotelRoom } from '../types/i-hotel-room';
 
 @Schema()

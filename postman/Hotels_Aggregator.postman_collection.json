@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "09e95516-5d1c-48d5-b60d-4b4b110d53fc",
-		"name": "Hotels_Aggregator",
+		"name": "HotelsMongo_Aggregator",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "9455686"
 	},
@@ -368,7 +368,7 @@
 			"response": []
 		},
 		{
-			"name": "Get Hotels Admin Query",
+			"name": "Get HotelsMongo Admin Query",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
