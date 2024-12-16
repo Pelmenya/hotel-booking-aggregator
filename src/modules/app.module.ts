@@ -19,6 +19,17 @@ import { PostgresModule } from './postgres/postgres.module';
 import { MongoModule } from './mongo/mongo.module';
 import { SmsModule } from './sms/sms.module';
 import { UserSettingsModule } from './user-settings/user-settings.module';
+import { HotelsModule } from './hotels/hotels.module';
+import { AboutsModule } from './abouts/abouts.module';
+import { AmenitiesModule } from './amenities/amenities.module';
+import { GeoModule } from './geo/geo.module';
+import { LocationsModule } from './locations/locations.module';
+import { ImagesModule } from './images/images.module';
+import { DistrictsModule } from './districts/districts.module';
+import { PoliciesModule } from './policies/policies.module';
+import { TranslationModule } from './translation/translation.module';
+import { TransportModule } from './transport/transport.module';
+import { LoggerModule } from './logger/logger.module';
 
 @Module({
     imports: [
@@ -40,6 +51,17 @@ import { UserSettingsModule } from './user-settings/user-settings.module';
         ConfirmModule,
         SmsModule,
         UserSettingsModule,
+        HotelsModule,
+        AboutsModule,
+        AmenitiesModule,
+        GeoModule,
+        LocationsModule,
+        ImagesModule,
+        DistrictsModule,
+        PoliciesModule,
+        TranslationModule,
+        TransportModule,
+        LoggerModule,
     ],
     controllers: [AppController],
     providers: [AppService],

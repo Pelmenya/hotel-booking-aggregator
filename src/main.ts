@@ -6,6 +6,11 @@ import * as session from 'express-session';
 import * as passport from 'passport';
 import { SessionAdapter } from './modules/auth/session-adapter';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { AppDataSource } from 'data-source';
+import * as fs from 'fs';
+import * as path from 'path';
+import * as winston from 'winston';
+import { WinstonModule } from 'nest-winston';
 
 declare const module: any;
 
@@ -18,7 +23,57 @@ const sessionMiddleware = session({
 });
 
 async function bootstrap() {
-    const app = await NestFactory.create(AppModule);
+    const instanceId = process.env.INSTANCE_ID || 'default';
+    const logsDir = path.join(__dirname, 'logs');
+    if (!fs.existsSync(logsDir)) {
+        fs.mkdirSync(logsDir);
+    }
+    const logger = winston.createLogger({
+        level: 'info',
+        format: winston.format.combine(
+            winston.format.colorize(), // Добавляем цвет
+            winston.format.label({ label: `Instance: ${instanceId}` }),
+            winston.format.timestamp(),
+            winston.format.printf(({ timestamp, level, message, label }) => {
+                return `[${timestamp}] [${label}] ${level}: ${message}`;
+            }),
+        ),
+        transports: [
+            new winston.transports.File({
+                filename: `${logsDir}/error-${instanceId}.log`,
+                level: 'error',
+            }),
+            new winston.transports.Console(),
+        ],
+    });
+
+    process.on('uncaughtException', (err) => {
+        logger.error(`Uncaught Exception: ${err.stack}`);
+        process.exit(1);
+    });
+
+    process.on('unhandledRejection', (reason, promise) => {
+        logger.error(
+            `Unhandled Rejection at: ${promise}, reason: ${
+                reason instanceof Error ? reason.stack : reason
+            }`,
+        );
+    });
+
+    try {
+        await AppDataSource.initialize();
+        logger.info('Data Source has been initialized!');
+    } catch (err) {
+        logger.error(
+            `Error during Data Source initialization: ${err.stack || err}`,
+        );
+    }
+
+    const app = await NestFactory.create(AppModule, {
+        logger: WinstonModule.createLogger({
+            instance: logger,
+        }),
+    });
 
     // Глобальный префикс для всех маршрутов API
     app.setGlobalPrefix('api');
