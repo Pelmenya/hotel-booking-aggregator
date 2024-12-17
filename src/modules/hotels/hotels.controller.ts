@@ -1,9 +1,10 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Hotels } from './hotels.entity';
 import { HotelsService } from './hotels.service';
 import { SearchBaseParams } from 'src/types/search-base-params';
 
+@ApiTags('hotels')
 @Controller('hotels')
 export class HotelsController {
     constructor(private readonly hotelsService: HotelsService) {}

@@ -1,10 +1,10 @@
 # «Backend Hotel Aggregator»
 
-### [Сайт агрегатор](http://top-hotels.su)
-### [Top-hotels.su](http://top-hotels.su)
+### [Сайт агрегатор](https://api.на-день.рф)
+### [Top-hotels.su](https://api.на-день.рф)
 
 ## [«Frontend Hotel Aggregator»](https://github.com/Pelmenya/hotel-booking-aggregator-front)
-## [«Swagger Hotel Aggregator API 1.0»](https://api.top-hotels.su/api/docs)
+## [«Swagger Hotel Aggregator API 1.0»](https://api.на-день.рф/api/docs)
 ## [«Postman API»](https://documenter.getpostman.com/view/9455686/2s93eZzCAR)
 
 ## Описание проекта
