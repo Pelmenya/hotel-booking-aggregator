@@ -24,7 +24,7 @@ export class HotelsRepository {
             .createQueryBuilder('hotel')
             .leftJoinAndSelect('hotel.locations', 'location')
             .andWhere(
-                'hotel.name ILIKE :q OR hotel.name_en ILIKE :q OR hotel.address ILIKE :q OR location.address ILIKE :q',
+                '(hotel.name ILIKE :q OR hotel.name_en ILIKE :q OR hotel.address ILIKE :q OR location.address ILIKE :q) AND hotel.is_visible = true',
                 {
                     q: `%${query.q}%`,
                 },
