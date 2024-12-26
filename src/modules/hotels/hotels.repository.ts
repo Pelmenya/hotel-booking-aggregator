@@ -23,19 +23,27 @@ export class HotelsRepository {
     async searchHotels(query: SearchBaseParams): Promise<any[]> {
         const sql = `
             SELECT 
-                h.id, 
+                h.id AS hotel_id, 
                 h.name, 
+                h.name_en,
+                h.stars, 
                 h.rating, 
-                l.geocode_data::jsonb->>'pretty' AS location_address
+                l.geocode_data::jsonb->>'pretty' AS location_pretty,
+                i.id AS image_id, 
+                i.alt, 
+                i.path, 
+                i.size, 
+                i.type
             FROM hotels h
             LEFT JOIN locations l ON l.hotel_id = h.id
+            LEFT JOIN images i ON i.hotel_id = h.id AND i.size = 'thumbnail'
             WHERE (h.name ILIKE $1 OR h.name_en ILIKE $1 OR h.address ILIKE $1 OR l.address ILIKE $1)
             AND h.is_visible = true
             ORDER BY h.rating DESC
             LIMIT $2 OFFSET $3
         `;
 
-        const params = [`%${query.q}%`, query.limit * 2, query.offset];
+        const params = [`%${query.q}%`, query.limit || 1000, query.offset];
 
         return this.entityManager.query(sql, params);
     }

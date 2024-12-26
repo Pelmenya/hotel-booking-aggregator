@@ -23,7 +23,7 @@ docker exec -i postgres_postgis /bin/bash -c "PGPASSWORD=secret pg_dump --userna
 
 ### Restore BD
 ``` cmd
-docker exec -i postgres_postgis /bin/bash -c "PGPASSWORD=secret psql --username postgres aggregator" < ./dump/dump_25_12_24_v1_prod.sql
+docker exec -i postgres_postgis /bin/bash -c "PGPASSWORD=secret psql --username postgres aggregator" < ./dump/dump_25_12_24_prod.sql
 ```
 # Подключаемся к контейнеру
 docker exec -it postgres_postgis /bin/bash
