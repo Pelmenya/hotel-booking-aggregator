@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Hotels } from './hotels.entity';
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import { SearchBaseParams } from 'src/types/search-base-params';
 
 @Injectable()
@@ -9,6 +9,7 @@ export class HotelsRepository {
     constructor(
         @InjectRepository(Hotels)
         private readonly hotelsRepository: Repository<Hotels>,
+        private readonly entityManager: EntityManager,
     ) {}
 
     async findOneById(id: string): Promise<Hotels> {
@@ -19,21 +20,23 @@ export class HotelsRepository {
         await this.hotelsRepository.update(id, { is_visible });
     }
 
-    async searchHotels(query: SearchBaseParams): Promise<Hotels[]> {
-        const q = this.hotelsRepository
-            .createQueryBuilder('hotel')
-            .leftJoinAndSelect('hotel.locations', 'location')
-            .andWhere(
-                '(hotel.name ILIKE :q OR hotel.name_en ILIKE :q OR hotel.address ILIKE :q OR location.address ILIKE :q) AND hotel.is_visible = true',
-                {
-                    q: `%${query.q}%`,
-                },
-            )
-            .orderBy('hotel.rating', 'DESC');
+    async searchHotels(query: SearchBaseParams): Promise<any[]> {
+        const sql = `
+            SELECT 
+                h.id, 
+                h.name, 
+                h.rating, 
+                l.geocode_data::jsonb->>'pretty' AS location_address
+            FROM hotels h
+            LEFT JOIN locations l ON l.hotel_id = h.id
+            WHERE (h.name ILIKE $1 OR h.name_en ILIKE $1 OR h.address ILIKE $1 OR l.address ILIKE $1)
+            AND h.is_visible = true
+            ORDER BY h.rating DESC
+            LIMIT $2 OFFSET $3
+        `;
 
-        q.limit(query.limit * 2); // Английский и русский язык геолакаций, поэтому на 2
-        q.offset(query.offset);
+        const params = [`%${query.q}%`, query.limit * 2, query.offset];
 
-        return q.getMany();
+        return this.entityManager.query(sql, params);
     }
 }
