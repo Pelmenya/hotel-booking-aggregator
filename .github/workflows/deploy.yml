@@ -45,7 +45,7 @@ jobs:
         '
 
     - name: Wait for logs to be fully written
-      run: sleep 300
+      run: sleep 420
 
     - name: Fetch deployment logs
       run: |

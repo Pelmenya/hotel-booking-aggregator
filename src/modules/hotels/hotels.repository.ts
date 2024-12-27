@@ -23,12 +23,14 @@ export class HotelsRepository {
     async searchHotels(query: SearchBaseParams): Promise<any[]> {
         const sql = `
             SELECT 
-                h.id AS hotel_id, 
+                h.id, 
                 h.name, 
                 h.name_en,
                 h.stars, 
                 h.rating, 
+                h.hotel_link_ostrovok,
                 l.geocode_data::jsonb->>'pretty' AS location_pretty,
+                l.language,
                 i.id AS image_id, 
                 i.alt, 
                 i.path, 
