@@ -23,12 +23,15 @@ export class Hotels {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
+    @Index()
     @Column()
     name: string;
 
+    @Index()
     @Column({ nullable: true })
     name_en: string;
 
+    @Index()
     @Column()
     address: string;
 

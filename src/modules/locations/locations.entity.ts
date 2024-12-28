@@ -17,6 +17,7 @@ export class Locations {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
+    @Index()
     @Column()
     address: string;
 

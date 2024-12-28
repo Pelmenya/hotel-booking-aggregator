@@ -17,7 +17,7 @@ export class SearchBaseParams {
     @IsOptional()
     @IsNumber()
     @Type(() => Number)
-    limit?: number;
+    limit?: number = 10;
 
     @ApiProperty({ example: 10, required: false, description: 'Offset' })
     @IsOptional()

@@ -19,9 +19,7 @@ export class HotelsController {
         type: Hotels,
         isArray: true,
     })
-    async searchHotels(
-        @Query() query: SearchBaseParams,
-    ): Promise<THotelResData[]> {
+    async searchHotels(@Query() query: SearchBaseParams): Promise<string[]> {
         return await this.hotelsService.searchHotels(query);
     }
 }

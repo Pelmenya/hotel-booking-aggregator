@@ -6,7 +6,6 @@ import * as session from 'express-session';
 import * as passport from 'passport';
 import { SessionAdapter } from './modules/auth/session-adapter';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { AppDataSource } from 'data-source';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as winston from 'winston';
@@ -59,15 +58,6 @@ async function bootstrap() {
             }`,
         );
     });
-
-    try {
-        await AppDataSource.initialize();
-        logger.info('Data Source has been initialized!');
-    } catch (err) {
-        logger.error(
-            `Error during Data Source initialization: ${err.stack || err}`,
-        );
-    }
 
     const app = await NestFactory.create(AppModule, {
         logger: WinstonModule.createLogger({

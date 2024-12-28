@@ -4,14 +4,29 @@ import { Hotels } from './hotels.entity';
 import { SearchBaseParams } from 'src/types/search-base-params';
 import { Images } from '../images/images.entity';
 import { THotelResData } from './hotels.types';
+import { LocationsRepository } from '../locations/locations.repository';
+import { AboutsRepository } from '../abouts/abouts.repository';
+import { AmenitiesRepository } from '../amenities/amenities.repository';
+import { ImagesRepository } from '../images/images.repository';
 
 @Injectable()
 export class HotelsService {
-    constructor(private readonly hotelsRepository: HotelsRepository) {}
+    constructor(
+        private readonly hotelsRepository: HotelsRepository,
+        private readonly locationsRepository: LocationsRepository,
+        private readonly aboutsRepository: AboutsRepository,
+        private readonly amenitiesRepository: AmenitiesRepository,
+        private readonly imagesRepository: ImagesRepository,
+    ) {}
 
-    async searchHotels(query: SearchBaseParams): Promise<THotelResData[]> {
-        const hotels = await this.hotelsRepository.searchHotels(query);
-        return await this.processHotelData(hotels);
+    async searchHotels(query: SearchBaseParams): Promise<string[]> {
+        const hotelsIdx = await this.hotelsRepository.searchHotelsIdx(query);
+        console.log(hotelsIdx.map((item) => item.idx));
+        return await this.processHotelsIdx(hotelsIdx);
+    }
+
+    async processHotelsIdx(idx: string[]) {
+        return idx;
     }
 
     async processHotelData(
