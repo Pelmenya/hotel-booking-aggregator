@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { HotelsRepository } from './hotels.repository';
-import { Hotels } from './hotels.entity';
 import { SearchBaseParams } from 'src/types/search-base-params';
-import { Images } from '../images/images.entity';
-import { THotelResData } from './hotels.types';
+import { TSearchHotelsResData } from './hotels.types';
 import { LocationsRepository } from '../locations/locations.repository';
 import { AboutsRepository } from '../abouts/abouts.repository';
 import { AmenitiesRepository } from '../amenities/amenities.repository';
 import { ImagesRepository } from '../images/images.repository';
+import { Amenities } from '../amenities/amenities.entity';
+import { Locations } from '../locations/locations.entity';
 
 @Injectable()
 export class HotelsService {
@@ -19,65 +19,68 @@ export class HotelsService {
         private readonly imagesRepository: ImagesRepository,
     ) {}
 
-    async searchHotels(query: SearchBaseParams): Promise<string[]> {
+    async searchHotels(
+        query: SearchBaseParams,
+    ): Promise<TSearchHotelsResData[]> {
         const hotelsIdx = await this.hotelsRepository.searchHotelsIdx(query);
         console.log(hotelsIdx.map((item) => item.idx));
-        return await this.processHotelsIdx(hotelsIdx);
+        return await this.processHotelsIdx(hotelsIdx.map((item) => item.idx));
     }
 
-    async processHotelsIdx(idx: string[]) {
-        return idx;
-    }
+    async processHotelsIdx(idx: string[]): Promise<TSearchHotelsResData[]> {
+        const results: TSearchHotelsResData[] = [];
 
-    async processHotelData(
-        data: Array<
-            Partial<Images> &
-                Hotels & {
-                    location_pretty: string;
-                    language: string;
-                    image_id: string;
-                }
-        >,
-    ): Promise<THotelResData[]> {
-        const hotelsMap = new Map();
+        for (const hotelId of idx) {
+            const hotelPromise =
+                this.hotelsRepository.findForSearchOneById(hotelId);
+            const imagesPromise = this.imagesRepository.findByHotelId(
+                hotelId,
+                8,
+            );
+            const locationsPromise =
+                this.locationsRepository.findForSearchByHotelId(hotelId);
+            const amenitiesPromise =
+                this.amenitiesRepository.findForSearchByHotelIdAndType(
+                    hotelId,
+                    'main',
+                );
 
-        data.forEach((row) => {
-            const hotelId = row.id;
-            if (!hotelsMap.has(hotelId)) {
-                hotelsMap.set(hotelId, {
-                    id: hotelId,
-                    name: row.name,
-                    name_en: row.name_en,
-                    hotel_link_ostrovok: row.hotel_link_ostrovok,
-                    rating: row.rating,
-                    stars: row.stars,
-                    locations: {},
-                    images: [],
-                });
-            }
-            const hotel = hotelsMap.get(hotelId);
+            // Параллельное выполнение асинхронных операций для текущего отеля
+            const [hotel, images, locations, amenities] = await Promise.all([
+                hotelPromise,
+                imagesPromise,
+                locationsPromise,
+                amenitiesPromise,
+            ]);
 
-            // Обработка изображений
-            if (row.image_id) {
-                hotel.images.push({
-                    id: row.image_id,
-                    alt: row.alt,
-                    path: row.path,
-                    size: row.size,
-                    type: row.type,
-                });
-            }
+            // Разделение locations по языкам
+            const locationsByLang = {
+                ru: locations.filter(
+                    (loc) => loc.language === 'ru',
+                ) as Partial<Locations>,
+                en: locations.filter(
+                    (loc) => loc.language === 'en',
+                ) as Partial<Locations>,
+            };
 
-            // Обработка локаций
-            if (row.location_pretty && row.language) {
-                // Используем язык как ключ для уникальности
-                hotel.locations[row.language] = row.location_pretty;
-            }
-        });
+            // Разделение amenities по языкам
+            const amenitiesByLang = {
+                ru: amenities.filter(
+                    (amenity) => amenity.language === 'ru',
+                ) as Partial<Amenities>,
+                en: amenities.filter(
+                    (amenity) => amenity.language === 'en',
+                ) as Partial<Amenities>,
+            };
 
-        // Преобразуем Map в массив объектов
-        const result = Array.from(hotelsMap.values());
+            results.push({
+                hotel,
+                locations: locationsByLang,
+                images,
+                amenities: amenitiesByLang,
+            });
+        }
 
-        return result;
+        return results;
     }
 }

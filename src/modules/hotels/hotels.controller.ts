@@ -3,7 +3,7 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Hotels } from './hotels.entity';
 import { HotelsService } from './hotels.service';
 import { SearchBaseParams } from 'src/types/search-base-params';
-import { THotelResData } from './hotels.types';
+import { TSearchHotelsResData } from './hotels.types';
 
 @ApiTags('hotels')
 @Controller('hotels')
@@ -19,7 +19,9 @@ export class HotelsController {
         type: Hotels,
         isArray: true,
     })
-    async searchHotels(@Query() query: SearchBaseParams): Promise<string[]> {
+    async searchHotels(
+        @Query() query: SearchBaseParams,
+    ): Promise<TSearchHotelsResData[]> {
         return await this.hotelsService.searchHotels(query);
     }
 }

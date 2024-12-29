@@ -25,6 +25,17 @@ export class AmenitiesRepository {
         });
     }
 
+    // Метод для поиска всех аменитиз по ID отеля
+    async findForSearchByHotelIdAndType(
+        hotelId: string,
+        type: TCategory,
+    ): Promise<Amenities[]> {
+        return this.amenitiesRepository.find({
+            select: { id: true, language: true, amenities_list: true },
+            where: { hotel: { id: hotelId }, type },
+        });
+    }
+
     // Метод для удаления записи по ID
     async deleteById(id: string): Promise<void> {
         await this.amenitiesRepository.delete(id);
