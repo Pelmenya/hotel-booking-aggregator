@@ -10,11 +10,12 @@ export class ImagesRepository {
         private imagesRepository: Repository<Images>,
     ) {}
 
-    async findByHotelId(hotelId: string, take: number): Promise<Images[]> {
-        return this.imagesRepository.find({
-            select: { id: true, type: true, alt: true, path: true },
-            where: { hotel: { id: hotelId } },
-            take,
+    async findForSearchByHotelId(hotelId: string): Promise<Images[]> {
+        return await this.imagesRepository.find({
+            select: { id: true, type: true, path: true },
+            where: { hotel: { id: hotelId }, size: 'thumbnail' },
+            order: { type: 'DESC' },
+            take: 8,
         });
     }
 
@@ -23,6 +24,6 @@ export class ImagesRepository {
     }
 
     async update(image: Images): Promise<Images> {
-        return this.imagesRepository.save(image);
+        return await this.imagesRepository.save(image);
     }
 }

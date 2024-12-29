@@ -31,10 +31,8 @@ export class HotelsService {
         const hotelPromises = idx.map(async (hotelId) => {
             const hotelPromise =
                 this.hotelsRepository.findForSearchOneById(hotelId);
-            const imagesPromise = this.imagesRepository.findByHotelId(
-                hotelId,
-                8,
-            );
+            const imagesPromise =
+                this.imagesRepository.findForSearchByHotelId(hotelId);
             const locationsPromise =
                 this.locationsRepository.findForSearchByHotelId(hotelId);
             const amenitiesPromise =

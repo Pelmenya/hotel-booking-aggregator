@@ -11,11 +11,11 @@ export class LocationsRepository {
     ) {}
 
     async save(location: Locations): Promise<Locations> {
-        return this.locationsRepository.save(location);
+        return await this.locationsRepository.save(location);
     }
 
     async findForSearchByHotelId(hotelId: string) {
-        return this.locationsRepository.find({
+        return await this.locationsRepository.find({
             select: { id: true, language: true, address: true },
             where: { hotel: { id: hotelId } },
         });

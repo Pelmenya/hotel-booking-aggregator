@@ -50,6 +50,6 @@ export class HotelsRepository {
 
         const params = [`%${query.q}%`, query.limit, query.offset];
 
-        return this.entityManager.query(sql, params);
+        return await this.entityManager.query(sql, params);
     }
 }

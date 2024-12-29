@@ -15,12 +15,12 @@ export class AmenitiesRepository {
 
     // Метод для сохранения или обновления записи
     async save(amenity: Amenities): Promise<Amenities> {
-        return this.amenitiesRepository.save(amenity);
+        return await this.amenitiesRepository.save(amenity);
     }
 
     // Метод для поиска всех аменитиз по ID отеля
     async findByHotelId(hotelId: string): Promise<Amenities[]> {
-        return this.amenitiesRepository.find({
+        return await this.amenitiesRepository.find({
             where: { hotel: { id: hotelId } },
         });
     }
@@ -30,7 +30,7 @@ export class AmenitiesRepository {
         hotelId: string,
         type: TCategory,
     ): Promise<Amenities[]> {
-        return this.amenitiesRepository.find({
+        return await this.amenitiesRepository.find({
             select: { id: true, language: true, amenities_list: true },
             where: { hotel: { id: hotelId }, type },
         });
@@ -43,7 +43,7 @@ export class AmenitiesRepository {
 
     // Метод для обновления записи
     async update(amenity: Amenities): Promise<Amenities> {
-        return this.amenitiesRepository.save(amenity);
+        return await this.amenitiesRepository.save(amenity);
     }
 
     // Метод для поиска записи по уникальной комбинации полей: ID отеля, язык и заголовок
@@ -52,7 +52,7 @@ export class AmenitiesRepository {
         language: TLanguage,
         title: string,
     ): Promise<Amenities | undefined> {
-        return this.amenitiesRepository.findOne({
+        return await this.amenitiesRepository.findOne({
             where: {
                 hotel: { id: hotelId },
                 language: language,
@@ -66,7 +66,7 @@ export class AmenitiesRepository {
         hotelId: string,
         type: TCategory,
     ): Promise<Amenities[]> {
-        return this.amenitiesRepository.find({
+        return await this.amenitiesRepository.find({
             where: {
                 hotel: { id: hotelId },
                 type: type,

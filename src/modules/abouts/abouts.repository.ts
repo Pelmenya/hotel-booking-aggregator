@@ -12,11 +12,11 @@ export class AboutsRepository {
     ) {}
 
     async save(about: Abouts): Promise<Abouts> {
-        return this.aboutsRepository.save(about);
+        return await this.aboutsRepository.save(about);
     }
 
     async findByHotelId(hotelId: string): Promise<Abouts[]> {
-        return this.aboutsRepository.find({
+        return await this.aboutsRepository.find({
             where: { hotel: { id: hotelId } },
         });
     }
@@ -25,7 +25,7 @@ export class AboutsRepository {
         hotelId: string,
         language: TLanguage,
     ): Promise<Abouts> {
-        return this.aboutsRepository.findOne({
+        return await this.aboutsRepository.findOne({
             where: { hotel: { id: hotelId }, language },
         });
     }
@@ -35,6 +35,6 @@ export class AboutsRepository {
     }
 
     async update(about: Abouts): Promise<Abouts> {
-        return this.aboutsRepository.save(about);
+        return await this.aboutsRepository.save(about);
     }
 }
