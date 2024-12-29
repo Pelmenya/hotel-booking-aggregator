@@ -15,6 +15,7 @@ export class HotelsRepository {
     async findForSearchOneById(id: string): Promise<Hotels> {
         return await this.hotelsRepository.findOne({
             select: {
+                id: true,
                 name: true,
                 name_en: true,
                 hotel_link_ostrovok: true,
