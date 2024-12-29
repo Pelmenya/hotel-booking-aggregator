@@ -28,9 +28,7 @@ export class HotelsService {
     }
 
     async processHotelsIdx(idx: string[]): Promise<TSearchHotelsResData[]> {
-        const results: TSearchHotelsResData[] = [];
-
-        for (const hotelId of idx) {
+        const hotelPromises = idx.map(async (hotelId) => {
             const hotelPromise =
                 this.hotelsRepository.findForSearchOneById(hotelId);
             const imagesPromise = this.imagesRepository.findByHotelId(
@@ -73,14 +71,15 @@ export class HotelsService {
                 ) as Partial<Amenities>,
             };
 
-            results.push({
+            return {
                 hotel,
                 locations: locationsByLang,
                 images,
                 amenities: amenitiesByLang,
-            });
-        }
+            };
+        });
 
-        return results;
+        // Параллельное выполнение всех операций для всех отелей
+        return await Promise.all(hotelPromises);
     }
 }
