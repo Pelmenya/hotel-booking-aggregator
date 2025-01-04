@@ -10,6 +10,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as winston from 'winston';
 import { WinstonModule } from 'nest-winston';
+import { AppDataSource } from '../data-source';
 
 declare const module: any;
 
@@ -58,6 +59,15 @@ async function bootstrap() {
             }`,
         );
     });
+
+    // Инициализация AppDataSource (TypeORM)
+    try {
+        await AppDataSource.initialize();
+        console.log('Data Source has been initialized!');
+    } catch (err) {
+        console.error('Error during Data Source initialization:', err);
+        process.exit(1); // Завершаем приложение, если инициализация не удалась
+    }
 
     const app = await NestFactory.create(AppModule, {
         logger: WinstonModule.createLogger({
@@ -115,4 +125,5 @@ async function bootstrap() {
         module.hot.dispose(() => app.close());
     }
 }
+
 bootstrap();

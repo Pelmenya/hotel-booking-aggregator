@@ -66,6 +66,8 @@ services:
     depends_on:
       - mongo
       - postgres_postgis
+    env_file:
+      - .env
     environment:
       - PORT=${DEV_PORT}
       - SECRET=${SECRET}
