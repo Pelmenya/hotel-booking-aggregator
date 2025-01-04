@@ -43,6 +43,10 @@ CREATE DATABASE aggregator;
 # Восстанавливаем базу данных из дампа
 cat ./dump/dump_18_12_24_v1_prod_fix_locations.sql | docker exec -i postgres_postgis /bin/bash -c "PGPASSWORD=secret psql --username postgres aggregator"
 
+npm run migration:create --name=TestMigration
+npm run migration:generate --name=TestMigration
+npm run migration:run
+npm run migration:revert
 
 docker exec hotel-aggregator-dev npm run migration:create --name=TestMigration
 docker exec hotel-aggregator-dev npm run migration:revert
