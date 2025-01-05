@@ -112,4 +112,7 @@ export class Hotels {
 
     @Column({ default: true })
     is_visible: boolean;
+
+    @Column({ type: 'tsvector', nullable: true })
+    search_vector: string;
 }

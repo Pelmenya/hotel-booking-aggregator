@@ -40,4 +40,7 @@ export class Locations {
 
     @Column({ default: false })
     is_translated_to_en: boolean;
+
+    @Column({ type: 'tsvector', nullable: true })
+    search_vector: string;
 }

@@ -31,25 +31,31 @@ export class HotelsRepository {
     }
 
     async searchHotelsIdx(query: SearchBaseParams): Promise<{ idx: string }[]> {
+        const formattedQuery = query.q
+            .split(' ')
+            .map((term) => `${term}:*`)
+            .join(' & ');
+
         const sql = `
-            SELECT DISTINCT h.id AS idx
+            SELECT DISTINCT h.id AS idx, 
+                            ts_rank_cd(h.search_vector, to_tsquery('russian', $1)) + 
+                            ts_rank_cd(h.search_vector, to_tsquery('english', $1)) AS rank
             FROM hotels h
-            JOIN 
-	            locations l ON l.hotel_id = h.id
+            LEFT JOIN locations l ON l.hotel_id = h.id
             WHERE 
-	        (
-		        h.name ILIKE $1 
-		        OR h.name_en ILIKE $1 
-		        OR h.address ILIKE $1
-                OR l.address ILIKE $1
-		    ) 
-	        AND h.is_visible = true
-            ORDER BY idx
+                (
+                    h.search_vector @@ to_tsquery('russian', $1) 
+                    OR h.search_vector @@ to_tsquery('english', $1) 
+                    OR l.search_vector @@ to_tsquery('russian', $1)
+                    OR l.search_vector @@ to_tsquery('english', $1)
+                ) 
+                AND h.is_visible = true
+            ORDER BY rank DESC
             LIMIT $2 
             OFFSET $3;
         `;
 
-        const params = [`%${query.q}%`, query.limit, query.offset];
+        const params = [formattedQuery, query.limit, query.offset];
 
         return await this.entityManager.query(sql, params);
     }

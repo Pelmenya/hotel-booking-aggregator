@@ -11,6 +11,8 @@ import * as path from 'path';
 import * as winston from 'winston';
 import { WinstonModule } from 'nest-winston';
 import { AppDataSource } from '../data-source';
+import { HotelsSubscriber } from './modules/hotels/hotels.subscriber';
+import { LocationsSubscriber } from './modules/locations/locations.subscriber';
 
 declare const module: any;
 
@@ -64,9 +66,17 @@ async function bootstrap() {
     try {
         await AppDataSource.initialize();
         console.log('Data Source has been initialized!');
+        AppDataSource.subscribers.push(new HotelsSubscriber());
+        AppDataSource.subscribers.push(new LocationsSubscriber());
     } catch (err) {
         console.error('Error during Data Source initialization:', err);
         process.exit(1); // Завершаем приложение, если инициализация не удалась
+    }
+
+    // Проверка, что DataSource инициализирован
+    if (!AppDataSource.isInitialized) {
+        console.error('Data Source is not initialized!');
+        process.exit(1);
     }
 
     const app = await NestFactory.create(AppModule, {

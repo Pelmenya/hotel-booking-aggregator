@@ -6,8 +6,6 @@ config();
 
 const isLocal = process.env.IS_LOCAL === 'true';
 
-console.log(isLocal);
-
 export const AppDataSource = new DataSource({
     type: 'postgres',
     host: isLocal ? process.env.LOCAL_POSTGRES_HOST : process.env.POSTGRES_HOST, // Используем локальный или Docker хост
