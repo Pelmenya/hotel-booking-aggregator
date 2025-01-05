@@ -1,7 +1,7 @@
 # «Backend Hotel Aggregator»
 
-### [Сайт агрегатор](https://api.на-день.рф)
-### [Top-hotels.su](https://api.на-день.рф)
+### [Сайт агрегатор](https://на-день.рф)
+### [На-День.рф](https://на-день.рф)
 
 ## [«Frontend Hotel Aggregator»](https://github.com/Pelmenya/hotel-booking-aggregator-front)
 ## [«Swagger Hotel Aggregator API 1.0»](https://api.на-день.рф/api/docs)
