@@ -23,7 +23,6 @@ export class HotelsService {
         query: SearchBaseParams,
     ): Promise<TSearchHotelsResData[]> {
         const hotelsIdx = await this.hotelsRepository.searchHotelsIdx(query);
-        console.log(hotelsIdx.map((item) => item.idx));
         return await this.processHotelsIdx(hotelsIdx.map((item) => item.idx));
     }
 
