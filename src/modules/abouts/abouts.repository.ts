@@ -30,6 +30,19 @@ export class AboutsRepository {
         });
     }
 
+    // Метод для поиска всех abouts по ID отеля
+    async findForSearchByHotelIdAndType(hotelId: string): Promise<Abouts[]> {
+        return await this.aboutsRepository.find({
+            select: {
+                id: true,
+                title: true,
+                descriptions: true,
+                language: true,
+            },
+            where: { hotel: { id: hotelId } },
+        });
+    }
+
     async deleteById(id: string): Promise<void> {
         await this.aboutsRepository.delete(id);
     }

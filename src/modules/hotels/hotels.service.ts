@@ -8,6 +8,8 @@ import { AmenitiesRepository } from '../amenities/amenities.repository';
 import { ImagesRepository } from '../images/images.repository';
 import { Amenities } from '../amenities/amenities.entity';
 import { Locations } from '../locations/locations.entity';
+import { GeoDataRepository } from '../geo/geo-data.repository';
+import { GeoData } from '../geo/geo-data.entity';
 
 @Injectable()
 export class HotelsService {
@@ -17,6 +19,7 @@ export class HotelsService {
         private readonly aboutsRepository: AboutsRepository,
         private readonly amenitiesRepository: AmenitiesRepository,
         private readonly imagesRepository: ImagesRepository,
+        private readonly geoDataRepository: GeoDataRepository,
     ) {}
 
     async searchHotels(
@@ -39,14 +42,20 @@ export class HotelsService {
                     hotelId,
                     'main',
                 );
-
+            const geoDataPromise =
+                this.geoDataRepository.findForSearchByHotelIdAndType(
+                    hotelId,
+                    'head',
+                );
             // Параллельное выполнение асинхронных операций для текущего отеля
-            const [hotel, images, locations, amenities] = await Promise.all([
-                hotelPromise,
-                imagesPromise,
-                locationsPromise,
-                amenitiesPromise,
-            ]);
+            const [hotel, images, locations, amenities, geoData] =
+                await Promise.all([
+                    hotelPromise,
+                    imagesPromise,
+                    locationsPromise,
+                    amenitiesPromise,
+                    geoDataPromise,
+                ]);
 
             // Разделение locations по языкам
             const locationsByLang = {
@@ -68,11 +77,21 @@ export class HotelsService {
                 )[0] as Partial<Amenities>,
             };
 
+            const geoDataByLang = {
+                ru: geoData.filter(
+                    (geo) => geo.language === 'ru',
+                )[0] as Partial<GeoData>,
+                en: geoData.filter(
+                    (geo) => geo.language === 'en',
+                )[0] as Partial<GeoData>,
+            };
+
             return {
                 hotel,
                 locations: locationsByLang,
                 images,
                 amenities: amenitiesByLang,
+                geoData: geoDataByLang,
             };
         });
 

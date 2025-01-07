@@ -63,6 +63,23 @@ export class GeoDataRepository {
         });
     }
 
+    // Метод для поиска всех geo объектов рядом по ID отеля
+    async findForSearchByHotelIdAndType(
+        hotelId: string,
+        type: TCategory,
+    ): Promise<GeoData[]> {
+        return await this.geoDataRepository.find({
+            select: {
+                id: true,
+                title: true,
+                type: true,
+                language: true,
+                geo_list: true,
+            },
+            where: { hotel: { id: hotelId }, type },
+        });
+    }
+
     // Метод для обновления только списка аменитиз в существующей записи
     async updateGeoDataList(
         id: string,

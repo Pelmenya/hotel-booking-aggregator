@@ -31,6 +31,8 @@ export class HotelsRepository {
     }
 
     async searchHotelsIdx(query: SearchBaseParams): Promise<{ idx: string }[]> {
+        if (query.q === '') return [];
+
         const formattedQuery = query.q
             .split(' ')
             .map((term) => `${term}:*`)
