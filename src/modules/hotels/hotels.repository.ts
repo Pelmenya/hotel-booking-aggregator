@@ -34,7 +34,7 @@ export class HotelsRepository {
         if (query.q === '') return [];
 
         const sql = `
-            SELECT h.id AS idx, 
+            SELECT DISTINCT h.id AS idx, 
                    ts_rank_cd(h.search_vector, plainto_tsquery('russian', $1)) + 
                    ts_rank_cd(h.search_vector, websearch_to_tsquery('english', $1)) AS rank,
                    h.is_images
