@@ -41,7 +41,8 @@ export class HotelsRepository {
         const sql = `
             SELECT DISTINCT h.id AS idx, 
                             ts_rank_cd(h.search_vector, plainto_tsquery('russian', $1)) + 
-                            ts_rank_cd(h.search_vector, websearch_to_tsquery('english', $1)) AS rank
+                            ts_rank_cd(h.search_vector, websearch_to_tsquery('english', $1)) AS rank,
+                            h.is_images
             FROM hotels h
             LEFT JOIN locations l ON l.hotel_id = h.id
             WHERE 
@@ -52,7 +53,7 @@ export class HotelsRepository {
                     OR l.search_vector @@ to_tsquery('english', $1)
                 ) 
                 AND h.is_visible = true
-            ORDER BY rank DESC
+            ORDER BY h.is_images DESC, rank DESC
             LIMIT $2 
             OFFSET $3;
         `;

@@ -115,4 +115,8 @@ export class Hotels {
 
     @Column({ type: 'tsvector', nullable: true })
     search_vector: string;
+
+    // Добавлено новое поле isImages
+    @Column({ default: false })
+    is_images: boolean;
 }
