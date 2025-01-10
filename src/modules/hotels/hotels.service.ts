@@ -10,6 +10,7 @@ import { Amenities } from '../amenities/amenities.entity';
 import { Locations } from '../locations/locations.entity';
 import { GeoDataRepository } from '../geo/geo-data.repository';
 import { GeoData } from '../geo/geo-data.entity';
+import { Abouts } from '../abouts/abouts.entity';
 
 @Injectable()
 export class HotelsService {
@@ -25,12 +26,85 @@ export class HotelsService {
     async searchHotels(
         query: SearchBaseParams,
     ): Promise<TSearchHotelsResData[]> {
-        const hotelsIdx = await this.hotelsRepository.searchHotelsIdx(query);
-        return await this.processHotelsIdx(hotelsIdx.map((item) => item.idx));
+        const hotelsIds = await this.hotelsRepository.searchHotelsIdx(query);
+        return await this.processHotelsIdx(hotelsIds.map((item) => item.idx));
     }
 
-    async processHotelsIdx(idx: string[]): Promise<TSearchHotelsResData[]> {
-        const hotelPromises = idx.map(async (hotelId) => {
+    async findHotelById(id: string): Promise<TSearchHotelsResData> {
+        const hotel = await this.processHotel(id);
+        return { ...hotel };
+    }
+
+    async processHotel(id: string) {
+        const hotelPromise = this.hotelsRepository.findForSearchOneById(id);
+        const imagesPromise = this.imagesRepository.finByHotelId(id, 'medium');
+        const locationsPromise = this.locationsRepository.findByHotelId(id);
+        const amenitiesPromise = this.amenitiesRepository.findByHotelId(id);
+        const geoDataPromise = this.geoDataRepository.findByHotelId(id);
+        const aboutsPromise = this.aboutsRepository.findByHotelId(id);
+
+        // Параллельное выполнение асинхронных операций для текущего отеля
+        const [hotel, images, locations, amenities, geoData, abouts] =
+            await Promise.all([
+                hotelPromise,
+                imagesPromise,
+                locationsPromise,
+                amenitiesPromise,
+                geoDataPromise,
+                aboutsPromise,
+            ]);
+
+        // Разделение locations по языкам
+        const locationsByLang = {
+            ru: locations.filter(
+                (loc) => loc.language === 'ru',
+            ) as Partial<Locations>,
+            en: locations.filter(
+                (loc) => loc.language === 'en',
+            ) as Partial<Locations>,
+        };
+
+        // Разделение amenities по языкам
+        const amenitiesByLang = {
+            ru: amenities.filter(
+                (amenity) => amenity.language === 'ru',
+            ) as Partial<Amenities>,
+            en: amenities.filter(
+                (amenity) => amenity.language === 'en',
+            ) as Partial<Amenities>,
+        };
+
+        const geoDataByLang = {
+            ru: geoData.filter(
+                (geo) => geo.language === 'ru',
+            ) as Partial<GeoData>,
+            en: geoData.filter(
+                (geo) => geo.language === 'en',
+            ) as Partial<GeoData>,
+        };
+        // Разделение amenities по языкам
+
+        const aboutsByLang = {
+            ru: abouts.filter(
+                (about) => about.language === 'ru',
+            ) as Partial<Abouts>,
+            en: abouts.filter(
+                (about) => about.language === 'en',
+            ) as Partial<Abouts>,
+        };
+
+        return {
+            hotel,
+            locations: locationsByLang,
+            images,
+            amenities: amenitiesByLang,
+            geoData: geoDataByLang,
+            abouts: aboutsByLang,
+        };
+    }
+
+    async processHotelsIdx(id: string[]): Promise<TSearchHotelsResData[]> {
+        const hotelPromises = id.map(async (hotelId) => {
             const hotelPromise =
                 this.hotelsRepository.findForSearchOneById(hotelId);
             const imagesPromise =

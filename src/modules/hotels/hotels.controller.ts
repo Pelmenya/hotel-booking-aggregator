@@ -1,5 +1,5 @@
-import { Controller, Get, Query } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Param, Query } from '@nestjs/common';
+import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Hotels } from './hotels.entity';
 import { HotelsService } from './hotels.service';
 import { SearchBaseParams } from 'src/types/search-base-params';
@@ -9,6 +9,18 @@ import { TSearchHotelsResData } from './hotels.types';
 @Controller('hotels')
 export class HotelsController {
     constructor(private readonly hotelsService: HotelsService) {}
+
+    @Get('hotel/:id')
+    @ApiOperation({ summary: 'Get hotel by ID' })
+    @ApiParam({
+        name: 'id',
+        required: true,
+        description: 'The ID of the hotel',
+        type: String,
+    })
+    async getHotelById(@Param('id') id: string) {
+        return await this.hotelsService.findHotelById(id);
+    }
 
     @Get('search')
     @ApiOperation({ summary: 'Get hotels by params' })

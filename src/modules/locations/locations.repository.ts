@@ -14,6 +14,12 @@ export class LocationsRepository {
         return await this.locationsRepository.save(location);
     }
 
+    async findByHotelId(hotelId: string) {
+        return await this.locationsRepository.find({
+            where: { hotel: { id: hotelId } },
+        });
+    }
+
     async findForSearchByHotelId(hotelId: string) {
         return await this.locationsRepository.find({
             select: { id: true, language: true, address: true },

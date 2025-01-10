@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Images } from './images.entity';
+import { Images, TImageSize } from './images.entity';
 
 @Injectable()
 export class ImagesRepository {
@@ -19,6 +19,13 @@ export class ImagesRepository {
         });
     }
 
+    async finByHotelId(hotelId: string, size: TImageSize): Promise<Images[]> {
+        return await this.imagesRepository.find({
+            select: { id: true, type: true, path: true },
+            where: { hotel: { id: hotelId }, size },
+            order: { type: 'DESC' },
+        });
+    }
     async deleteById(id: string): Promise<void> {
         await this.imagesRepository.delete(id);
     }
