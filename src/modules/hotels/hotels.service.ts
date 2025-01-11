@@ -58,10 +58,10 @@ export class HotelsService {
         const locationsByLang = {
             ru: locations.filter(
                 (loc) => loc.language === 'ru',
-            ) as Partial<Locations>,
+            )[0] as Partial<Locations>,
             en: locations.filter(
                 (loc) => loc.language === 'en',
-            ) as Partial<Locations>,
+            )[0] as Partial<Locations>,
         };
 
         // Разделение amenities по языкам
