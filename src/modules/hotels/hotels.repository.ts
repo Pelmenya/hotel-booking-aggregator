@@ -33,19 +33,25 @@ export class HotelsRepository {
     async searchHotelsIdx(query: SearchBaseParams): Promise<{ idx: string }[]> {
         if (query.q === '') return [];
 
+        const formattedQuery = query.q
+            .split(' ')
+            .filter((term) => term !== '')
+            .map((term) => `${term}:*`)
+            .join(' & ');
+
         const sql = `
             SELECT DISTINCT h.id AS idx, 
-                   ts_rank_cd(h.search_vector, plainto_tsquery('russian', $1)) + 
-                   ts_rank_cd(h.search_vector, websearch_to_tsquery('english', $1)) AS rank,
+                   ts_rank_cd(h.search_vector, to_tsquery('russian', $1)) + 
+                   ts_rank_cd(h.search_vector, to_tsquery('english', $1)) AS rank,
                    h.is_images
             FROM hotels h
             LEFT JOIN locations l ON l.hotel_id = h.id
             WHERE 
                 (
-                    h.search_vector @@ plainto_tsquery('russian', $1) 
-                    OR h.search_vector @@ websearch_to_tsquery('english', $1) 
-                    OR l.search_vector @@ plainto_tsquery('russian', $1)
-                    OR l.search_vector @@ websearch_to_tsquery('english', $1)
+                    h.search_vector @@ to_tsquery('russian', $1) 
+                    OR h.search_vector @@ to_tsquery('english', $1) 
+                    OR l.search_vector @@ to_tsquery('russian', $1)
+                    OR l.search_vector @@ to_tsquery('english', $1)
                 ) 
                 AND h.is_visible = true
             ORDER BY h.is_images DESC, rank DESC
@@ -53,7 +59,7 @@ export class HotelsRepository {
             OFFSET $3;
         `;
 
-        const params = [query.q, query.limit, query.offset];
+        const params = [formattedQuery, query.limit, query.offset];
 
         return await this.entityManager.query(sql, params);
     }
