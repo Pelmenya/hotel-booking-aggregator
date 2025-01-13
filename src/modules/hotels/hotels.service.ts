@@ -87,10 +87,10 @@ export class HotelsService {
         const aboutsByLang = {
             ru: abouts.filter(
                 (about) => about.language === 'ru',
-            ) as Partial<Abouts>,
+            )[0] as Partial<Abouts>,
             en: abouts.filter(
                 (about) => about.language === 'en',
-            ) as Partial<Abouts>,
+            )[0] as Partial<Abouts>,
         };
 
         return {
