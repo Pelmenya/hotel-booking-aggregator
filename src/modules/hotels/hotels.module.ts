@@ -9,6 +9,7 @@ import { AboutsModule } from '../abouts/abouts.module';
 import { AmenitiesModule } from '../amenities/amenities.module';
 import { LocationsModule } from '../locations/locations.module';
 import { ImagesModule } from '../images/images.module';
+import { PoliciesModule } from '../policies/policies.module';
 
 @Module({
     imports: [
@@ -18,6 +19,7 @@ import { ImagesModule } from '../images/images.module';
         AmenitiesModule,
         LocationsModule,
         ImagesModule,
+        PoliciesModule,
     ],
     controllers: [HotelsController],
     providers: [HotelsRepository, HotelsService],

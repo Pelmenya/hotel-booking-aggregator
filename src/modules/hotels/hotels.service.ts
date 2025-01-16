@@ -11,6 +11,8 @@ import { Locations } from '../locations/locations.entity';
 import { GeoDataRepository } from '../geo/geo-data.repository';
 import { GeoData } from '../geo/geo-data.entity';
 import { Abouts } from '../abouts/abouts.entity';
+import { PoliciesRepository } from '../policies/policies.repository';
+import { Policies } from '../policies/policies.entity';
 
 @Injectable()
 export class HotelsService {
@@ -21,6 +23,7 @@ export class HotelsService {
         private readonly amenitiesRepository: AmenitiesRepository,
         private readonly imagesRepository: ImagesRepository,
         private readonly geoDataRepository: GeoDataRepository,
+        private readonly policiesRepository: PoliciesRepository,
     ) {}
 
     async searchHotels(
@@ -42,9 +45,10 @@ export class HotelsService {
         const amenitiesPromise = this.amenitiesRepository.findByHotelId(id);
         const geoDataPromise = this.geoDataRepository.findByHotelId(id);
         const aboutsPromise = this.aboutsRepository.findByHotelId(id);
+        const policiesPromise = this.policiesRepository.findByHotelId(id);
 
         // Параллельное выполнение асинхронных операций для текущего отеля
-        const [hotel, images, locations, amenities, geoData, abouts] =
+        const [hotel, images, locations, amenities, geoData, abouts, policies] =
             await Promise.all([
                 hotelPromise,
                 imagesPromise,
@@ -52,6 +56,7 @@ export class HotelsService {
                 amenitiesPromise,
                 geoDataPromise,
                 aboutsPromise,
+                policiesPromise,
             ]);
 
         // Разделение locations по языкам
@@ -93,6 +98,14 @@ export class HotelsService {
             )[0] as Partial<Abouts>,
         };
 
+        const policiesByLang = {
+            ru: policies.filter(
+                (policy) => policy.language === 'ru',
+            )[0] as Partial<Policies>,
+            en: policies.filter(
+                (policy) => policy.language === 'en',
+            )[0] as Partial<Policies>,
+        };
         return {
             hotel,
             locations: locationsByLang,
@@ -100,6 +113,7 @@ export class HotelsService {
             amenities: amenitiesByLang,
             geoData: geoDataByLang,
             abouts: aboutsByLang,
+            policies: policiesByLang,
         };
     }
 
