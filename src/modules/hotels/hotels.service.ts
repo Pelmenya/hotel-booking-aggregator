@@ -38,7 +38,7 @@ export class HotelsService {
         return { ...hotel };
     }
 
-    async processHotel(id: string) {
+    async processHotel(id: string): Promise<TSearchHotelsResData> {
         const hotelPromise = this.hotelsRepository.findForSearchOneById(id);
         const imagesPromise = this.imagesRepository.finByHotelId(id, 'medium');
         const locationsPromise = this.locationsRepository.findByHotelId(id);

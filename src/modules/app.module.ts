@@ -30,6 +30,7 @@ import { PoliciesModule } from './policies/policies.module';
 import { TranslationModule } from './translation/translation.module';
 import { TransportModule } from './transport/transport.module';
 import { LoggerModule } from './logger/logger.module';
+import { ProxyModule } from './proxy/proxy.module';
 
 @Module({
     imports: [
@@ -62,6 +63,7 @@ import { LoggerModule } from './logger/logger.module';
         TranslationModule,
         TransportModule,
         LoggerModule,
+        ProxyModule,
     ],
     controllers: [AppController],
     providers: [AppService],

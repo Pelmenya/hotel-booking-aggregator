@@ -75,6 +75,7 @@ export class SmsService {
                         const { message } = e.response.data as {
                             message: string;
                         };
+                        console.log(message);
                         throw new NotFoundException(message || e.message);
                     }),
                 ),
