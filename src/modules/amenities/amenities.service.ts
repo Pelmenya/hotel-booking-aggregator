@@ -8,6 +8,8 @@ export class AmenitiesService {
 
     // Метод для получения данных из материализованного представления
     async getAmenitiesFromMaterializedView(): Promise<TAmenityView[]> {
-        return await this.amenitiesRepository.findFromMaterializedView();
+        const amenities =
+            await this.amenitiesRepository.findFromMaterializedView();
+        return amenities;
     }
 }
