@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { AmenitiesService } from './amenities.service';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { TAmenityViewRes } from './amenities.types';
+import { ApiOperation, ApiTags, ApiOkResponse } from '@nestjs/swagger';
+import { TAmenityViewResDto } from './amenities.dto';
 
 @ApiTags('amenities')
 @Controller('amenities')
@@ -12,7 +12,11 @@ export class AmenitiesController {
     @ApiOperation({
         summary: 'Get all amenities group by categories',
     })
-    async getAmenities(): Promise<TAmenityViewRes[]> {
+    @ApiOkResponse({
+        description: 'List of amenities grouped by categories',
+        type: [TAmenityViewResDto],
+    })
+    async getAmenities(): Promise<TAmenityViewResDto[]> {
         return await this.amenitiesService.getAmenitiesFromMaterializedView();
     }
 }

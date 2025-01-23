@@ -21,3 +21,14 @@ export type TAmenityViewRes = {
         amenities: string[];
     };
 };
+
+export class AmenityViewResDto {
+    ru: {
+        title: string;
+        amenities: string[];
+    };
+    en: {
+        title: string;
+        amenities: string[];
+    };
+}
