@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Amenities } from './amenities.entity';
-import { TAmenity } from './amenities.types';
+import { TAmenity, TAmenityView } from './amenities.types';
 import { TLanguage } from 'src/types/t-language';
 import { TCategory } from 'src/types/t-category';
 
@@ -82,5 +82,12 @@ export class AmenitiesRepository {
         await this.amenitiesRepository.update(id, {
             amenities_list: amenitiesList,
         });
+    }
+
+    // Метод для получения данных из материализованного представления
+    async findFromMaterializedView(): Promise<TAmenityView[]> {
+        return await this.amenitiesRepository.query(`
+                SELECT * FROM amenities_mv;
+            `);
     }
 }

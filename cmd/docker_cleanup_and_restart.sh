@@ -107,5 +107,14 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+# Запуск миграций после успешного запуска контейнеров
+echo "Running migrations..." >> deploy.log
+docker-compose exec hotel-aggregator npm run migration:run >> deploy.log 2>&1
+if [ $? -ne 0 ]; then
+    echo "Migration failed. Exiting." >> deploy.log
+    echo "FAILED" > deploy_status.txt
+    exit 1
+fi
+
 echo "Deployment completed successfully." >> deploy.log
 echo "SUCCESS" > deploy_status.txt
