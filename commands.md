@@ -18,12 +18,12 @@ host.docker.internal
 
 ### Dump BD
 ``` cmd
-docker exec -i postgres_postgis /bin/bash -c "PGPASSWORD=secret pg_dump --username postgres aggregator" > ./dump/dump_24_01_25_prod.sql
+docker exec -i postgres_postgis /bin/bash -c "PGPASSWORD=secret pg_dump --username postgres aggregator" > ./dump/dump_25_01_25_prod.sql
 ```
 
 ### Restore BD
 ``` cmd
-docker exec -i postgres_postgis /bin/bash -c "PGPASSWORD=secret psql --username postgres aggregator" < ./dump/dump_24_01_25_prod.sql
+docker exec -i postgres_postgis /bin/bash -c "PGPASSWORD=secret psql --username postgres aggregator" < ./dump/dump_25_01_25_prod.sql
 ```
 # Подключаемся к контейнеру
 docker exec -it postgres_postgis /bin/bash
