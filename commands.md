@@ -44,7 +44,5 @@ CREATE DATABASE aggregator;
 cat ./dump/dump_18_12_24_v1_prod_fix_locations.sql | docker exec -i postgres_postgis /bin/bash -c "PGPASSWORD=secret psql --username postgres aggregator"
 
 docker exec hotel-aggregator-dev npm run migration:create --name=TestMigration
-
 docker exec hotel-aggregator-dev npm run migration:revert
-
 docker exec hotel-aggregator-dev npm run migration:run
