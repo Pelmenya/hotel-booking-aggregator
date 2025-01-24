@@ -8,6 +8,8 @@ import { Hotels } from 'src/modules/hotels/hotels.entity';
 import { Images } from 'src/modules/images/images.entity';
 import { Locations } from 'src/modules/locations/locations.entity';
 import { Policies } from 'src/modules/policies/policies.entity';
+import { RealEstateCategory } from 'src/modules/real-estate/real-estate-category.entity';
+import { RealEstateSubcategory } from 'src/modules/real-estate/real-estate-subcategory.entity';
 import { UserSettings } from 'src/modules/user-settings/entities/user-settings.entity';
 
 export const getPostgresConfig = async (
@@ -30,6 +32,8 @@ export const getPostgresConfig = async (
             GeoData,
             Policies,
             Locations,
+            RealEstateCategory,
+            RealEstateSubcategory,
         ],
         synchronize: true,
     };

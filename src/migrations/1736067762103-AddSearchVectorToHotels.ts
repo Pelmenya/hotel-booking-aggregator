@@ -4,7 +4,7 @@ export class AddSearchVectorToHotels1736067762103
     implements MigrationInterface
 {
     public async up(queryRunner: QueryRunner): Promise<void> {
-        // Добавляем колонку search_vector для hotels
+        /*         // Добавляем колонку search_vector для hotels или сама добавится через ORM
         await queryRunner.query(`
             ALTER TABLE hotels ADD COLUMN search_vector tsvector;
         `);
@@ -12,7 +12,7 @@ export class AddSearchVectorToHotels1736067762103
         // Добавляем колонку search_vector для locations
         await queryRunner.query(`
             ALTER TABLE locations ADD COLUMN search_vector tsvector;
-        `);
+        `); */
 
         // Инициализируем данные в search_vector для hotels
         await queryRunner.query(`

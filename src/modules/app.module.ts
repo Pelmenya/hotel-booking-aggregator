@@ -31,6 +31,7 @@ import { TranslationModule } from './translation/translation.module';
 import { TransportModule } from './transport/transport.module';
 import { LoggerModule } from './logger/logger.module';
 import { ProxyModule } from './proxy/proxy.module';
+import { RealEstateModule } from './real-estate/real-estate.module';
 
 @Module({
     imports: [
@@ -64,6 +65,7 @@ import { ProxyModule } from './proxy/proxy.module';
         TransportModule,
         LoggerModule,
         ProxyModule,
+        RealEstateModule,
     ],
     controllers: [AppController],
     providers: [AppService],
