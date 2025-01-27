@@ -48,3 +48,5 @@ docker exec hotel-aggregator-dev npm run migration:create --name=TestMigration
 docker exec hotel-aggregator-dev npm run migration:revert
 
 docker exec hotel-aggregator-dev npm run migration:run
+
+docker exec hotel-aggregator npm run migration:run
