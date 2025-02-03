@@ -2,7 +2,7 @@ import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { ProxyService } from './proxy.service';
-import { TSuggestionAddressResData } from './proxy.types';
+import { TCoordinatesResData, TSuggestionAddressResData } from './proxy.types';
 import { Roles } from 'src/decorators/roles.decorator';
 import { SearchBaseParams } from 'src/types/search-base-params';
 
@@ -18,5 +18,13 @@ export class ProxyController {
         @Query() query: SearchBaseParams,
     ): Promise<TSuggestionAddressResData> {
         return await this.proxyService.getSuggestions(query.q, query.limit);
+    }
+
+    @Roles('admin', 'client', 'manager')
+    @Get('geocode')
+    async getCoordinates(
+        @Query('address') address: string,
+    ): Promise<TCoordinatesResData> {
+        return await this.proxyService.getCoordinates(address);
     }
 }

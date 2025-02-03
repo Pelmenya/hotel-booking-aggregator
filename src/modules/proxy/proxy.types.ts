@@ -10,3 +10,10 @@ export type TSuggestionAddressResData = {
     requestProcessTime: number;
     suggestions: TSuggestion[];
 };
+
+export type TCoordinatesResData = {
+    coordinates: {
+        latitude: number;
+        longitude: number;
+    };
+};
