@@ -7,14 +7,18 @@ import { TSuggestionAddressResData, TCoordinatesResData } from './proxy.types';
 
 @Injectable()
 export class ProxyService {
-    private host: string;
+    private AHUNTER_HOST: string;
+    private YA_HTTP_GEOCODER_API_HOST: string;
     private YA_HTTP_GEOCODER_API_KEY: string;
 
     constructor(
         private readonly configService: ConfigService,
         private readonly httpService: HttpService,
     ) {
-        this.host = this.configService.get('AHUNTER_HOST');
+        this.AHUNTER_HOST = this.configService.get('AHUNTER_HOST');
+        this.YA_HTTP_GEOCODER_API_HOST = this.configService.get(
+            'YA_HTTP_GEOCODER_API_HOST',
+        );
         this.YA_HTTP_GEOCODER_API_KEY = this.configService.get(
             'YA_HTTP_GEOCODER_API_KEY',
         );
@@ -29,7 +33,7 @@ export class ProxyService {
                 this.httpService
                     .get(
                         `${
-                            this.host
+                            this.AHUNTER_HOST
                         }/suggest/address?addresslim=${limit};output=json|pretty;query=${encodeURIComponent(
                             q,
                         )}`,
@@ -49,7 +53,7 @@ export class ProxyService {
     async getCoordinates(address: string): Promise<TCoordinatesResData> {
         const response = await firstValueFrom(
             this.httpService
-                .get('https://geocode-maps.yandex.ru/1.x/', {
+                .get(this.YA_HTTP_GEOCODER_API_HOST, {
                     params: {
                         apikey: this.YA_HTTP_GEOCODER_API_KEY,
                         geocode: address,
