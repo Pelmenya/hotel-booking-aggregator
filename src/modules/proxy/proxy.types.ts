@@ -11,9 +11,10 @@ export type TSuggestionAddressResData = {
     suggestions: TSuggestion[];
 };
 
+export type TPoint = {
+    latitude: number;
+    longitude: number;
+};
 export type TCoordinatesResData = {
-    coordinates: {
-        latitude: number;
-        longitude: number;
-    };
+    coordinates: TPoint;
 };
